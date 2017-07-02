@@ -9,7 +9,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using PiP_Tool.Common;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace PiP_Tool.ViewModels
 {
@@ -22,6 +21,9 @@ namespace PiP_Tool.ViewModels
 
         private ImageSource _imageScreen;
         private DispatcherTimer _timer;
+
+        [System.Runtime.InteropServices.DllImport("gdi32.dll")]
+        public static extern bool DeleteObject(IntPtr hObject);
 
         public ImageSource ImageScreen
         {
@@ -52,7 +54,7 @@ namespace PiP_Tool.ViewModels
             }
             else
             {
-                _timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(50) };
+                _timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(10) };
                 _timer.Tick += Screenshot;
                 _timer.Start();
             }
@@ -66,21 +68,21 @@ namespace PiP_Tool.ViewModels
 
         private static BitmapSource CopyScreen()
         {
-            using (var screenBmp = new Bitmap(
-                100,
-                100,
-                PixelFormat.Format32bppArgb))
+            BitmapSource result;
+            using (var screenBmp = new Bitmap(100, 100))
             {
                 using (var bmpGraphics = Graphics.FromImage(screenBmp))
                 {
-                    bmpGraphics.CopyFromScreen(0, 0, 0, 0, screenBmp.Size);
-                    return Imaging.CreateBitmapSourceFromHBitmap(
-                        screenBmp.GetHbitmap(),
-                        IntPtr.Zero,
-                        Int32Rect.Empty,
-                        BitmapSizeOptions.FromEmptyOptions());
+                    bmpGraphics.CopyFromScreen(0, 0, 0, 0, screenBmp.Size, CopyPixelOperation.SourceCopy);
+                    var hBitmap = screenBmp.GetHbitmap();
+                    bmpGraphics.Dispose();
+                    result = Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                    DeleteObject(hBitmap);
+
                 }
             }
+            GC.Collect();
+            return result;
         }
 
         protected virtual void NotifyPropertyChanged([CallerMemberName] string propertyName = "")

@@ -1,0 +1,15 @@
+﻿<Window x:Class="PiP_Tool.PictureInPictureWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PiP_Tool"
+        mc:Ignorable="d"
+        Title="PictureInPictureWindow" Height="300" Width="300">
+    <Grid>
+        
+        <Button Command="{Binding TestCommand}"  Content="Button" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" RenderTransformOrigin="-0.059,-0.297"/>
+        <Image Source="{Binding ImageScreen, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Height="299" Margin="0,20,0,0" VerticalAlignment="Top" Width="517"/>
+
+    </Grid>
+</Window>

@@ -35,7 +35,7 @@ namespace PiP_Tool.ViewModels
             }
         }
 
-        public ICommand TestCommand
+        public ICommand CaptureCommand
         {
             get
             {

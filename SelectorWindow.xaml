@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:local="clr-namespace:PiP_Tool"
         mc:Ignorable="d"
         AllowsTransparency="True" WindowStyle="None" ResizeMode="NoResize" WindowState="Maximized" Topmost="True"
@@ -12,7 +13,18 @@
     </Window.Background>
     <Grid>
 
-        <Canvas Name="CanvasMain" Background="Transparent" Grid.RowSpan="2" >
+        <Canvas Name="CanvasMain" Background="Transparent" Grid.RowSpan="2">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDown">
+                    <i:InvokeCommandAction Command="{Binding MouseDownCommand}"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName="MouseMove">
+                    <i:InvokeCommandAction Command="{Binding MouseMoveCommand}"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName="MouseUp">
+                    <i:InvokeCommandAction Command="{Binding MouseUpCommand}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
             <Border Name="RecodBorderSizeObject" BorderBrush="Red" BorderThickness="1" Canvas.Left="200" Canvas.Top="200" Width="300" Height="300">
                 <Grid>
                     <Grid.ColumnDefinitions>

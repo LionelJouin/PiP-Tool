@@ -27,7 +27,6 @@ namespace PiP_Tool.ViewModels
             {
                 return new RelayCommand(() =>
                 {
-                    Console.WriteLine("koukou");
                 });
             }
         }

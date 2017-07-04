@@ -1,16 +1,15 @@
-﻿using System.Windows;
-using PiP_Tool.ViewModels;
+﻿using PiP_Tool.ViewModels;
 
 namespace PiP_Tool
 {
     /// <summary>
     /// Logique d'interaction pour PictureInPictureWindow.xaml
     /// </summary>
-    public partial class PictureInPictureWindow : Window
+    public partial class PictureInPictureWindow
     {
         public PictureInPictureWindow()
         {
-            this.DataContext = new PictureInPicture();
+            DataContext = new PictureInPicture();
             InitializeComponent();
         }
     }

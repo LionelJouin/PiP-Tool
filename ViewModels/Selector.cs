@@ -1,8 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Input;
-using PiP_Tool.Common;
+using Point = System.Windows.Point;
 
 namespace PiP_Tool.ViewModels
 {
@@ -11,34 +12,39 @@ namespace PiP_Tool.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public ICommand MouseDownCommand
+        private Point _selectorBoxPosition = new Point(100, 200);
+        private Size _selectorBoxSize = new Size(50, 300);
+
+        public Point SelectorBoxPosition
         {
-            get
+            get { return _selectorBoxPosition; }
+            set
             {
-                return new RelayCommand(() =>
-                {
-                });
+                _selectorBoxPosition = value;
+                NotifyPropertyChanged();
             }
         }
 
-        public ICommand MouseUpCommand
+        public Size SelectorBoxSize
         {
-            get
+            get { return _selectorBoxSize; }
+            set
             {
-                return new RelayCommand(() =>
-                {
-                });
+                _selectorBoxSize = value;
+                NotifyPropertyChanged();
             }
         }
-        public ICommand MouseMoveCommand
+
+        public void SetCursor(Point mousePosition)
         {
-            get
-            {
-                return new RelayCommand(() =>
-                {
-                });
-            }
+            var left = _selectorBoxPosition.X;
+            var top = _selectorBoxPosition.Y;
+            var right = left + _selectorBoxSize.Width;
+            var bottom = top + _selectorBoxSize.Height;
+
+            Mouse.OverrideCursor = Cursors.Wait;
         }
+
         protected virtual void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
         {
             var handler = PropertyChanged;

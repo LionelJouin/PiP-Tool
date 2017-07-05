@@ -14,6 +14,7 @@ namespace PiP_Tool.ViewModels
 
         private Point _selectorBoxPosition = new Point(100, 200);
         private Size _selectorBoxSize = new Size(50, 300);
+        private bool _dragging = false;
 
         public Point SelectorBoxPosition
         {
@@ -41,8 +42,45 @@ namespace PiP_Tool.ViewModels
             var top = _selectorBoxPosition.Y;
             var right = left + _selectorBoxSize.Width;
             var bottom = top + _selectorBoxSize.Height;
+            
+            var margin = 10;
+            if ((mousePosition.X + margin) < right && (mousePosition.X - margin) > left &&
+                (mousePosition.Y + margin) < bottom && (mousePosition.Y - margin) > top)
+            {
+                Mouse.OverrideCursor = Cursors.ScrollAll;
+            }
+            else if ((Math.Abs(mousePosition.X - left) < margin && Math.Abs(mousePosition.Y - bottom) < margin) ||
+                (Math.Abs(mousePosition.X - right) < margin && Math.Abs(mousePosition.Y - top) < margin))
+            {
+                Mouse.OverrideCursor = Cursors.SizeNESW;
+            }
+            else if ((Math.Abs(mousePosition.X - right) < margin && Math.Abs(mousePosition.Y - bottom) < margin) ||
+                (Math.Abs(mousePosition.X - left) < margin && Math.Abs(mousePosition.Y - top) < margin))
+            {
+                Mouse.OverrideCursor = Cursors.SizeNWSE;
+            }
+            else if (Math.Abs(mousePosition.X - right) < margin || Math.Abs(mousePosition.X - left) < margin)
+            {
+                Mouse.OverrideCursor = Cursors.SizeWE;
+            }
+            else if (Math.Abs(mousePosition.Y - top) < margin || Math.Abs(mousePosition.Y - bottom) < margin)
+            {
+                Mouse.OverrideCursor = Cursors.SizeNS;
+            }
+            else
+            {
+                Mouse.OverrideCursor = Cursors.Arrow;
+            }
+        }
 
-            Mouse.OverrideCursor = Cursors.Wait;
+        public void MouseDown()
+        {
+            _dragging = true;
+        }
+
+        public void MouseUp()
+        {
+            _dragging = false;
         }
 
         protected virtual void NotifyPropertyChanged([CallerMemberName] String propertyName = "")

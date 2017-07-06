@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
-using Point = System.Windows.Point;
 
 namespace PiP_Tool.ViewModels
 {
@@ -12,9 +11,10 @@ namespace PiP_Tool.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private Point _selectorBoxPosition = new Point(100, 200);
-        private Size _selectorBoxSize = new Size(50, 300);
+        private Point _selectorBoxPosition = new Point(500, 300);
+        private Size _selectorBoxSize = new Size(100, 300);
         private bool _dragging = false;
+        private Point _mouseDownPosition = new Point(0, 0);
 
         public Point SelectorBoxPosition
         {
@@ -36,51 +36,98 @@ namespace PiP_Tool.ViewModels
             }
         }
 
-        public void SetCursor(Point mousePosition)
+        public enum Hit
+        {
+            None, Body, TL, TR, BR, BL, L, R, T, B
+        }
+
+        public Hit GetHit(Point mousePosition)
         {
             var left = _selectorBoxPosition.X;
             var top = _selectorBoxPosition.Y;
             var right = left + _selectorBoxSize.Width;
             var bottom = top + _selectorBoxSize.Height;
-            
-            var margin = 10;
-            if ((mousePosition.X + margin) < right && (mousePosition.X - margin) > left &&
-                (mousePosition.Y + margin) < bottom && (mousePosition.Y - margin) > top)
+            if (mousePosition.X < left) return Hit.None;
+            if (mousePosition.X > right) return Hit.None;
+            if (mousePosition.Y < top) return Hit.None;
+            if (mousePosition.Y > bottom) return Hit.None;
+
+            const int margin = 10;
+            if (mousePosition.X - left < margin)
             {
-                Mouse.OverrideCursor = Cursors.ScrollAll;
+                if (mousePosition.Y - top < margin) return Hit.TL;
+                if (bottom - mousePosition.Y < margin) return Hit.BL;
+                return Hit.L;
             }
-            else if ((Math.Abs(mousePosition.X - left) < margin && Math.Abs(mousePosition.Y - bottom) < margin) ||
-                (Math.Abs(mousePosition.X - right) < margin && Math.Abs(mousePosition.Y - top) < margin))
+            if (right - mousePosition.X < margin)
             {
-                Mouse.OverrideCursor = Cursors.SizeNESW;
+                if (mousePosition.Y - top < margin) return Hit.TR;
+                if (bottom - mousePosition.Y < margin) return Hit.BR;
+                return Hit.R;
             }
-            else if ((Math.Abs(mousePosition.X - right) < margin && Math.Abs(mousePosition.Y - bottom) < margin) ||
-                (Math.Abs(mousePosition.X - left) < margin && Math.Abs(mousePosition.Y - top) < margin))
-            {
-                Mouse.OverrideCursor = Cursors.SizeNWSE;
-            }
-            else if (Math.Abs(mousePosition.X - right) < margin || Math.Abs(mousePosition.X - left) < margin)
-            {
-                Mouse.OverrideCursor = Cursors.SizeWE;
-            }
-            else if (Math.Abs(mousePosition.Y - top) < margin || Math.Abs(mousePosition.Y - bottom) < margin)
-            {
-                Mouse.OverrideCursor = Cursors.SizeNS;
-            }
-            else
-            {
-                Mouse.OverrideCursor = Cursors.Arrow;
-            }
+            if (mousePosition.Y - top < margin) return Hit.T;
+            if (bottom - mousePosition.Y < margin) return Hit.B;
+            return Hit.Body;
         }
 
-        public void MouseDown()
+        public void SetCursor(Hit hit)
         {
+            var cursor = Cursors.Arrow;
+
+            switch (hit)
+            {
+                case Hit.None:
+                    cursor = Cursors.Arrow;
+                    break;
+                case Hit.Body:
+                    cursor = Cursors.ScrollAll;
+                    break;
+                case Hit.TL:
+                case Hit.BR:
+                    cursor = Cursors.SizeNWSE;
+                    break;
+                case Hit.BL:
+                case Hit.TR:
+                    cursor = Cursors.SizeNESW;
+                    break;
+                case Hit.T:
+                case Hit.B:
+                    cursor = Cursors.SizeNS;
+                    break;
+                case Hit.L:
+                case Hit.R:
+                    cursor = Cursors.SizeWE;
+                    break;
+            }
+
+            if (Mouse.OverrideCursor != cursor)
+                Mouse.OverrideCursor = cursor;
+        }
+
+        public void MouseDown(Point mousePosition)
+        {
+            _mouseDownPosition.X = mousePosition.X;
+            _mouseDownPosition.Y = mousePosition.X;
             _dragging = true;
         }
 
         public void MouseUp()
         {
             _dragging = false;
+        }
+
+        public void MouseMove(Point mousePosition)
+        {
+            if (_dragging == false)
+            {
+                SetCursor(GetHit(mousePosition));
+            }
+            else
+            {
+                //var offsetX = _mouseDownPosition.X - SelectorBoxPosition.X;
+                //var offsetY = _mouseDownPosition.Y - SelectorBoxPosition.Y;
+                SelectorBoxPosition = new Point(mousePosition.X, mousePosition.Y);
+            }
         }
 
         protected virtual void NotifyPropertyChanged([CallerMemberName] String propertyName = "")

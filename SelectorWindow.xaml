@@ -13,7 +13,12 @@
     </Window.Background>
     <Grid>
 
-        <Canvas Name="CanvasMain" Background="Transparent" Grid.RowSpan="2" MouseDown="MouseDown" MouseMove="MouseMove" MouseUp="MouseUp">
+        <Canvas Name="CanvasMain" 
+                Background="Transparent" 
+                Grid.RowSpan="2" 
+                MouseDown="MouseDown" 
+                MouseMove="MouseMove" 
+                MouseUp="MouseUp">
             <Border Name="SelectorBox" 
                     BorderBrush="Red" 
                     BorderThickness="1" 

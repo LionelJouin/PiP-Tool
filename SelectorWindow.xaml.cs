@@ -20,7 +20,7 @@ namespace PiP_Tool
 
         private new void MouseDown(object sender, MouseEventArgs e)
         {
-            _viewModel.MouseDown();
+            _viewModel.MouseDown(Mouse.GetPosition(CanvasMain));
         }
 
         private new void MouseUp(object sender, MouseEventArgs e)
@@ -30,7 +30,7 @@ namespace PiP_Tool
 
         private new void MouseMove(object sender, MouseEventArgs e)
         {
-            _viewModel.SetCursor(Mouse.GetPosition(CanvasMain));
+            _viewModel.MouseMove(Mouse.GetPosition(CanvasMain));
         }
 
     }

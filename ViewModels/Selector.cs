@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
@@ -13,8 +12,8 @@ namespace PiP_Tool.ViewModels
 
         private Point _selectorBoxPosition = new Point(500, 300);
         private Size _selectorBoxSize = new Size(100, 300);
-        private bool _dragging = false;
-        private Point _mouseDownPosition = new Point(0, 0);
+        private Point _draggingOffset = new Point(0, 0);
+        private bool _dragging;
 
         public Point SelectorBoxPosition
         {
@@ -38,7 +37,7 @@ namespace PiP_Tool.ViewModels
 
         public enum Hit
         {
-            None, Body, TL, TR, BR, BL, L, R, T, B
+            None, Body, Tl, Tr, Br, Bl, L, R, T, B
         }
 
         public Hit GetHit(Point mousePosition)
@@ -55,14 +54,14 @@ namespace PiP_Tool.ViewModels
             const int margin = 10;
             if (mousePosition.X - left < margin)
             {
-                if (mousePosition.Y - top < margin) return Hit.TL;
-                if (bottom - mousePosition.Y < margin) return Hit.BL;
+                if (mousePosition.Y - top < margin) return Hit.Tl;
+                if (bottom - mousePosition.Y < margin) return Hit.Bl;
                 return Hit.L;
             }
             if (right - mousePosition.X < margin)
             {
-                if (mousePosition.Y - top < margin) return Hit.TR;
-                if (bottom - mousePosition.Y < margin) return Hit.BR;
+                if (mousePosition.Y - top < margin) return Hit.Tr;
+                if (bottom - mousePosition.Y < margin) return Hit.Br;
                 return Hit.R;
             }
             if (mousePosition.Y - top < margin) return Hit.T;
@@ -82,12 +81,12 @@ namespace PiP_Tool.ViewModels
                 case Hit.Body:
                     cursor = Cursors.ScrollAll;
                     break;
-                case Hit.TL:
-                case Hit.BR:
+                case Hit.Tl:
+                case Hit.Br:
                     cursor = Cursors.SizeNWSE;
                     break;
-                case Hit.BL:
-                case Hit.TR:
+                case Hit.Bl:
+                case Hit.Tr:
                     cursor = Cursors.SizeNESW;
                     break;
                 case Hit.T:
@@ -106,8 +105,8 @@ namespace PiP_Tool.ViewModels
 
         public void MouseDown(Point mousePosition)
         {
-            _mouseDownPosition.X = mousePosition.X;
-            _mouseDownPosition.Y = mousePosition.X;
+            _draggingOffset.X = SelectorBoxPosition.X - mousePosition.X;
+            _draggingOffset.Y = SelectorBoxPosition.Y - mousePosition.Y;
             _dragging = true;
         }
 
@@ -124,13 +123,11 @@ namespace PiP_Tool.ViewModels
             }
             else
             {
-                //var offsetX = _mouseDownPosition.X - SelectorBoxPosition.X;
-                //var offsetY = _mouseDownPosition.Y - SelectorBoxPosition.Y;
-                SelectorBoxPosition = new Point(mousePosition.X, mousePosition.Y);
+                SelectorBoxPosition = new Point(mousePosition.X + _draggingOffset.X, mousePosition.Y + _draggingOffset.Y);
             }
         }
 
-        protected virtual void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        protected virtual void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             var handler = PropertyChanged;
             if (handler != null)

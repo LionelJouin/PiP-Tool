@@ -33,5 +33,12 @@ namespace PiP_Tool
             ViewModel.MouseMove(Mouse.GetPosition(CanvasMain));
         }
 
+        private new void MouseRightButtonUp(object sender, MouseEventArgs e)
+        {
+            var pictureInPicture = new PictureInPictureWindow(ViewModel.SelectorBoxPosition, ViewModel.SelectorBoxSize);
+            pictureInPicture.Show();
+            Close();
+        }
+
     }
 }

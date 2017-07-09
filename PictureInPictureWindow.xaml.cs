@@ -1,4 +1,5 @@
-﻿using PiP_Tool.ViewModels;
+﻿using System.Windows;
+using PiP_Tool.ViewModels;
 
 namespace PiP_Tool
 {
@@ -7,9 +8,9 @@ namespace PiP_Tool
     /// </summary>
     public partial class PictureInPictureWindow
     {
-        public PictureInPictureWindow()
+        public PictureInPictureWindow(Point position, Size size)
         {
-            DataContext = new PictureInPicture();
+            DataContext = new PictureInPicture(position, size);
             InitializeComponent();
         }
     }

@@ -9,6 +9,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using PiP_Tool.Common;
+using Point = System.Windows.Point;
+using Size = System.Windows.Size;
 
 namespace PiP_Tool.ViewModels
 {
@@ -17,13 +19,15 @@ namespace PiP_Tool.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private bool _state;
-
-        private ImageSource _imageScreen;
-        private DispatcherTimer _timer;
-
         [System.Runtime.InteropServices.DllImport("gdi32.dll")]
         public static extern bool DeleteObject(IntPtr hObject);
+
+        private bool _state;
+        private ImageSource _imageScreen;
+        private DispatcherTimer _timer;
+        private Point _capturePosition;
+        private Size _captureSize;
+
 
         public ImageSource ImageScreen
         {
@@ -46,6 +50,13 @@ namespace PiP_Tool.ViewModels
             }
         }
 
+        public PictureInPicture(Point position, Size size)
+        {
+            _capturePosition = position;
+            _captureSize = size;
+            Video();
+        }
+
         private void Video()
         {
             if (_state)
@@ -66,14 +77,14 @@ namespace PiP_Tool.ViewModels
             ImageScreen = CopyScreen();
         }
 
-        private static BitmapSource CopyScreen()
+        private BitmapSource CopyScreen()
         {
             BitmapSource result;
-            using (var screenBmp = new Bitmap(100, 100))
+            using (var screenBmp = new Bitmap((int)_captureSize.Width, (int)_captureSize.Height))
             {
                 using (var bmpGraphics = Graphics.FromImage(screenBmp))
                 {
-                    bmpGraphics.CopyFromScreen(0, 0, 0, 0, screenBmp.Size, CopyPixelOperation.SourceCopy);
+                    bmpGraphics.CopyFromScreen((int)_capturePosition.X, (int)_capturePosition.Y, 0, 0, screenBmp.Size, CopyPixelOperation.SourceCopy);
                     var hBitmap = screenBmp.GetHbitmap();
                     bmpGraphics.Dispose();
                     result = Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());

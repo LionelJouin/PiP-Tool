@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Drawing;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Input;
 using PiP_Tool.Common;
 using PiP_Tool.Interfaces;
@@ -20,7 +20,8 @@ namespace PiP_Tool.ViewModels
             {
                 return new RelayCommand(() =>
                 {
-                    var main = new PictureInPictureWindow();
+                    
+                    var main = new PictureInPictureWindow(new Point(100, 100), new Size(100, 100));
                     main.Show();
                     CloseWindow();
                 });

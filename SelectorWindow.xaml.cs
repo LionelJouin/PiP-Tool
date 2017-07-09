@@ -9,28 +9,28 @@ namespace PiP_Tool
     public partial class SelectorWindow
     {
 
-        private readonly Selector _viewModel;
+        public readonly Selector ViewModel;
 
         public SelectorWindow()
         {
-            _viewModel = new Selector();
-            DataContext = _viewModel;
+            ViewModel = new Selector();
+            DataContext = ViewModel;
             InitializeComponent();
         }
 
         private new void MouseDown(object sender, MouseEventArgs e)
         {
-            _viewModel.MouseDown(Mouse.GetPosition(CanvasMain));
+            ViewModel.MouseDown(Mouse.GetPosition(CanvasMain));
         }
 
         private new void MouseUp(object sender, MouseEventArgs e)
         {
-            _viewModel.MouseUp();
+            ViewModel.MouseUp();
         }
 
         private new void MouseMove(object sender, MouseEventArgs e)
         {
-            _viewModel.MouseMove(Mouse.GetPosition(CanvasMain));
+            ViewModel.MouseMove(Mouse.GetPosition(CanvasMain));
         }
 
     }

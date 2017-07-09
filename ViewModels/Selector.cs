@@ -10,10 +10,13 @@ namespace PiP_Tool.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        private bool _dragging;
+        private Hit _hit;
         private Point _selectorBoxPosition = new Point(500, 300);
         private Size _selectorBoxSize = new Size(100, 300);
-        private Point _draggingOffset = new Point(0, 0);
-        private bool _dragging;
+        private Point _lastMousePosition = new Point(0, 0);
+        private readonly double _screenWidth = SystemParameters.PrimaryScreenWidth;
+        private readonly double _screenHeight = SystemParameters.PrimaryScreenHeight;
 
         public Point SelectorBoxPosition
         {
@@ -105,8 +108,7 @@ namespace PiP_Tool.ViewModels
 
         public void MouseDown(Point mousePosition)
         {
-            _draggingOffset.X = SelectorBoxPosition.X - mousePosition.X;
-            _draggingOffset.Y = SelectorBoxPosition.Y - mousePosition.Y;
+            _lastMousePosition = mousePosition;
             _dragging = true;
         }
 
@@ -119,11 +121,92 @@ namespace PiP_Tool.ViewModels
         {
             if (_dragging == false)
             {
-                SetCursor(GetHit(mousePosition));
+                _hit = GetHit(mousePosition);
+                SetCursor(_hit);
             }
             else
             {
-                SelectorBoxPosition = new Point(mousePosition.X + _draggingOffset.X, mousePosition.Y + _draggingOffset.Y);
+                var offsetX = mousePosition.X - _lastMousePosition.X;
+                var offsetY = mousePosition.Y - _lastMousePosition.Y;
+                
+                var newX = _selectorBoxPosition.X;
+                var newY = _selectorBoxPosition.Y;
+                var newWidth = _selectorBoxSize.Width;
+                var newHeight = _selectorBoxSize.Height;
+
+
+
+                if (newX <= 0)
+                {
+                    newX = 0;
+                }
+                if (newY <= 0)
+                {
+                    newY = 0;
+                }
+                if (newWidth > _screenWidth)
+                {
+                    newWidth = _screenWidth;
+                }
+                if (newHeight > _screenHeight)
+                {
+                    newHeight = _screenHeight;
+                }
+                if (newX + newWidth >= _screenWidth)
+                {
+                    newX -= newX + newWidth - _screenWidth;
+                }
+                if (newY + newHeight >= _screenHeight)
+                {
+                    newY -= newY + newHeight - _screenHeight;
+                }
+
+                switch (_hit)
+                {
+                    case Hit.Body:
+                        newX += offsetX;
+                        newY += offsetY;
+                        break;
+                    case Hit.Tl:
+                        newX += offsetX;
+                        newY += offsetY;
+                        newWidth -= offsetX;
+                        newHeight -= offsetY;
+                        break;
+                    case Hit.Tr:
+                        newY += offsetY;
+                        newWidth += offsetX;
+                        newHeight -= offsetY;
+                        break;
+                    case Hit.Br:
+                        newWidth += offsetX;
+                        newHeight += offsetY;
+                        break;
+                    case Hit.Bl:
+                        newX += offsetX;
+                        newWidth -= offsetX;
+                        newHeight += offsetY;
+                        break;
+                    case Hit.L:
+                        newX += offsetX;
+                        newWidth -= offsetX;
+                        break;
+                    case Hit.R:
+                        newWidth += offsetX;
+                        break;
+                    case Hit.B:
+                        newHeight += offsetY;
+                        break;
+                    case Hit.T:
+                        newY += offsetY;
+                        newHeight -= offsetY;
+                        break;
+                }
+
+                if (!(newWidth > 50) || !(newHeight > 50)) return;
+                SelectorBoxPosition = new Point(newX, newY);
+                SelectorBoxSize = new Size(newWidth, newHeight);
+                _lastMousePosition = mousePosition;
             }
         }
 

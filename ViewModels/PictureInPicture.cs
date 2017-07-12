@@ -3,12 +3,10 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using PiP_Tool.Common;
 using Point = System.Windows.Point;
 using Size = System.Windows.Size;
 
@@ -27,7 +25,8 @@ namespace PiP_Tool.ViewModels
         private DispatcherTimer _timer;
         private Point _capturePosition;
         private Size _captureSize;
-
+        private Size _windowSize = new Size(100, 100);
+        public double Ratio;
 
         public ImageSource ImageScreen
         {
@@ -39,14 +38,13 @@ namespace PiP_Tool.ViewModels
             }
         }
 
-        public ICommand CaptureCommand
+        public Size WindowSize
         {
-            get
+            get { return _windowSize; }
+            set
             {
-                return new RelayCommand(() =>
-                {
-                    Video();
-                });
+                _windowSize = value;
+                NotifyPropertyChanged();
             }
         }
 
@@ -54,6 +52,9 @@ namespace PiP_Tool.ViewModels
         {
             _capturePosition = position;
             _captureSize = size;
+            Ratio = _captureSize.Width / _captureSize.Height;
+            WindowSize = new Size(_captureSize.Width, _captureSize.Height);
+            // todo max size, min size
             Video();
         }
 

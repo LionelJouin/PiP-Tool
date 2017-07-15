@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
@@ -10,9 +11,21 @@ namespace PiP_Tool.ViewModels
 {
     public class Main : INotifyPropertyChanged, ICloseable
     {
-        
+
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler<EventArgs> RequestClose;
+
+        public Main()
+        {
+            var procceses = Process.GetProcesses();
+            foreach (var process in procceses)
+            {
+                if (!string.IsNullOrEmpty(process.MainWindowTitle))
+                {
+                    Console.WriteLine("Process: {0}", process.MainWindowTitle);
+                }
+            }
+        }
 
         public ICommand StartPictureInPicture
         {
@@ -20,7 +33,7 @@ namespace PiP_Tool.ViewModels
             {
                 return new RelayCommand(() =>
                 {
-                    
+
                     var main = new PictureInPictureWindow(new Point(100, 100), new Size(100, 100));
                     main.Show();
                     CloseWindow();

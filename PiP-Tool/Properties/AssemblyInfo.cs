@@ -7,11 +7,11 @@ using System.Windows;
 // Les informations générales relatives à un assembly dépendent de
 // l'ensemble d'attributs suivant. Changez les valeurs de ces attributs pour modifier les informations
 // associées à un assembly.
-[assembly: AssemblyTitle("PiP Tool")]
+[assembly: AssemblyTitle("PiP-Tool")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("PiP Tool")]
+[assembly: AssemblyProduct("PiP-Tool")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

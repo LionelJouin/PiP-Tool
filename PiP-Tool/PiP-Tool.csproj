@@ -57,6 +57,7 @@
     </ApplicationDefinition>
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Interfaces\ICloseable.cs" />
+    <Compile Include="Models\WindowInfo.cs" />
     <Compile Include="PictureInPictureWindow.xaml.cs">
       <DependentUpon>PictureInPictureWindow.xaml</DependentUpon>
     </Compile>
@@ -112,6 +113,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Helpers\Helpers.csproj">
+      <Project>{C1E4ED3B-147C-4F7C-8F78-007ABB3ACF3A}</Project>
+      <Name>Helpers</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

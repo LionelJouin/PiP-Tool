@@ -1,9 +1,11 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using Helpers.Native;
+using PiP_Tool.Models;
 
 namespace PiP_Tool.ViewModels
 {
@@ -17,6 +19,7 @@ namespace PiP_Tool.ViewModels
         private Point _selectorBoxPosition = new Point(500, 300);
         private Size _selectorBoxSize = new Size(100, 300);
         private Point _lastMousePosition = new Point(0, 0);
+        private List<WindowInfo> _windows;
         private readonly double _screenWidth = SystemParameters.PrimaryScreenWidth;
         private readonly double _screenHeight = SystemParameters.PrimaryScreenHeight;
 
@@ -37,6 +40,19 @@ namespace PiP_Tool.ViewModels
             {
                 _selectorBoxSize = value;
                 NotifyPropertyChanged();
+            }
+        }
+
+        public Selector()
+        {
+            _windows = new List<WindowInfo>();
+            var procceses = Process.GetProcesses();
+            foreach (var process in procceses)
+            {
+                if (!string.IsNullOrEmpty(process.MainWindowTitle) && NativeMethods.IsWindowVisible(process.MainWindowHandle))
+                {
+                    _windows.Add(new WindowInfo(process.MainWindowHandle));
+                }
             }
         }
 

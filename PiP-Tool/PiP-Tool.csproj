@@ -58,15 +58,20 @@
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Interfaces\ICloseable.cs" />
     <Compile Include="Models\WindowInfo.cs" />
-    <Compile Include="PictureInPictureWindow.xaml.cs">
+    <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\WindowSelector.cs" />
+    <Compile Include="Views\PictureInPictureWindow.xaml.cs">
       <DependentUpon>PictureInPictureWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SelectorWindow.xaml.cs">
+    <Compile Include="Views\SelectorWindow.xaml.cs">
       <DependentUpon>SelectorWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\Main.cs" />
     <Compile Include="ViewModels\PictureInPicture.cs" />
     <Compile Include="ViewModels\Selector.cs" />
+    <Compile Include="Views\WindowSelectorWindow.xaml.cs">
+      <DependentUpon>WindowSelectorWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -79,13 +84,17 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="PictureInPictureWindow.xaml">
+    <Page Include="Views\PictureInPictureWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="SelectorWindow.xaml">
+    <Page Include="Views\SelectorWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\WindowSelectorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

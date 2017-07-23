@@ -2,7 +2,7 @@
 using System.Windows.Input;
 using PiP_Tool.ViewModels;
 
-namespace PiP_Tool
+namespace PiP_Tool.Views
 {
     /// <summary>
     /// Logique d'interaction pour PictureInPictureWindow.xaml

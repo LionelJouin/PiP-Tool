@@ -1,7 +1,8 @@
-﻿using System.Windows.Input;
+﻿using System.Windows;
+using System.Windows.Input;
 using PiP_Tool.ViewModels;
 
-namespace PiP_Tool
+namespace PiP_Tool.Views
 {
     /// <summary>
     /// Logique d'interaction pour SelectorWindow.xaml
@@ -35,7 +36,7 @@ namespace PiP_Tool
 
         private new void MouseRightButtonUp(object sender, MouseEventArgs e)
         {
-            var pictureInPicture = new PictureInPictureWindow(ViewModel.SelectorBoxPosition, ViewModel.SelectorBoxSize);
+            var pictureInPicture = new Views.PictureInPictureWindow(ViewModel.SelectorBoxPosition, ViewModel.SelectorBoxSize);
             pictureInPicture.Show();
             Close();
         }

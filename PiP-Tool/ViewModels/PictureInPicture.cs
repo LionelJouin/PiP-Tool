@@ -1,7 +1,5 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Drawing;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -12,10 +10,8 @@ using Size = System.Windows.Size;
 
 namespace PiP_Tool.ViewModels
 {
-    public class PictureInPicture : INotifyPropertyChanged
+    public class PictureInPicture : BaseViewModel
     {
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         [System.Runtime.InteropServices.DllImport("gdi32.dll")]
         public static extern bool DeleteObject(IntPtr hObject);
@@ -95,13 +91,6 @@ namespace PiP_Tool.ViewModels
             }
             GC.Collect();
             return result;
-        }
-
-        protected virtual void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            var handler = PropertyChanged;
-            if (handler != null)
-                handler(this, new PropertyChangedEventArgs(propertyName));
         }
 
     }

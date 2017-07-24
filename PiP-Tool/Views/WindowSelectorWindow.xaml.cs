@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
+using System.Windows.Input;
 using PiP_Tool.ViewModels;
 
 namespace PiP_Tool.Views
@@ -16,6 +18,11 @@ namespace PiP_Tool.Views
             ViewModel = new WindowSelector();
             DataContext = ViewModel;
             InitializeComponent();
+        }
+
+        private void OnMouseMove(object sender, MouseEventArgs e)
+        {
+            ViewModel.OnMouseMove(Mouse.GetPosition(this));
         }
 
     }

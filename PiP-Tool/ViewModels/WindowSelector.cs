@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Helpers.Native;
 using PiP_Tool.Models;
+using Point = System.Windows.Point;
 
 namespace PiP_Tool.ViewModels
 {
@@ -22,6 +24,16 @@ namespace PiP_Tool.ViewModels
                 }
             }
         }
+
+        public void OnMouseMove(Point point)
+        {
+            foreach (var window in _windows)
+            {
+                if (window.PositionSize.Contains(point))
+                    Console.Write("ok");
+            }
+        }
         
+
     }
 }

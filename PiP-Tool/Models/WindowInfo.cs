@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Windows;
 using Helpers.Native;
 
@@ -8,12 +9,13 @@ namespace PiP_Tool.Models
     {
 
         public IntPtr Handle { get; set; }
+        public string Title { get; set; }
         public Rect PositionSize { get; set; }
         public Point Position { get; set; }
         public Size Size { get; set; }
         public int ZIndex { get; set; }
 
-        public WindowInfo(IntPtr handle)
+        public WindowInfo(IntPtr handle, string windowTitle)
         {
             Handle = handle;
             Size = new Size(0, 0);
@@ -26,10 +28,12 @@ namespace PiP_Tool.Models
                 Size = new Size(rct.Right - rct.Left + 1, rct.Bottom - rct.Top + 1);
                 PositionSize = new Rect
                 {
-                    Size = new Size(100, 100),
+                    Size = Size,
                     Location = Position
                 };
             }
+
+            Title = windowTitle;
         }
 
     }

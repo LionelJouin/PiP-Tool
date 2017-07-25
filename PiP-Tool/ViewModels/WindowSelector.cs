@@ -20,7 +20,7 @@ namespace PiP_Tool.ViewModels
             {
                 if (!string.IsNullOrEmpty(process.MainWindowTitle) && NativeMethods.IsWindowVisible(process.MainWindowHandle))
                 {
-                    _windows.Add(new WindowInfo(process.MainWindowHandle));
+                    _windows.Add(new WindowInfo(process.MainWindowHandle, process.MainWindowTitle));
                 }
             }
         }
@@ -30,10 +30,10 @@ namespace PiP_Tool.ViewModels
             foreach (var window in _windows)
             {
                 if (window.PositionSize.Contains(point))
-                    Console.Write("ok");
+                    Console.WriteLine(window.Title);
             }
         }
-        
+
 
     }
 }

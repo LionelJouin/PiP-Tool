@@ -5,8 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="WindowSelectorWindow" 
-        Height="300" 
-        Width="300">
+        AllowsTransparency="True" 
+        WindowStyle="None" 
+        ResizeMode="NoResize" 
+         MouseMove="OnMouseMove"
+        WindowState="Maximized">
+    <Window.Background>
+        <SolidColorBrush Opacity="0.1" Color="Black"/>
+    </Window.Background>
     <Grid>
         
     </Grid>

@@ -1,12 +1,14 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
+using Helpers.Native;
 
-namespace PiP_Tool
+namespace Helpers
 {
     public class HotKey
     {
+
+        // https://stackoverflow.com/questions/3654787/global-hotkey-in-console-application
 
         public static event EventHandler<HotKeyEventArgs> HotKeyPressed;
         private delegate void RegisterHotKeyDelegate(IntPtr hwnd, int id, uint modifiers, uint key);
@@ -15,6 +17,8 @@ namespace PiP_Tool
         private static volatile MessageWindow _wnd;
         private static volatile IntPtr _hwnd;
         private static readonly ManualResetEvent WindowReadyEvent = new ManualResetEvent(false);
+
+        private static int _id;
 
         static HotKey()
         {
@@ -42,12 +46,12 @@ namespace PiP_Tool
 
         private static void RegisterHotKeyInternal(IntPtr hwnd, int id, uint modifiers, uint key)
         {
-            RegisterHotKey(hwnd, id, modifiers, key);
+            NativeMethods.RegisterHotKey(hwnd, id, modifiers, key);
         }
 
         private static void UnRegisterHotKeyInternal(IntPtr hwnd, int id)
         {
-            UnregisterHotKey(_hwnd, id);
+            NativeMethods.UnregisterHotKey(_hwnd, id);
         }
 
         private static void OnHotKeyPressed(HotKeyEventArgs e)
@@ -83,14 +87,6 @@ namespace PiP_Tool
 
             private const int WmHotkey = 0x312;
         }
-
-        [DllImport("user32", SetLastError = true)]
-        private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
-
-        [DllImport("user32", SetLastError = true)]
-        private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
-
-        private static int _id;
     }
 
 

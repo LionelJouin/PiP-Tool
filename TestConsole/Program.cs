@@ -24,18 +24,24 @@ namespace TestConsole
 
         public static void HotKeyPressed(object sender, HotKeyEventArgs e)
         {
-            Console.WriteLine("HotKey : " + GetActiveWindowTitle());
+            var foregroundWindow = NativeMethods.GetForegroundWindow();
+            Console.WriteLine("HotKey : " + GetWindowTitle(foregroundWindow));
+            NativeMethods.SetWindowPos(
+                foregroundWindow, 
+                (IntPtr)NativeEnums.SpecialWindowHandles.HWND_TOPMOST, 
+                0, 0, 0, 0, 
+                (int)NativeEnums.SetWindowPosFlags.SWP_NOMOVE | (int)NativeEnums.SetWindowPosFlags.SWP_NOSIZE
+                );
         }
 
-        private static string GetActiveWindowTitle()
+        private static string GetWindowTitle(IntPtr window)
         {
             const int nChars = 256;
-            var Buff = new StringBuilder(nChars);
-            var foregroundWindow = NativeMethods.GetForegroundWindow();
+            var buff = new StringBuilder(nChars);
 
-            if (NativeMethods.GetWindowText(foregroundWindow, Buff, nChars) > 0)
+            if (NativeMethods.GetWindowText(window, buff, nChars) > 0)
             {
-                return Buff.ToString();
+                return buff.ToString();
             }
             return null;
         }

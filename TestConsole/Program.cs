@@ -22,16 +22,26 @@ namespace TestConsole
             } while (true);
         }
 
+        // https://stackoverflow.com/questions/2832217/modify-the-windows-style-of-another-application-using-winapi
         public static void HotKeyPressed(object sender, HotKeyEventArgs e)
         {
             var foregroundWindow = NativeMethods.GetForegroundWindow();
             Console.WriteLine("HotKey : " + GetWindowTitle(foregroundWindow));
+            var style = NativeMethods.GetWindowLong(foregroundWindow, NativeConsts.GWL_STYLE);
+
+            SetWindowOnTop(foregroundWindow);
+            NativeMethods.SetWindowLongPtr(foregroundWindow, NativeConsts.GWL_STYLE, (style & ~NativeEnums.WindowStyles.WS_CAPTION));
+        }
+
+        public static void SetWindowOnTop(IntPtr window)
+        {
+
             NativeMethods.SetWindowPos(
-                foregroundWindow, 
-                (IntPtr)NativeEnums.SpecialWindowHandles.HWND_TOPMOST, 
-                0, 0, 0, 0, 
-                (int)NativeEnums.SetWindowPosFlags.SWP_NOMOVE | (int)NativeEnums.SetWindowPosFlags.SWP_NOSIZE
-                );
+                window,
+                (IntPtr)NativeEnums.SpecialWindowHandles.HWND_TOPMOST,
+                    0, 0, 0, 0,
+                    (int)NativeEnums.SetWindowPosFlags.SWP_NOMOVE | (int)NativeEnums.SetWindowPosFlags.SWP_NOSIZE
+                    );
         }
 
         private static string GetWindowTitle(IntPtr window)

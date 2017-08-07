@@ -52,6 +52,9 @@ namespace Helpers.Native
         [DllImport("user32.dll", EntryPoint = "SetWindowLongPtr")]
         private static extern IntPtr SetWindowLongPtr64(HandleRef hWnd, int nIndex, IntPtr dwNewLong);
 
+        [DllImport("user32.dll")]
+        public static extern int SetWindowLong(IntPtr hWnd, int nIndex, uint dwNewLong);
+
         [DllImport("USER32.DLL")]
         public static extern int GetWindowLong(IntPtr hWnd, int nIndex);
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text;
+using System.Linq;
 using System.Windows.Forms;
 using Helpers;
 using Helpers.Native;
@@ -17,6 +16,7 @@ namespace TestConsole
         {
             _windows = new List<Window>();
 
+            // ALT + P
             HotKey.RegisterHotKey(Keys.P, KeyModifiers.Alt);
             HotKey.HotKeyPressed += HotKeyPressed;
 
@@ -37,9 +37,19 @@ namespace TestConsole
         public static void HotKeyPressed(object sender, HotKeyEventArgs e)
         {
             var foregroundWindow = NativeMethods.GetForegroundWindow();
-            var window = new Window(foregroundWindow);
-            _windows.Add(window);
-            window.SetWindowPiP();
+            var windowInPipMode = _windows.Any(x => x.Equals(foregroundWindow));
+            if (windowInPipMode)
+            {
+                var window = _windows.First(x => x.Equals(foregroundWindow));
+                window.SetWindowPiP(false);
+                _windows.Remove(window);
+            }
+            else
+            {
+                var window = new Window(foregroundWindow);
+                _windows.Add(window);
+                window.SetWindowPiP();
+            }
         }
 
     }

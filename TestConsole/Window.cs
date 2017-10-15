@@ -77,5 +77,10 @@ namespace TestConsole
             return null;
         }
 
+        public bool Equals(IntPtr window)
+        {
+            return _window.Equals(window);
+        }
+        
     }
 }

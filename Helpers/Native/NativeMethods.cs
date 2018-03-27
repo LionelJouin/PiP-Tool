@@ -58,5 +58,14 @@ namespace Helpers.Native
         [DllImport("USER32.DLL")]
         public static extern int GetWindowLong(IntPtr hWnd, int nIndex);
 
+        [DllImport("user32.dll")]
+        public static extern bool UpdateWindow(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
+        public static extern bool InvalidateRect(IntPtr hWnd, IntPtr lpRect, bool bErase);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern IntPtr SetFocus(IntPtr hWnd);
+
     }
 }

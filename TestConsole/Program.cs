@@ -23,6 +23,7 @@ namespace TestConsole
             } while (true);
         }
 
+        // https://www.codeproject.com/Articles/20651/Capturing-Minimized-Window-A-Kid-s-Trick
         // https://stackoverflow.com/questions/2832217/modify-the-windows-style-of-another-application-using-winapi
         public static void HotKeyPressed(object sender, HotKeyEventArgs e)
         {

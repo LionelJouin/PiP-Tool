@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C11CF462-9B98-4FAF-9ECB-7A069599BA15}</ProjectGuid>
+    <ProjectGuid>{51558263-F5AD-4990-869B-48B3FA8E1AA9}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>PiP_Tool</RootNamespace>
     <AssemblyName>PiP-Tool</AssemblyName>
-    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -36,7 +36,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -55,23 +54,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Common\RelayCommand.cs" />
-    <Compile Include="Interfaces\ICloseable.cs" />
-    <Compile Include="Models\WindowInfo.cs" />
-    <Compile Include="ViewModels\BaseViewModel.cs" />
-    <Compile Include="ViewModels\WindowSelector.cs" />
-    <Compile Include="Views\PictureInPictureWindow.xaml.cs">
-      <DependentUpon>PictureInPictureWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\SelectorWindow.xaml.cs">
-      <DependentUpon>SelectorWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModels\Main.cs" />
-    <Compile Include="ViewModels\PictureInPicture.cs" />
-    <Compile Include="ViewModels\Selector.cs" />
-    <Compile Include="Views\WindowSelectorWindow.xaml.cs">
-      <DependentUpon>WindowSelectorWindow.xaml</DependentUpon>
-    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -84,18 +66,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\PictureInPictureWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\SelectorWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\WindowSelectorWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -122,12 +92,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Helpers\Helpers.csproj">
-      <Project>{C1E4ED3B-147C-4F7C-8F78-007ABB3ACF3A}</Project>
-      <Name>Helpers</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

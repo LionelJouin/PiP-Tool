@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Native\NativeEnums.cs" />
     <Compile Include="Native\NativeMethods.cs" />
     <Compile Include="Native\NativeStructs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

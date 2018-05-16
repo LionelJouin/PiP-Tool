@@ -26,7 +26,7 @@ namespace PiP_Tool.ViewModels
 
         public ImageSource ImageScreen
         {
-            get { return _imageScreen; }
+            get => _imageScreen;
             set
             {
                 _imageScreen = value;
@@ -36,7 +36,7 @@ namespace PiP_Tool.ViewModels
 
         public Size WindowSize
         {
-            get { return _windowSize; }
+            get => _windowSize;
             set
             {
                 _windowSize = value;

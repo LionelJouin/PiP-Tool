@@ -36,8 +36,8 @@ namespace PiP_Tool.Views
 
         private new void MouseRightButtonUp(object sender, MouseEventArgs e)
         {
-            var pictureInPicture = new Views.PictureInPictureWindow(ViewModel.SelectorBoxPosition, ViewModel.SelectorBoxSize);
-            pictureInPicture.Show();
+            //var pictureInPicture = new Views.PictureInPictureWindow(ViewModel.SelectorBoxPosition, ViewModel.SelectorBoxSize);
+            //pictureInPicture.Show();
             Close();
         }
 

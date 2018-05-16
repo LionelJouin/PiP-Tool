@@ -10,16 +10,16 @@
         <Button x:Name="ButtonPip" 
                 Content="Pip" 
                 HorizontalAlignment="Left" 
-                Margin="10,10,0,0" 
+                Margin="148,10,0,0" 
                 VerticalAlignment="Top" 
                 Width="75" 
                 RenderTransformOrigin="0.112,-0.412"  
-                Command="{Binding StartPictureInPicture}" />
+                Command="{Binding StartPictureInPicture}" Height="22" />
 
         <Button x:Name="ButtonSelector" 
                 Content="Selector" 
                 HorizontalAlignment="Left" 
-                Margin="116,10,0,0" 
+                Margin="301,289,0,0" 
                 VerticalAlignment="Top" 
                 Width="75"
                 Command="{Binding StartSelector}" />
@@ -27,10 +27,15 @@
         <Button x:Name="ButtonWindowSelector" 
                 Content="WindowSelector" 
                 HorizontalAlignment="Left" 
-                Margin="224,10,0,0" 
+                Margin="381,289,0,0" 
                 VerticalAlignment="Top" 
                 Width="126"
                 Command="{Binding StartWindowSelector}" />
+        <ComboBox HorizontalAlignment="Left" 
+                  Margin="10,10,0,0" 
+                  VerticalAlignment="Top" 
+                  Width="120"
+                  ItemsSource="{Binding Path=Windows}" />
 
     </Grid>
 </Window>

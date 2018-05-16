@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Input;
 using PiP_Tool.ViewModels;
 
@@ -12,9 +13,9 @@ namespace PiP_Tool.Views
 
         private readonly PictureInPicture _pictureInPicture;
 
-        public PictureInPictureWindow(Point position, Size size)
+        public PictureInPictureWindow(IntPtr hWnd)
         {
-            _pictureInPicture = new PictureInPicture(position, size);
+            _pictureInPicture = new PictureInPicture(hWnd);
             DataContext = _pictureInPicture;
             InitializeComponent();
         }

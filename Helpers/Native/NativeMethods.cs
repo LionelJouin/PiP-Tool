@@ -46,6 +46,10 @@ namespace Helpers.Native
         [DllImport("dwmapi.dll")]
         private static extern int DwmGetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE dwAttribute, out bool pvAttribute, int cbAttribute);
 
+        [DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool DeleteObject([In] IntPtr hObject);
+
         // https://stackoverflow.com/questions/43927156/enumwindows-returns-closed-windows-store-applications
         public static IDictionary<IntPtr, string> GetOpenWindows()
         {

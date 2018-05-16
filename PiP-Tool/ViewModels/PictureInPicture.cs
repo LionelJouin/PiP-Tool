@@ -5,24 +5,22 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using Point = System.Windows.Point;
-using Size = System.Windows.Size;
+using Helpers.Native;
+using PixelFormat = System.Drawing.Imaging.PixelFormat;
+using Size = System.Drawing.Size;
 
 namespace PiP_Tool.ViewModels
 {
     public class PictureInPicture : BaseViewModel
     {
-
-        [System.Runtime.InteropServices.DllImport("gdi32.dll")]
-        public static extern bool DeleteObject(IntPtr hObject);
+        private const int Ips = 60;
 
         private bool _state;
-        private ImageSource _imageScreen;
         private DispatcherTimer _timer;
-        private Point _capturePosition;
-        private Size _captureSize;
+        private ImageSource _imageScreen;
         private Size _windowSize = new Size(100, 100);
-        public double Ratio;
+        private readonly IntPtr _hWnd;
+        public double Ratio { get; private set; }
 
         public ImageSource ImageScreen
         {
@@ -44,13 +42,9 @@ namespace PiP_Tool.ViewModels
             }
         }
 
-        public PictureInPicture(Point position, Size size)
+        public PictureInPicture(IntPtr hWnd)
         {
-            _capturePosition = position;
-            _captureSize = size;
-            Ratio = _captureSize.Width / _captureSize.Height;
-            WindowSize = new Size(_captureSize.Width, _captureSize.Height);
-            // todo max size, min size
+            _hWnd = hWnd;
             Video();
         }
 
@@ -62,7 +56,7 @@ namespace PiP_Tool.ViewModels
             }
             else
             {
-                _timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(10) };
+                _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1 / Ips) };
                 _timer.Tick += Screenshot;
                 _timer.Start();
             }
@@ -71,26 +65,35 @@ namespace PiP_Tool.ViewModels
 
         private void Screenshot(object sender, EventArgs e)
         {
-            ImageScreen = CopyScreen();
+            ImageScreen = ImageSourceForBitmap(PrintWindow(_hWnd));
         }
 
-        private BitmapSource CopyScreen()
+        public Bitmap PrintWindow(IntPtr hwnd)
         {
-            BitmapSource result;
-            using (var screenBmp = new Bitmap((int)_captureSize.Width, (int)_captureSize.Height))
-            {
-                using (var bmpGraphics = Graphics.FromImage(screenBmp))
-                {
-                    bmpGraphics.CopyFromScreen((int)_capturePosition.X, (int)_capturePosition.Y, 0, 0, screenBmp.Size, CopyPixelOperation.SourceCopy);
-                    var hBitmap = screenBmp.GetHbitmap();
-                    bmpGraphics.Dispose();
-                    result = Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-                    DeleteObject(hBitmap);
+            NativeMethods.GetWindowRect(hwnd, out var rc);
 
-                }
+            Ratio = rc.Width / rc.Height;
+
+            var bmp = new Bitmap(rc.Width, rc.Height, PixelFormat.Format32bppArgb);
+            var gfxBmp = Graphics.FromImage(bmp);
+            var hdcBitmap = gfxBmp.GetHdc();
+
+            NativeMethods.PrintWindow(hwnd, hdcBitmap, 0);
+
+            gfxBmp.ReleaseHdc(hdcBitmap);
+            gfxBmp.Dispose();
+
+            return bmp;
+        }
+
+        public ImageSource ImageSourceForBitmap(Bitmap bmp)
+        {
+            var handle = bmp.GetHbitmap();
+            try
+            {
+                return Imaging.CreateBitmapSourceFromHBitmap(handle, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
             }
-            GC.Collect();
-            return result;
+            finally { NativeMethods.DeleteObject(handle); }
         }
 
     }

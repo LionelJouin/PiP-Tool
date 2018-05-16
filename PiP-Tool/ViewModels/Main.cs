@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 using Helpers.Native;
 using PiP_Tool.Common;
@@ -12,7 +13,7 @@ namespace PiP_Tool.ViewModels
 {
     public class Main : BaseViewModel, ICloseable
     {
-        
+
         public event EventHandler<EventArgs> RequestClose;
 
         public ICommand StartPictureInPicture
@@ -21,8 +22,7 @@ namespace PiP_Tool.ViewModels
             {
                 return new RelayCommand(() =>
                 {
-
-                    var main = new PictureInPictureWindow(new Point(100, 100), new Size(100, 100));
+                    var main = new PictureInPictureWindow(_windowToPip);
                     main.Show();
                     CloseWindow();
                 });
@@ -55,8 +55,10 @@ namespace PiP_Tool.ViewModels
             }
         }
 
+        public CollectionView Windows { get; }
+
         private IDictionary<IntPtr, string> _openWindows;
-        private IntPtr _windowToPip;
+        private readonly IntPtr _windowToPip;
 
         public Main()
         {
@@ -68,7 +70,8 @@ namespace PiP_Tool.ViewModels
 
                 Console.WriteLine("{0}: {1}", handle, title);
             }
-            //_windowToPip = _openWindows.FirstOrDefault(x => x.Value.Contains("Bloc-notes")).Key;
+            _windowToPip = _openWindows.FirstOrDefault(x => x.Value.Contains("Bloc-notes")).Key;
+            Windows = new CollectionView(_openWindows.Select(x => x.Value));
         }
 
         private void CloseWindow()

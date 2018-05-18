@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Interop;
+using PiP_Tool.Models;
 using PiP_Tool.ViewModels;
 
 namespace PiP_Tool.Views
@@ -11,13 +15,18 @@ namespace PiP_Tool.Views
     public partial class PictureInPictureWindow
     {
 
+        readonly WindowInteropHelper _wih;
         private readonly PictureInPicture _pictureInPicture;
-
-        public PictureInPictureWindow(IntPtr hWnd)
+        
+        public PictureInPictureWindow(WindowInfo selectedWindow)
         {
-            _pictureInPicture = new PictureInPicture(hWnd);
-            DataContext = _pictureInPicture;
             InitializeComponent();
+
+            _wih = new WindowInteropHelper(this);
+            _pictureInPicture = new PictureInPicture();
+            DataContext = _pictureInPicture;
+
+            Loaded += (s, e) => _pictureInPicture.Init(_wih.Handle, selectedWindow);
         }
 
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
@@ -29,14 +38,14 @@ namespace PiP_Tool.Views
 
         protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
         {
-            if (sizeInfo.WidthChanged)
-            {
-                Width = sizeInfo.NewSize.Height * _pictureInPicture.Ratio;
-            }
-            else
-            {
-                Height = sizeInfo.NewSize.Width / _pictureInPicture.Ratio;
-            }
+            //if (sizeInfo.WidthChanged)
+            //{
+            //    Width = sizeInfo.NewSize.Height * _pictureInPicture.Ratio;
+            //}
+            //else
+            //{
+            //    Height = sizeInfo.NewSize.Width / _pictureInPicture.Ratio;
+            //}
         }
 
     }

@@ -12,12 +12,9 @@
         WindowStyle="None" 
         Topmost="True"
         WindowStartupLocation="Manual">
-    <Window.Background>
-        <SolidColorBrush Opacity="0.0" Color="Black"/>
-    </Window.Background>
     <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
 
-        <Image Source="{Binding ImageScreen, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,0"/>
+        <!--<Image Source="{Binding ImageScreen, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,0"/>-->
 
     </Grid>
 </Window>

@@ -1,33 +1,29 @@
 ﻿using System;
 using System.Drawing;
-using System.Windows;
-using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Threading;
 using Helpers.Native;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
-using Size = System.Drawing.Size;
+using PiP_Tool.Models;
 
 namespace PiP_Tool.ViewModels
 {
     public class PictureInPicture : BaseViewModel
     {
-        private const int Ips = 60;
 
-        private bool _state;
-        private DispatcherTimer _timer;
-        private ImageSource _imageScreen;
-        private Size _windowSize = new Size(100, 100);
-        private readonly IntPtr _hWnd;
-        public double Ratio { get; private set; }
-
-        public ImageSource ImageScreen
+        public WindowInfo SelectedWindow
         {
-            get => _imageScreen;
+            get => _selectedWindow;
             set
             {
-                _imageScreen = value;
+                if (_selectedWindow != null && _selectedWindow.Handle == IntPtr.Zero)
+                    return;
+
+                _selectedWindow = value;
+
+                if (_thumbHandle != IntPtr.Zero)
+                    NativeMethods.DwmUnregisterThumbnail(_thumbHandle);
+
+                if (NativeMethods.DwmRegisterThumbnail(_targetHandle, SelectedWindow.Handle, out _thumbHandle) == 0)
+                    Update();
+
                 NotifyPropertyChanged();
             }
         }
@@ -42,59 +38,53 @@ namespace PiP_Tool.ViewModels
             }
         }
 
-        public PictureInPicture(IntPtr hWnd)
+        private Size _windowSize = new Size(100, 100);
+        private IntPtr _targetHandle, _thumbHandle;
+        private WindowInfo _selectedWindow;
+
+        //NativeStructs.Rect _targetRect;
+
+        //public PictureInPicture(IntPtr hWnd, PictureInPictureWindow.Rect rect)
+        //{
+        //    _targetHandle = Process.GetCurrentProcess().MainWindowHandle;
+        //    _targetRect = rect;
+        //    SelectedWindow = hWnd;
+        //    a();
+        //    ImageScreen = Update();
+        //}
+
+        public void Init(IntPtr target, WindowInfo selectedWindow)
         {
-            _hWnd = hWnd;
-            Video();
+            _targetHandle = target;
+            SelectedWindow = selectedWindow;
+            WindowSize = SelectedWindow.Size;
         }
 
-        private void Video()
+        public void Update()
         {
-            if (_state)
+            if (_thumbHandle == IntPtr.Zero)
+                return;
+
+            NativeMethods.DwmQueryThumbnailSourceSize(_thumbHandle, out NativeStructs.Psize size);
+            
+            var props = new NativeStructs.DwmThumbnailProperties
             {
-                _timer.Stop();
-            }
-            else
-            {
-                _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1 / Ips) };
-                _timer.Tick += Screenshot;
-                _timer.Start();
-            }
-            _state = !_state;
+                fVisible = true,
+                //dwFlags = (int) (DWM_TNP.DWM_TNP_VISIBLE | DWM_TNP.DWM_TNP_RECTDESTINATION | DWM_TNP.DWM_TNP_OPACITY | DWM_TNP.DWM_TNP_RECTSOURCE),
+                dwFlags = (int)(DWM_TNP.DWM_TNP_VISIBLE | DWM_TNP.DWM_TNP_RECTDESTINATION | DWM_TNP.DWM_TNP_OPACITY),
+                opacity = 255,
+                rcDestination = new NativeStructs.Rect(0, 0, 300, 300),
+                rcSource = new NativeStructs.Rect(50, 150, 300, 300)
+            };
+
+            //if (size.x < _targetRect.Width)
+            //    props.rcDestination.Right = 0;
+
+            //if (size.y < _targetRect.Height)
+            //    props.rcDestination.Bottom = 0;
+
+            NativeMethods.DwmUpdateThumbnailProperties(_thumbHandle, ref props);
         }
-
-        private void Screenshot(object sender, EventArgs e)
-        {
-            ImageScreen = ImageSourceForBitmap(PrintWindow(_hWnd));
-        }
-
-        public Bitmap PrintWindow(IntPtr hwnd)
-        {
-            NativeMethods.GetWindowRect(hwnd, out var rc);
-
-            Ratio = rc.Width / rc.Height;
-
-            var bmp = new Bitmap(rc.Width, rc.Height, PixelFormat.Format32bppArgb);
-            var gfxBmp = Graphics.FromImage(bmp);
-            var hdcBitmap = gfxBmp.GetHdc();
-
-            NativeMethods.PrintWindow(hwnd, hdcBitmap, 0);
-
-            gfxBmp.ReleaseHdc(hdcBitmap);
-            gfxBmp.Dispose();
-
-            return bmp;
-        }
-
-        public ImageSource ImageSourceForBitmap(Bitmap bmp)
-        {
-            var handle = bmp.GetHbitmap();
-            try
-            {
-                return Imaging.CreateBitmapSourceFromHBitmap(handle, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-            }
-            finally { NativeMethods.DeleteObject(handle); }
-        }
-
+        
     }
 }

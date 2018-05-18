@@ -1,10 +1,49 @@
 ﻿using System.Drawing;
+using System.Globalization;
 using System.Runtime.InteropServices;
 
 namespace Helpers.Native
 {
     public static class NativeStructs
     {
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct WINDOWINFO
+        {
+            public uint cbSize;
+            public Rect rcWindow;
+            public Rect rcClient;
+            public uint dwStyle;
+            public uint dwExStyle;
+            public uint dwWindowStatus;
+            public uint cxWindowBorders;
+            public uint cyWindowBorders;
+            public ushort atomWindowType;
+            public ushort wCreatorVersion;
+
+            public WINDOWINFO(bool? filler) : this()   // Allows automatic initialization of "cbSize" with "new WINDOWINFO(null/true/false)".
+            {
+                cbSize = (uint)(Marshal.SizeOf(typeof(WINDOWINFO)));
+            }
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct DwmThumbnailProperties
+        {
+            public int dwFlags;
+            public Rect rcDestination;
+            public Rect rcSource;
+            public byte opacity;
+            public bool fVisible;
+            public bool fSourceClientAreaOnly;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct Psize
+        {
+            public int x;
+            public int y;
+        }
 
         [StructLayout(LayoutKind.Sequential)]
         public struct Rect
@@ -98,9 +137,8 @@ namespace Helpers.Native
 
             public override string ToString()
             {
-                return string.Format(System.Globalization.CultureInfo.CurrentCulture, "{{Left={0},Top={1},Right={2},Bottom={3}}}", Left, Top, Right, Bottom);
+                return string.Format(CultureInfo.CurrentCulture, "{{Left={0},Top={1},Right={2},Bottom={3}}}", Left, Top, Right, Bottom);
             }
         }
-
     }
 }

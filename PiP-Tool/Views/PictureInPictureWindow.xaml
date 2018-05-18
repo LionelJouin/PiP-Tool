@@ -7,8 +7,8 @@
         Title="PictureInPictureWindow" 
         ResizeMode="CanResizeWithGrip" 
         AllowsTransparency="True"
-        Height="{Binding WindowSize.Height, UpdateSourceTrigger=PropertyChanged}" 
-        Width="{Binding WindowSize.Width, UpdateSourceTrigger=PropertyChanged}" 
+        Height="{Binding Height, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+        Width="{Binding Width, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
         WindowStyle="None" 
         Topmost="True"
         WindowStartupLocation="Manual">

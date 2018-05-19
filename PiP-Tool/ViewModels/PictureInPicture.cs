@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using Helpers.Native;
 using PiP_Tool.Models;
 
@@ -8,12 +7,12 @@ namespace PiP_Tool.ViewModels
     public class PictureInPicture : BaseViewModel
     {
 
-        public WindowInfo SelectedWindow
+        public SelectedWindow SelectedWindow
         {
             get => _selectedWindow;
             set
             {
-                if (_selectedWindow != null && _selectedWindow.Handle == IntPtr.Zero)
+                if (_selectedWindow != null && _selectedWindow.WindowInfo.Handle == IntPtr.Zero)
                     return;
 
                 _selectedWindow = value;
@@ -21,13 +20,13 @@ namespace PiP_Tool.ViewModels
                 if (_thumbHandle != IntPtr.Zero)
                     NativeMethods.DwmUnregisterThumbnail(_thumbHandle);
 
-                if (NativeMethods.DwmRegisterThumbnail(_targetHandle, SelectedWindow.Handle, out _thumbHandle) == 0)
+                if (NativeMethods.DwmRegisterThumbnail(_targetHandle, SelectedWindow.WindowInfo.Handle, out _thumbHandle) == 0)
                     Update();
 
                 NotifyPropertyChanged();
             }
         }
-        
+
         public int Height
         {
             get => _height;
@@ -50,18 +49,18 @@ namespace PiP_Tool.ViewModels
         }
 
         public float Ratio { get; private set; }
-        
+
         private int _height;
         private int _width;
         private IntPtr _targetHandle, _thumbHandle;
-        private WindowInfo _selectedWindow;
+        private SelectedWindow _selectedWindow;
 
-        public void Init(IntPtr target, WindowInfo selectedWindow)
+        public void Init(IntPtr target, SelectedWindow selectedWindow)
         {
             _targetHandle = target;
             SelectedWindow = selectedWindow;
-            Height = SelectedWindow.Size.Height;
-            Width = SelectedWindow.Size.Width;
+            Height = SelectedWindow.SelectedRegion.Height;
+            Width = SelectedWindow.SelectedRegion.Width;
             Ratio = SelectedWindow.Ratio;
         }
 
@@ -69,29 +68,17 @@ namespace PiP_Tool.ViewModels
         {
             if (_thumbHandle == IntPtr.Zero)
                 return;
-
-            NativeMethods.DwmQueryThumbnailSourceSize(_thumbHandle, out var size);
-
-            //var source = new NativeStructs.Rect(SelectedWindow.Position.X, SelectedWindow.Position.Y, SelectedWindow.Size.Width, SelectedWindow.Size.Height);
-            //var dest = new NativeStructs.Rect(SelectedWindow.Position.X, SelectedWindow.Position.Y, SelectedWindow.Size.Width, SelectedWindow.Size.Height);
-            var source = new NativeStructs.Rect(0, 0, SelectedWindow.Size.Width, SelectedWindow.Size.Height);
+            
             var dest = new NativeStructs.Rect(0, 0, _width, _height);
 
             var props = new NativeStructs.DwmThumbnailProperties
             {
                 fVisible = true,
-                //dwFlags = (int) (DWM_TNP.DWM_TNP_VISIBLE | DWM_TNP.DWM_TNP_RECTDESTINATION | DWM_TNP.DWM_TNP_OPACITY | DWM_TNP.DWM_TNP_RECTSOURCE),
-                dwFlags = (int)(DWM_TNP.DWM_TNP_VISIBLE | DWM_TNP.DWM_TNP_RECTDESTINATION | DWM_TNP.DWM_TNP_OPACITY),
+                dwFlags = (int)(DWM_TNP.DWM_TNP_VISIBLE | DWM_TNP.DWM_TNP_RECTDESTINATION | DWM_TNP.DWM_TNP_OPACITY | DWM_TNP.DWM_TNP_RECTSOURCE),
                 opacity = 255,
                 rcDestination = dest,
-                rcSource = source
+                rcSource = SelectedWindow.SelectedRegion
             };
-
-            //if (size.x < _targetRect.Width)
-            //    props.rcDestination.Right = 0;
-
-            //if (size.y < _targetRect.Height)
-            //    props.rcDestination.Bottom = 0;
 
             NativeMethods.DwmUpdateThumbnailProperties(_thumbHandle, ref props);
         }

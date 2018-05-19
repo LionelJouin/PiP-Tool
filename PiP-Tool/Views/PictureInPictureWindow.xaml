@@ -13,8 +13,5 @@
         Topmost="True"
         WindowStartupLocation="Manual">
     <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-
-        <!--<Image Source="{Binding ImageScreen, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,0"/>-->
-
     </Grid>
 </Window>

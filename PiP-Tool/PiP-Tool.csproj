@@ -57,6 +57,7 @@
     </ApplicationDefinition>
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Interfaces\ICloseable.cs" />
+    <Compile Include="Models\SelectedWindow.cs" />
     <Compile Include="Models\WindowInfo.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\WindowSelector.cs" />

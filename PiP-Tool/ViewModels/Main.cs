@@ -23,7 +23,7 @@ namespace PiP_Tool.ViewModels
             {
                 return new RelayCommand(() =>
                 {
-                    var main = new PictureInPictureWindow(SelectedWindow);
+                    var main = new PictureInPictureWindow(new SelectedWindow(SelectedWindow, SelectedRegion));
                     main.Show();
                     CloseWindow();
                 });
@@ -57,6 +57,7 @@ namespace PiP_Tool.ViewModels
         }
         
         public WindowInfo SelectedWindow { get; set; }
+        public NativeStructs.Rect SelectedRegion => new NativeStructs.Rect(0, 0, SelectedWindow.Size.Width, SelectedWindow.Size.Height);
 
         public CollectionView WindowsList { get; }
 

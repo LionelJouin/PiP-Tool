@@ -1,10 +1,6 @@
-﻿using System;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
-using Helpers.Native;
 using PiP_Tool.Models;
 using PiP_Tool.ViewModels;
 
@@ -20,10 +16,11 @@ namespace PiP_Tool.Views
         private readonly WindowInteropHelper _wih;
         private readonly PictureInPicture _pictureInPicture;
 
-        public PictureInPictureWindow(WindowInfo selectedWindow)
+        public PictureInPictureWindow(SelectedWindow selectedWindow)
         {
             InitializeComponent();
-            
+
+            _wih = new WindowInteropHelper(this);
             _pictureInPicture = new PictureInPicture();
             DataContext = _pictureInPicture;
             Loaded += (s, e) => _pictureInPicture.Init(_wih.Handle, selectedWindow);

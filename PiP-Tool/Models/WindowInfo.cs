@@ -14,8 +14,8 @@ namespace PiP_Tool.Models
         public Point Position { get; private set; }
         public Size Size { get; private set; }
         public NativeStructs.Rect Rect { get; private set; }
+        public NativeStructs.Rect Border { get; set; }
 
-        public float Ratio => Size.Height > 0 ? Size.Width / (float)Size.Height : 0;
         public bool IsMinimized => (_winInfo.dwStyle & (uint)WindowStyles.WS_MINIMIZE) == (uint)WindowStyles.WS_MINIMIZE;
 
         private NativeStructs.WINDOWINFO _winInfo;
@@ -27,6 +27,7 @@ namespace PiP_Tool.Models
             SetSizeAndPosition();
             SetTitle();
             SetWinInfo();
+            SetBorder();
         }
 
         private void SetSizeAndPosition()
@@ -53,6 +54,20 @@ namespace PiP_Tool.Models
             _winInfo.cbSize = (uint)Marshal.SizeOf(_winInfo);
             NativeMethods.GetWindowInfo(Handle, ref _winInfo);
         }
+
+        private void SetBorder()
+        {
+            DwmGetWindowAttribute(Handle, DWMWINDOWATTRIBUTE.ExtendedFrameBounds, out var frame, Marshal.SizeOf(typeof(NativeStructs.Rect)));
+            Border = new NativeStructs.Rect(
+                frame.Left - Rect.Left,
+                frame.Top - Rect.Top,
+                Rect.Right - frame.Right,
+                Rect.Bottom - frame.Bottom
+            );
+        }
+
+        [DllImport("dwmapi.dll")]
+        public static extern int DwmGetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE dwAttribute, out NativeStructs.Rect pvAttribute, int cbAttribute);
 
     }
 }

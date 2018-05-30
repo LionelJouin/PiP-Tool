@@ -1,8 +1,11 @@
 ﻿using System;
-using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows;
+using System.Windows.Interop;
 using Helpers.Native;
+using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
 
 namespace PiP_Tool.Models
 {
@@ -15,6 +18,7 @@ namespace PiP_Tool.Models
         public Size Size { get; private set; }
         public NativeStructs.Rect Rect { get; private set; }
         public NativeStructs.Rect Border { get; set; }
+        //public Window Window { get; set; }
 
         public bool IsMinimized => (_winInfo.dwStyle & (uint)WindowStyles.WS_MINIMIZE) == (uint)WindowStyles.WS_MINIMIZE;
 
@@ -24,6 +28,11 @@ namespace PiP_Tool.Models
         public WindowInfo(IntPtr handle)
         {
             Handle = handle;
+
+            //var hwndSource = HwndSource.FromHwnd(Handle);
+            //if (hwndSource != null)
+            //    Window = hwndSource.RootVisual as Window;
+
             SetSizeAndPosition();
             SetTitle();
             SetWinInfo();

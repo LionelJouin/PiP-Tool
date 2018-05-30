@@ -6,8 +6,7 @@
         mc:Ignorable="d"
         AllowsTransparency="True" 
         WindowStyle="None" 
-        ResizeMode="NoResize" 
-        WindowState="Maximized" 
+        ResizeMode="CanResizeWithGrip"
         Topmost="True"
         Title="SelectorWindow">
     <Window.Background>
@@ -15,35 +14,5 @@
     </Window.Background>
     <Grid>
 
-        <Canvas Name="CanvasMain" 
-                Background="Transparent" 
-                Grid.RowSpan="2" 
-                MouseRightButtonUp="MouseRightButtonUp"
-                MouseDown="MouseDown" 
-                MouseMove="MouseMove" 
-                MouseUp="MouseUp">
-            <Border Name="SelectorBox" 
-                    BorderBrush="Red" 
-                    BorderThickness="1" 
-                    Canvas.Left="{Binding SelectorBoxPosition.X, UpdateSourceTrigger=PropertyChanged}" 
-                    Canvas.Top="{Binding SelectorBoxPosition.Y, UpdateSourceTrigger=PropertyChanged}" 
-                    Width="{Binding SelectorBoxSize.Width, UpdateSourceTrigger=PropertyChanged}" 
-                    Height="{Binding SelectorBoxSize.Height, UpdateSourceTrigger=PropertyChanged}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="110"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="110"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-                    <Rectangle Fill="WhiteSmoke" Opacity="0.25" Grid.RowSpan="3" Grid.ColumnSpan="2"></Rectangle>
-
-                </Grid>
-            </Border>
-        </Canvas>
-        
     </Grid>
 </Window>

@@ -37,7 +37,7 @@
                   Width="120"
                   ItemsSource="{Binding Path=WindowsList}"
                   DisplayMemberPath="Title"
-                  SelectedItem="{Binding Path=SelectedWindow}"/>
+                  SelectedItem="{Binding Path=SelectedWindowInfo}"/>
 
     </Grid>
 </Window>

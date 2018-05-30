@@ -1,6 +1,9 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Input;
+using Helpers.Native;
 using PiP_Tool.ViewModels;
+using Point = System.Drawing.Point;
 
 namespace PiP_Tool.Views
 {
@@ -10,35 +13,51 @@ namespace PiP_Tool.Views
     public partial class SelectorWindow
     {
 
+        public NativeStructs.Rect SizeRestriction;
+        public Point PositionRestriction;
         public readonly Selector ViewModel;
 
-        public SelectorWindow()
+        public SelectorWindow(NativeStructs.Rect sizeRestriction, Point positionRestriction)
         {
+            SizeRestriction = sizeRestriction;
+            PositionRestriction = positionRestriction;
             ViewModel = new Selector();
             DataContext = ViewModel;
             InitializeComponent();
+
+            Left = PositionRestriction.X;
+            Top = PositionRestriction.Y;
         }
 
-        private new void MouseDown(object sender, MouseEventArgs e)
+        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
         {
-            ViewModel.MouseDown(Mouse.GetPosition(CanvasMain));
+            base.OnMouseLeftButtonDown(e);
+
+            DragMove();
         }
 
-        private new void MouseUp(object sender, MouseEventArgs e)
+        protected override void OnLocationChanged(EventArgs e)
         {
-            ViewModel.MouseUp();
+            if (Left < PositionRestriction.X)
+                Left = PositionRestriction.X;
+
+            if (Left + Width > PositionRestriction.X + SizeRestriction.Width)
+                Left = PositionRestriction.X + SizeRestriction.Width - Width;
+
+            if (Top < PositionRestriction.Y)
+                Top = PositionRestriction.Y;
+
+            if (Top + Height > PositionRestriction.Y + SizeRestriction.Height)
+                Top = PositionRestriction.Y + SizeRestriction.Height - Height;
         }
 
-        private new void MouseMove(object sender, MouseEventArgs e)
+        protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
         {
-            ViewModel.MouseMove(Mouse.GetPosition(CanvasMain));
-        }
+            if (sizeInfo.NewSize.Width > SizeRestriction.Width)
+                Width = SizeRestriction.Width;
 
-        private new void MouseRightButtonUp(object sender, MouseEventArgs e)
-        {
-            //var pictureInPicture = new Views.PictureInPictureWindow(ViewModel.SelectorBoxPosition, ViewModel.SelectorBoxSize);
-            //pictureInPicture.Show();
-            Close();
+            if (sizeInfo.NewSize.Height > SizeRestriction.Height)
+                Height = SizeRestriction.Height;
         }
 
     }

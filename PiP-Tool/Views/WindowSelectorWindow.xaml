@@ -7,13 +7,11 @@
         Title="WindowSelectorWindow" 
         AllowsTransparency="True" 
         WindowStyle="None" 
-        ResizeMode="NoResize" 
-         MouseMove="OnMouseMove"
-        WindowState="Maximized">
+        MouseMove="OnMouseMove">
     <Window.Background>
         <SolidColorBrush Opacity="0.1" Color="Black"/>
     </Window.Background>
     <Grid>
-        
+
     </Grid>
 </Window>

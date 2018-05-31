@@ -1,11 +1,19 @@
-﻿using System.Windows;
-using Helpers.Native;
-using PiP_Tool.Models;
+﻿using Helpers.Native;
 
 namespace PiP_Tool.ViewModels
 {
     public class Selector : BaseViewModel
     {
+
+        public int MaxHeight => _sizeRestriction.Height;
+        public int MaxWidth => _sizeRestriction.Width;
+
+        private NativeStructs.Rect _sizeRestriction;
+
+        public Selector(NativeStructs.Rect sizeRestriction)
+        {
+            _sizeRestriction = sizeRestriction;
+        }
 
         //public int Height
         //{

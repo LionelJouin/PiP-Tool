@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using Helpers.Native;
-using PiP_Tool.Models;
+using PiP_Tool.DataModel;
 using Point = System.Windows.Point;
 
 namespace PiP_Tool.ViewModels

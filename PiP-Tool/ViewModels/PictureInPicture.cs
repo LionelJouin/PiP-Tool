@@ -1,6 +1,6 @@
 ﻿using System;
 using Helpers.Native;
-using PiP_Tool.Models;
+using PiP_Tool.DataModel;
 
 namespace PiP_Tool.ViewModels
 {

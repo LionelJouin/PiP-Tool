@@ -6,13 +6,56 @@
         mc:Ignorable="d"
         AllowsTransparency="True" 
         WindowStyle="None" 
-        ResizeMode="CanResizeWithGrip"
+        ResizeMode="NoResize"
         Topmost="True"
         Title="SelectorWindow">
-    <Window.Background>
-        <SolidColorBrush Opacity="0.7" Color="Black"/>
-    </Window.Background>
-    <Grid>
 
-    </Grid>
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Themes/Generic.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Window.Background>
+        <SolidColorBrush Opacity="0.1" Color="White"/>
+    </Window.Background>
+    <Canvas x:Name="LayoutRoot">
+
+        <Rectangle 
+            Canvas.Top="0"
+            Canvas.Left="0"
+            Fill="Red"
+            Width="{Binding MaxWidth, Mode=OneTime}"
+            Height="{Binding (Canvas.Top), ElementName=Selector}"
+            />
+        <ContentControl x:Name="Selector"
+                        Width="130"
+                        Height="130"
+                        MaxHeight="{Binding MaxHeight, Mode=OneTime}"
+                        MaxWidth="{Binding MaxWidth, Mode=OneTime}"
+                        Canvas.Top="150"
+                        Canvas.Left="150"
+                        Selector.IsSelected="True"
+                        Style="{StaticResource MoveResize}">
+            <Rectangle Fill="White"
+                        Stretch="Fill"
+                        Opacity="0.1"
+                        IsHitTestVisible="False"/>
+        </ContentControl>
+
+        <!--<Rectangle x:Name="testSquare" 
+                   Fill="Red" 
+                   Height="100" 
+                   Width="100" 
+                   AllowDrop="True"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Bottom"
+                   Canvas.Top="10"
+                   Canvas.Left="10"/>-->
+
+        <!--<Rectangle x:Name="testSquare" Fill="Red" Height="100" Stroke="Black" Width="100" HorizontalAlignment="Left" VerticalAlignment="Bottom" Canvas.Left="10" Canvas.Top="10"/>-->
+    </Canvas>
+
 </Window>

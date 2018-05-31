@@ -5,9 +5,9 @@ using System.Text;
 using System.Windows.Data;
 using System.Windows.Input;
 using Helpers.Native;
-using PiP_Tool.Common;
+using PiP_Tool.DataModel;
+using PiP_Tool.Helpers;
 using PiP_Tool.Interfaces;
-using PiP_Tool.Models;
 using PiP_Tool.Views;
 
 namespace PiP_Tool.ViewModels

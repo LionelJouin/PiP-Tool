@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Globalization;
 using System.Windows;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using Helpers.Native;
-using PiP_Tool.ViewModels;
 using Point = System.Drawing.Point;
+using Selector = PiP_Tool.ViewModels.Selector;
 
 namespace PiP_Tool.Views
 {
@@ -21,7 +23,7 @@ namespace PiP_Tool.Views
         {
             SizeRestriction = sizeRestriction;
             PositionRestriction = positionRestriction;
-            ViewModel = new Selector();
+            ViewModel = new Selector(sizeRestriction);
             DataContext = ViewModel;
             InitializeComponent();
 
@@ -29,27 +31,27 @@ namespace PiP_Tool.Views
             Top = PositionRestriction.Y;
         }
 
-        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
-        {
-            base.OnMouseLeftButtonDown(e);
+        //protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+        //{
+        //    base.OnMouseLeftButtonDown(e);
 
-            DragMove();
-        }
+        //    DragMove();
+        //}
 
-        protected override void OnLocationChanged(EventArgs e)
-        {
-            if (Left < PositionRestriction.X)
-                Left = PositionRestriction.X;
+        //protected override void OnLocationChanged(EventArgs e)
+        //{
+        //    if (Left < PositionRestriction.X)
+        //        Left = PositionRestriction.X;
 
-            if (Left + Width > PositionRestriction.X + SizeRestriction.Width)
-                Left = PositionRestriction.X + SizeRestriction.Width - Width;
+        //    if (Left + Width > PositionRestriction.X + SizeRestriction.Width)
+        //        Left = PositionRestriction.X + SizeRestriction.Width - Width;
 
-            if (Top < PositionRestriction.Y)
-                Top = PositionRestriction.Y;
+        //    if (Top < PositionRestriction.Y)
+        //        Top = PositionRestriction.Y;
 
-            if (Top + Height > PositionRestriction.Y + SizeRestriction.Height)
-                Top = PositionRestriction.Y + SizeRestriction.Height - Height;
-        }
+        //    if (Top + Height > PositionRestriction.Y + SizeRestriction.Height)
+        //        Top = PositionRestriction.Y + SizeRestriction.Height - Height;
+        //}
 
         protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
         {

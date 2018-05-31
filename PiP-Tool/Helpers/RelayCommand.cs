@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace PiP_Tool.Common
+namespace PiP_Tool.Helpers
 {
 
     /// <summary>

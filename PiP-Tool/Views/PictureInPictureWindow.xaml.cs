@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
-using PiP_Tool.Models;
+using PiP_Tool.DataModel;
 using PiP_Tool.ViewModels;
 
 namespace PiP_Tool.Views

@@ -1,6 +1,6 @@
 ﻿using Helpers.Native;
 
-namespace PiP_Tool.Models
+namespace PiP_Tool.DataModel
 {
     public class SelectedWindow
     {

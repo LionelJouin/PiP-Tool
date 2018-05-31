@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Windows;
-using System.Windows.Interop;
 using Helpers.Native;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
-namespace PiP_Tool.Models
+namespace PiP_Tool.DataModel
 {
     public class WindowInfo
     {

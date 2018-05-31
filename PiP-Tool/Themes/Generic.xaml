@@ -1,0 +1,30 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:PiP_Tool.Controls">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Controls/MoveControl.xaml"/>
+        <ResourceDictionary Source="/Controls/ResizeControl.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+    <Style x:Key="MoveResize" TargetType="ContentControl">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ContentControl">
+                    <Grid DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
+
+                        <controls:MoveControl 
+                            Template="{StaticResource MoveTemplate}" />
+
+                        <Control Template="{StaticResource ResizeTemplate}"/>
+
+                        <ContentPresenter Content="{TemplateBinding ContentControl.Content}"/>
+
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

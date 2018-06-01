@@ -56,9 +56,6 @@ namespace PiP_Tool.Controls
                     break;
             }
 
-            Console.WriteLine("aaaaa " + designerItem.ActualWidth + " : " + designerItem.ActualHeight);
-            Console.WriteLine("bbbbb "+ designerItem.MaxWidth + " : "+ designerItem.MaxHeight);
-
             e.Handled = true;
         }
 

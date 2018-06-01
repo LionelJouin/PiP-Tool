@@ -12,6 +12,7 @@
 
     <Window.Resources>
         <ResourceDictionary>
+            <SolidColorBrush x:Key="TransparentBlue" Color="#00b0f0" Opacity="0.5" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Themes/Generic.xaml"/>
             </ResourceDictionary.MergedDictionaries>
@@ -19,43 +20,65 @@
     </Window.Resources>
 
     <Window.Background>
-        <SolidColorBrush Opacity="0.1" Color="White"/>
+        <SolidColorBrush Opacity="0.4" Color="White"/>
     </Window.Background>
     <Canvas x:Name="LayoutRoot">
 
         <Rectangle 
+            x:Name="HideTop"
             Canvas.Top="0"
             Canvas.Left="0"
-            Fill="Red"
+            Opacity="0.5"
+            Fill="Black"
             Width="{Binding MaxWidth, Mode=OneTime}"
-            Height="{Binding (Canvas.Top), ElementName=Selector}"
-            />
+            Height="{Binding (Canvas.Top), ElementName=Selector}"/>
+        <Rectangle
+            x:Name="HideLeft"
+            Canvas.Top="{Binding (Canvas.Top), ElementName=Selector}"
+            Canvas.Left="0"
+            Opacity="0.5"
+            Fill="Black"
+            Width="{Binding (Canvas.Left), ElementName=Selector}"
+            Height="{Binding ActualHeight, ElementName=Selector}"/>
+        <Rectangle
+            x:Name="HideBottom"
+            Canvas.Bottom="0"
+            Canvas.Left="0"
+            Opacity="0.5"
+            Fill="Black"
+            Width="{Binding MaxWidth, Mode=OneTime}"
+            Height="{Binding (Canvas.Bottom), ElementName=Selector}"
+        />
+        <Rectangle
+            x:Name="HideRight"
+            Canvas.Top="{Binding (Canvas.Top), ElementName=Selector}"
+            Canvas.Right="0"
+            Opacity="0.5"
+            Fill="Black"
+            Width="{Binding (Canvas.Right), ElementName=Selector}"
+            Height="{Binding ActualHeight, ElementName=Selector}"
+        />
+
         <ContentControl x:Name="Selector"
-                        Width="130"
-                        Height="130"
-                        MaxHeight="{Binding MaxHeight, Mode=OneTime}"
-                        MaxWidth="{Binding MaxWidth, Mode=OneTime}"
-                        Canvas.Top="150"
-                        Canvas.Left="150"
-                        Selector.IsSelected="True"
-                        Style="{StaticResource MoveResize}">
-            <Rectangle Fill="White"
+                        Background="{StaticResource TransparentBlue}"
+                    MinHeight="{Binding MinHeight, Mode=OneTime}"
+                    MinWidth="{Binding MinWidth, Mode=OneTime}"
+                    Width="{Binding Width, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                    Height="{Binding Height, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                    MaxHeight="{Binding MaxHeight, Mode=OneTime}"
+                    MaxWidth="{Binding MaxWidth, Mode=OneTime}"
+                    Canvas.Top="{Binding Top, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                    Canvas.Left="{Binding Left, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                    Canvas.Bottom="{Binding Bottom, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
+                    Canvas.Right="{Binding Right, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
+                    Selector.IsSelected="True"
+                    Style="{StaticResource MoveResize}">
+            <Rectangle Fill="White" x:Name="Selector2"
                         Stretch="Fill"
-                        Opacity="0.1"
+                        Opacity="0"
                         IsHitTestVisible="False"/>
         </ContentControl>
-
-        <!--<Rectangle x:Name="testSquare" 
-                   Fill="Red" 
-                   Height="100" 
-                   Width="100" 
-                   AllowDrop="True"
-                   HorizontalAlignment="Left"
-                   VerticalAlignment="Bottom"
-                   Canvas.Top="10"
-                   Canvas.Left="10"/>-->
-
-        <!--<Rectangle x:Name="testSquare" Fill="Red" Height="100" Stroke="Black" Width="100" HorizontalAlignment="Left" VerticalAlignment="Bottom" Canvas.Left="10" Canvas.Top="10"/>-->
+           
     </Canvas>
 
 </Window>

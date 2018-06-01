@@ -2,23 +2,33 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:PiP_Tool.Controls">
 
+    <Style TargetType="local:ResizeControl">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:ResizeControl">
+                <Ellipse Fill="White" Height="15" Width="15"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <ControlTemplate x:Key="ResizeTemplate" TargetType="{x:Type Control}">
         <Grid SnapsToDevicePixels="True" Opacity="1">
-            <local:ResizeControl Height="3" Cursor="SizeNS" Margin="0 -4 0 0"
+            <local:ResizeControl Cursor="SizeNS" Margin="0 -5 0 0"
                            VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
-            <local:ResizeControl Width="3" Cursor="SizeWE" Margin="-4 0 0 0"
+            <local:ResizeControl Cursor="SizeWE" Margin="-5 0 0 0"
                            VerticalAlignment="Stretch" HorizontalAlignment="Left"/>
-            <local:ResizeControl Width="3" Cursor="SizeWE" Margin="0 0 -4 0"
+            <local:ResizeControl Cursor="SizeWE" Margin="0 0 -5 0"
                            VerticalAlignment="Stretch" HorizontalAlignment="Right"/>
-            <local:ResizeControl Height="3" Cursor="SizeNS" Margin="0 0 0 -4"
+            <local:ResizeControl Cursor="SizeNS" Margin="0 0 0 -5"
                            VerticalAlignment="Bottom" HorizontalAlignment="Stretch"/>
-            <local:ResizeControl Width="7" Height="7" Cursor="SizeNWSE" Margin="-6 -6 0 0"
+            <local:ResizeControl  Cursor="SizeNWSE" Margin="-5 -5 0 0"
                            VerticalAlignment="Top" HorizontalAlignment="Left"/>
-            <local:ResizeControl Width="7" Height="7" Cursor="SizeNESW" Margin="0 -6 -6 0"
+            <local:ResizeControl Cursor="SizeNESW" Margin="0 -5 -5 0"
                            VerticalAlignment="Top" HorizontalAlignment="Right"/>
-            <local:ResizeControl Width="7" Height="7" Cursor="SizeNESW" Margin="-6 0 0 -6"
+            <local:ResizeControl Cursor="SizeNESW" Margin="-5 0 0 -5"
                            VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
-            <local:ResizeControl Width="7" Height="7" Cursor="SizeNWSE" Margin="0 0 -6 -6"
+            <local:ResizeControl Cursor="SizeNWSE" Margin="0 0 -5 -5"
                            VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
         </Grid>
     </ControlTemplate>

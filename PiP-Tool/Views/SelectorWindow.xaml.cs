@@ -27,39 +27,10 @@ namespace PiP_Tool.Views
             DataContext = ViewModel;
             InitializeComponent();
 
+            Height = sizeRestriction.Height;
+            Width = sizeRestriction.Width;
             Left = PositionRestriction.X;
             Top = PositionRestriction.Y;
-        }
-
-        //protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
-        //{
-        //    base.OnMouseLeftButtonDown(e);
-
-        //    DragMove();
-        //}
-
-        //protected override void OnLocationChanged(EventArgs e)
-        //{
-        //    if (Left < PositionRestriction.X)
-        //        Left = PositionRestriction.X;
-
-        //    if (Left + Width > PositionRestriction.X + SizeRestriction.Width)
-        //        Left = PositionRestriction.X + SizeRestriction.Width - Width;
-
-        //    if (Top < PositionRestriction.Y)
-        //        Top = PositionRestriction.Y;
-
-        //    if (Top + Height > PositionRestriction.Y + SizeRestriction.Height)
-        //        Top = PositionRestriction.Y + SizeRestriction.Height - Height;
-        //}
-
-        protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
-        {
-            if (sizeInfo.NewSize.Width > SizeRestriction.Width)
-                Width = SizeRestriction.Width;
-
-            if (sizeInfo.NewSize.Height > SizeRestriction.Height)
-                Height = SizeRestriction.Height;
         }
 
     }

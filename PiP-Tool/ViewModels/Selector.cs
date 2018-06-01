@@ -7,61 +7,95 @@ namespace PiP_Tool.ViewModels
 
         public int MaxHeight => _sizeRestriction.Height;
         public int MaxWidth => _sizeRestriction.Width;
+        public int MinHeight => 100;
+        public int MinWidth => 100;
+
+        public int Height
+        {
+            get => _height;
+            set
+            {
+                _height = value;
+                UpdateBottom();
+                NotifyPropertyChanged();
+            }
+        }
+        public int Width
+        {
+            get => _width;
+            set
+            {
+                _width = value;
+                UpdateRight();
+                NotifyPropertyChanged();
+            }
+        }
+        public int Top
+        {
+            get => _top;
+            set
+            {
+                _top = value;
+                UpdateBottom();
+                NotifyPropertyChanged();
+            }
+        }
+        public int Left
+        {
+            get => _left;
+            set
+            {
+                _left = value;
+                UpdateRight();
+                NotifyPropertyChanged();
+            }
+        }
+        public int Bottom
+        {
+            get => _bottom;
+            set
+            {
+                _bottom = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public int Right
+        {
+            get => _right;
+            set
+            {
+                _right = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private int _height;
+        private int _width;
+        private int _top;
+        private int _left;
+        private int _bottom;
+        private int _right;
 
         private NativeStructs.Rect _sizeRestriction;
 
         public Selector(NativeStructs.Rect sizeRestriction)
         {
             _sizeRestriction = sizeRestriction;
+            Top = 0;
+            Left = 0;
+            Height = MinHeight;
+            Width = MinWidth;
         }
 
-        //public int Height
-        //{
-        //    get => _selectedWindow.SelectedRegion.Height;
-        //    set
-        //    {
-        //        _selectedWindow.SelectedRegion = new NativeStructs.Rect(
-        //            _selectedWindow.SelectedRegion.Left,
-        //            _selectedWindow.SelectedRegion.Top,
-        //            _selectedWindow.SelectedRegion.Right,
-        //            _selectedWindow.SelectedRegion.Bottom
-        //        );
-        //        _selectedWindow.SelectedRegion = new NativeStructs.Rect(
-        //            _selectedWindow.SelectedRegion.Left,
-        //            _selectedWindow.SelectedRegion.Top,
-        //            _selectedWindow.SelectedRegion.Right,
-        //            _selectedWindow.SelectedRegion.Bottom
-        //        )
-        //        {
-        //            Height = value
-        //        };
-        //        NotifyPropertyChanged();
-        //    }
-        //}
-        //public int Width
-        //{
-        //    get => _selectedWindow.SelectedRegion.Width;
-        //    set
-        //    {
-        //        _selectedWindow.SelectedRegion = new NativeStructs.Rect(
-        //            _selectedWindow.SelectedRegion.Left,
-        //            _selectedWindow.SelectedRegion.Top,
-        //            _selectedWindow.SelectedRegion.Right,
-        //            _selectedWindow.SelectedRegion.Bottom
-        //        )
-        //        {
-        //            Width = value
-        //        };
-        //        NotifyPropertyChanged();
-        //    }
-        //}
+        private void UpdateBottom()
+        {
+            Bottom = MaxHeight - (Top + Height);
+        }
 
-        //private SelectedWindow _selectedWindow;
-
-        //public Selector(SelectedWindow selectedWindow)
-        //{
-        //    _selectedWindow = selectedWindow;
-        //}
+        private void UpdateRight()
+        {
+            Right = MaxWidth - (Left + Width);
+        }
 
     }
 }

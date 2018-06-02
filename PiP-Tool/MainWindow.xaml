@@ -4,13 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="100" Width="350">
     <Grid>
         
         <Button x:Name="ButtonPip" 
                 Content="Pip" 
                 HorizontalAlignment="Left" 
-                Margin="148,10,0,0" 
+                Margin="215,10,0,0" 
                 VerticalAlignment="Top" 
                 Width="75" 
                 RenderTransformOrigin="0.112,-0.412"  
@@ -19,18 +19,11 @@
         <Button x:Name="ButtonSelector" 
                 Content="Selector" 
                 HorizontalAlignment="Left" 
-                Margin="301,289,0,0" 
+                Margin="135,10,0,0" 
                 VerticalAlignment="Top" 
                 Width="75"
-                Command="{Binding StartSelector}" />
+                Command="{Binding StartSelector}" Height="22" />
 
-        <Button x:Name="ButtonWindowSelector" 
-                Content="WindowSelector" 
-                HorizontalAlignment="Left" 
-                Margin="381,289,0,0" 
-                VerticalAlignment="Top" 
-                Width="126"
-                Command="{Binding StartWindowSelector}" />
         <ComboBox HorizontalAlignment="Left" 
                   Margin="10,10,0,0" 
                   VerticalAlignment="Top" 

@@ -5,10 +5,10 @@ using System.Windows.Controls.Primitives;
 
 namespace PiP_Tool.Controls
 {
-    public class ResizeControl : Thumb
+    public class ResizeThumb : Thumb
     {
 
-        public ResizeControl()
+        public ResizeThumb()
         {
             DragDelta += ResizeDragDelta;
         }

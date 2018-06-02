@@ -43,19 +43,6 @@ namespace PiP_Tool.ViewModels
                 });
             }
         }
-
-        public ICommand StartWindowSelector
-        {
-            get
-            {
-                return new RelayCommand(() =>
-                {
-                    var windowSelector = new WindowSelectorWindow();
-                    windowSelector.Show();
-                    CloseWindow();
-                });
-            }
-        }
         
         public WindowInfo SelectedWindowInfo { get; set; }
         public NativeStructs.Rect SelectedRegion => new NativeStructs.Rect(0, 0, SelectedWindowInfo.Size.Width, SelectedWindowInfo.Size.Height);

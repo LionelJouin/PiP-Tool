@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         AllowsTransparency="True" 
         WindowStyle="None" 
@@ -12,7 +13,7 @@
 
     <Window.Resources>
         <ResourceDictionary>
-            <SolidColorBrush x:Key="TransparentBlue" Color="#00b0f0" Opacity="0.5" />
+            <system:Double x:Key="Opacity">0.75</system:Double>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Themes/Generic.xaml"/>
             </ResourceDictionary.MergedDictionaries>
@@ -20,7 +21,7 @@
     </Window.Resources>
 
     <Window.Background>
-        <SolidColorBrush Opacity="0.4" Color="White"/>
+        <SolidColorBrush Opacity="0" Color="White"/>
     </Window.Background>
     <Canvas x:Name="LayoutRoot">
 
@@ -28,7 +29,7 @@
             x:Name="HideTop"
             Canvas.Top="0"
             Canvas.Left="0"
-            Opacity="0.5"
+            Opacity="{StaticResource Opacity}"
             Fill="Black"
             Width="{Binding MaxWidth, Mode=OneTime}"
             Height="{Binding (Canvas.Top), ElementName=Selector}"/>
@@ -36,7 +37,7 @@
             x:Name="HideLeft"
             Canvas.Top="{Binding (Canvas.Top), ElementName=Selector}"
             Canvas.Left="0"
-            Opacity="0.5"
+            Opacity="{StaticResource Opacity}"
             Fill="Black"
             Width="{Binding (Canvas.Left), ElementName=Selector}"
             Height="{Binding ActualHeight, ElementName=Selector}"/>
@@ -44,7 +45,7 @@
             x:Name="HideBottom"
             Canvas.Bottom="0"
             Canvas.Left="0"
-            Opacity="0.5"
+            Opacity="{StaticResource Opacity}"
             Fill="Black"
             Width="{Binding MaxWidth, Mode=OneTime}"
             Height="{Binding (Canvas.Bottom), ElementName=Selector}"
@@ -53,14 +54,13 @@
             x:Name="HideRight"
             Canvas.Top="{Binding (Canvas.Top), ElementName=Selector}"
             Canvas.Right="0"
-            Opacity="0.5"
+            Opacity="{StaticResource Opacity}"
             Fill="Black"
             Width="{Binding (Canvas.Right), ElementName=Selector}"
             Height="{Binding ActualHeight, ElementName=Selector}"
         />
 
         <ContentControl x:Name="Selector"
-                        Background="{StaticResource TransparentBlue}"
                     MinHeight="{Binding MinHeight, Mode=OneTime}"
                     MinWidth="{Binding MinWidth, Mode=OneTime}"
                     Width="{Binding Width, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
@@ -75,7 +75,7 @@
                     Style="{StaticResource MoveResize}">
             <Rectangle Fill="White" x:Name="Selector2"
                         Stretch="Fill"
-                        Opacity="0"
+                        Opacity="0.01"
                         IsHitTestVisible="False"/>
         </ContentControl>
            

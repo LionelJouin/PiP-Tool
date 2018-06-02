@@ -4,8 +4,8 @@
     xmlns:controls="clr-namespace:PiP_Tool.Controls">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/Controls/MoveControl.xaml"/>
-        <ResourceDictionary Source="/Controls/ResizeControl.xaml"/>
+        <ResourceDictionary Source="/Themes/MoveThumbTemplate.xaml"/>
+        <ResourceDictionary Source="/Themes/ResizeTemplate.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="MoveResize" TargetType="ContentControl">
@@ -14,8 +14,8 @@
                 <ControlTemplate TargetType="ContentControl">
                     <Grid DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
 
-                        <controls:MoveControl 
-                            Template="{StaticResource MoveTemplate}" />
+                        <controls:MoveThumb 
+                            Template="{StaticResource MoveThumbTemplate}" />
 
                         <Control Template="{StaticResource ResizeTemplate}"/>
 

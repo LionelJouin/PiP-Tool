@@ -2,35 +2,37 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:PiP_Tool.Controls">
 
-    <Style TargetType="local:ResizeControl">
+    <Style TargetType="local:ResizeThumb">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="local:ResizeControl">
-                <Ellipse Fill="White" Height="15" Width="15"/>
+                <ControlTemplate TargetType="local:ResizeThumb">
+                    <Ellipse Fill="White" Height="16" Width="16"/>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
     <ControlTemplate x:Key="ResizeTemplate" TargetType="{x:Type Control}">
-        <Grid SnapsToDevicePixels="True" Opacity="1">
-            <local:ResizeControl Cursor="SizeNS" Margin="0 -5 0 0"
+        <Border BorderBrush="White" BorderThickness="1">
+            <Grid SnapsToDevicePixels="True" Opacity="1">
+                <local:ResizeThumb Cursor="SizeNS" Margin="0 -8 0 0"
                            VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
-            <local:ResizeControl Cursor="SizeWE" Margin="-5 0 0 0"
+                <local:ResizeThumb Cursor="SizeWE" Margin="-8 0 0 0"
                            VerticalAlignment="Stretch" HorizontalAlignment="Left"/>
-            <local:ResizeControl Cursor="SizeWE" Margin="0 0 -5 0"
+                <local:ResizeThumb Cursor="SizeWE" Margin="0 0 -8 0"
                            VerticalAlignment="Stretch" HorizontalAlignment="Right"/>
-            <local:ResizeControl Cursor="SizeNS" Margin="0 0 0 -5"
+                <local:ResizeThumb Cursor="SizeNS" Margin="0 0 0 -8"
                            VerticalAlignment="Bottom" HorizontalAlignment="Stretch"/>
-            <local:ResizeControl  Cursor="SizeNWSE" Margin="-5 -5 0 0"
+                <local:ResizeThumb  Cursor="SizeNWSE" Margin="-8 -8 0 0"
                            VerticalAlignment="Top" HorizontalAlignment="Left"/>
-            <local:ResizeControl Cursor="SizeNESW" Margin="0 -5 -5 0"
+                <local:ResizeThumb Cursor="SizeNESW" Margin="0 -8 -8 0"
                            VerticalAlignment="Top" HorizontalAlignment="Right"/>
-            <local:ResizeControl Cursor="SizeNESW" Margin="-5 0 0 -5"
+                <local:ResizeThumb Cursor="SizeNESW" Margin="-8 0 0 -8"
                            VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
-            <local:ResizeControl Cursor="SizeNWSE" Margin="0 0 -5 -5"
+                <local:ResizeThumb Cursor="SizeNWSE" Margin="0 0 -8 -8"
                            VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
-        </Grid>
+            </Grid>
+        </Border>
     </ControlTemplate>
 
 </ResourceDictionary>

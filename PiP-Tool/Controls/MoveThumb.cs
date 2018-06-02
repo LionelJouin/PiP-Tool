@@ -3,10 +3,10 @@ using System.Windows.Controls.Primitives;
 
 namespace PiP_Tool.Controls
 {
-    public class MoveControl : Thumb
+    public class MoveThumb : Thumb
     {
 
-        public MoveControl()
+        public MoveThumb()
         {
             DragDelta += MoveDragDelta;
         }

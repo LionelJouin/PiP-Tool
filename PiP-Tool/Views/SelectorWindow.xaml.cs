@@ -1,9 +1,4 @@
-﻿using System;
-using System.Globalization;
-using System.Windows;
-using System.Windows.Controls.Primitives;
-using System.Windows.Input;
-using Helpers.Native;
+﻿using Helpers.Native;
 using Point = System.Drawing.Point;
 using Selector = PiP_Tool.ViewModels.Selector;
 

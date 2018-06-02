@@ -71,14 +71,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Controls\MoveControl.cs" />
-    <Compile Include="Controls\ResizeControl.cs" />
+    <Compile Include="Controls\MoveThumb.cs" />
+    <Compile Include="Controls\ResizeThumb.cs" />
     <Compile Include="Helpers\RelayCommand.cs" />
     <Compile Include="Interfaces\ICloseable.cs" />
     <Compile Include="DataModel\SelectedWindow.cs" />
     <Compile Include="DataModel\WindowInfo.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
-    <Compile Include="ViewModels\WindowSelector.cs" />
     <Compile Include="Views\PictureInPictureWindow.xaml.cs">
       <DependentUpon>PictureInPictureWindow.xaml</DependentUpon>
     </Compile>
@@ -88,14 +87,11 @@
     <Compile Include="ViewModels\Main.cs" />
     <Compile Include="ViewModels\PictureInPicture.cs" />
     <Compile Include="ViewModels\Selector.cs" />
-    <Compile Include="Views\WindowSelectorWindow.xaml.cs">
-      <DependentUpon>WindowSelectorWindow.xaml</DependentUpon>
-    </Compile>
-    <Page Include="Controls\MoveControl.xaml">
+    <Page Include="Themes\MoveThumbTemplate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ResizeControl.xaml">
+    <Page Include="Themes\ResizeTemplate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -122,10 +118,6 @@
     <Page Include="Views\SelectorWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\WindowSelectorWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -160,9 +152,7 @@
       <Name>Helpers</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Converters\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7">
       <Visible>False</Visible>

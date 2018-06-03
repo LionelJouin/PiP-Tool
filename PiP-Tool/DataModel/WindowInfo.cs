@@ -21,7 +21,6 @@ namespace PiP_Tool.DataModel
         public bool IsMinimized => (_winInfo.dwStyle & (uint)WindowStyles.WS_MINIMIZE) == (uint)WindowStyles.WS_MINIMIZE;
 
         private NativeStructs.WINDOWINFO _winInfo;
-        private Point _savedPosition;
 
         public WindowInfo(IntPtr handle)
         {

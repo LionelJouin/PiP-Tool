@@ -10,22 +10,24 @@ namespace PiP_Tool.Views
     public partial class SelectorWindow
     {
 
-        public NativeStructs.Rect SizeRestriction;
-        public Point PositionRestriction;
+        //public NativeStructs.Rect SizeRestriction;
+        //public Point PositionRestriction;
         public readonly Selector ViewModel;
+
+        public NativeStructs.Rect SelectedRegion => ViewModel.SelectedRegion;
 
         public SelectorWindow(NativeStructs.Rect sizeRestriction, Point positionRestriction)
         {
-            SizeRestriction = sizeRestriction;
-            PositionRestriction = positionRestriction;
+            //SizeRestriction = sizeRestriction;
+            //PositionRestriction = positionRestriction;
             ViewModel = new Selector(sizeRestriction);
             DataContext = ViewModel;
             InitializeComponent();
 
             Height = sizeRestriction.Height;
             Width = sizeRestriction.Width;
-            Left = PositionRestriction.X;
-            Top = PositionRestriction.Y;
+            Left = positionRestriction.X;
+            Top = positionRestriction.Y;
         }
 
     }

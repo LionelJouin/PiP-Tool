@@ -69,6 +69,8 @@ namespace PiP_Tool.ViewModels
             }
         }
 
+        public NativeStructs.Rect SelectedRegion => new NativeStructs.Rect(Left, Top, Width + Left, Top + Height);
+
         private int _height;
         private int _width;
         private int _top;

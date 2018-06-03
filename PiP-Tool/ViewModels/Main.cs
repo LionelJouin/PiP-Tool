@@ -23,7 +23,10 @@ namespace PiP_Tool.ViewModels
             {
                 return new RelayCommand(() =>
                 {
-                    var main = new PictureInPictureWindow(new SelectedWindow(SelectedWindowInfo, SelectedRegion));
+                    var selectedRegion = _selectorWindow.SelectedRegion;
+                    Console.WriteLine("koukou " + selectedRegion);
+                    _selectorWindow.Close();
+                    var main = new PictureInPictureWindow(new SelectedWindow(SelectedWindowInfo, selectedRegion));
                     main.Show();
                     CloseWindow();
                 });
@@ -37,18 +40,20 @@ namespace PiP_Tool.ViewModels
                 return new RelayCommand(() =>
                 {
                     //_selectedWindow = new SelectedWindow(SelectedWindowInfo, SelectedRegion);
-                    var selector = new SelectorWindow(SelectedWindowInfo.Rect, SelectedWindowInfo.Position);
-                    selector.Show();
+                    _selectorWindow = new SelectorWindow(SelectedWindowInfo.Rect, SelectedWindowInfo.Position);
+                    _selectorWindow.Show();
                     //CloseWindow();
                 });
             }
         }
-        
+
+
         public WindowInfo SelectedWindowInfo { get; set; }
-        public NativeStructs.Rect SelectedRegion => new NativeStructs.Rect(0, 0, SelectedWindowInfo.Size.Width, SelectedWindowInfo.Size.Height);
+        //public NativeStructs.Rect SelectedRegion => new NativeStructs.Rect(0, 0, SelectedWindowInfo.Size.Width, SelectedWindowInfo.Size.Height);
 
         public CollectionView WindowsList { get; }
 
+        private SelectorWindow _selectorWindow;
         //private SelectedWindow _selectedWindow { get; set; }
 
         public Main()

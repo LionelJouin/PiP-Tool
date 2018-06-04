@@ -1,9 +1,16 @@
-﻿using Helpers.Native;
+﻿using System.Windows;
+using Helpers.Native;
+using PiP_Tool.DataModel;
 
 namespace PiP_Tool.ViewModels
 {
     public class Selector : BaseViewModel
     {
+        public int WindowTop => _windowInfo.Position.Y;
+        public int WindowLeft => _windowInfo.Position.X;
+        public int WindowWidth => _windowInfo.Rect.Width;
+        public int WindowHeight => _windowInfo.Rect.Height;
+        public Thickness CanvasMargin => new Thickness(_windowInfo.Border.Left, _windowInfo.Border.Top, _windowInfo.Border.Right, _windowInfo.Border.Bottom);
 
         public int MaxHeight => _sizeRestriction.Height;
         public int MaxWidth => _sizeRestriction.Width;
@@ -79,6 +86,17 @@ namespace PiP_Tool.ViewModels
         private int _right;
 
         private NativeStructs.Rect _sizeRestriction;
+        private readonly WindowInfo _windowInfo;
+
+        public Selector(WindowInfo windowInfo)
+        {
+            _windowInfo = windowInfo;
+            _sizeRestriction = windowInfo.Rect - windowInfo.Border;
+            Top = 0;
+            Left = 0;
+            Height = MinHeight;
+            Width = MinWidth;
+        }
 
         public Selector(NativeStructs.Rect sizeRestriction)
         {

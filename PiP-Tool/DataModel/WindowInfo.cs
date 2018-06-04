@@ -16,7 +16,6 @@ namespace PiP_Tool.DataModel
         public Size Size { get; private set; }
         public NativeStructs.Rect Rect { get; private set; }
         public NativeStructs.Rect Border { get; set; }
-        //public Window Window { get; set; }
 
         public bool IsMinimized => (_winInfo.dwStyle & (uint)WindowStyles.WS_MINIMIZE) == (uint)WindowStyles.WS_MINIMIZE;
 
@@ -25,10 +24,6 @@ namespace PiP_Tool.DataModel
         public WindowInfo(IntPtr handle)
         {
             Handle = handle;
-
-            //var hwndSource = HwndSource.FromHwnd(Handle);
-            //if (hwndSource != null)
-            //    Window = hwndSource.RootVisual as Window;
 
             SetSizeAndPosition();
             SetTitle();

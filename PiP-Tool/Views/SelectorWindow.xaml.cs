@@ -1,5 +1,5 @@
 ﻿using Helpers.Native;
-using Point = System.Drawing.Point;
+using PiP_Tool.DataModel;
 using Selector = PiP_Tool.ViewModels.Selector;
 
 namespace PiP_Tool.Views
@@ -9,25 +9,16 @@ namespace PiP_Tool.Views
     /// </summary>
     public partial class SelectorWindow
     {
-
-        //public NativeStructs.Rect SizeRestriction;
-        //public Point PositionRestriction;
+        
         public readonly Selector ViewModel;
 
         public NativeStructs.Rect SelectedRegion => ViewModel.SelectedRegion;
 
-        public SelectorWindow(NativeStructs.Rect sizeRestriction, Point positionRestriction)
+        public SelectorWindow(WindowInfo windowInfo)
         {
-            //SizeRestriction = sizeRestriction;
-            //PositionRestriction = positionRestriction;
-            ViewModel = new Selector(sizeRestriction);
+            ViewModel = new Selector(windowInfo);
             DataContext = ViewModel;
             InitializeComponent();
-
-            Height = sizeRestriction.Height;
-            Width = sizeRestriction.Width;
-            Left = positionRestriction.X;
-            Top = positionRestriction.Y;
         }
 
     }

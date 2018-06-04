@@ -24,7 +24,6 @@ namespace PiP_Tool.ViewModels
                 return new RelayCommand(() =>
                 {
                     var selectedRegion = _selectorWindow.SelectedRegion;
-                    Console.WriteLine("koukou " + selectedRegion);
                     _selectorWindow.Close();
                     var main = new PictureInPictureWindow(new SelectedWindow(SelectedWindowInfo, selectedRegion));
                     main.Show();
@@ -39,30 +38,25 @@ namespace PiP_Tool.ViewModels
             {
                 return new RelayCommand(() =>
                 {
-                    //_selectedWindow = new SelectedWindow(SelectedWindowInfo, SelectedRegion);
-                    _selectorWindow = new SelectorWindow(SelectedWindowInfo.Rect, SelectedWindowInfo.Position);
+                    _selectorWindow = new SelectorWindow(SelectedWindowInfo);
                     _selectorWindow.Show();
-                    //CloseWindow();
                 });
             }
         }
 
 
         public WindowInfo SelectedWindowInfo { get; set; }
-        //public NativeStructs.Rect SelectedRegion => new NativeStructs.Rect(0, 0, SelectedWindowInfo.Size.Width, SelectedWindowInfo.Size.Height);
 
         public CollectionView WindowsList { get; }
 
         private SelectorWindow _selectorWindow;
-        //private SelectedWindow _selectedWindow { get; set; }
 
         public Main()
         {
             var openWindows = GetOpenWindows();
             WindowsList = new CollectionView(openWindows);
         }
-
-        // https://stackoverflow.com/questions/43927156/enumwindows-returns-closed-windows-store-applications
+        
         public static List<WindowInfo> GetOpenWindows()
         {
             var shellWindow = NativeMethods.GetShellWindow();

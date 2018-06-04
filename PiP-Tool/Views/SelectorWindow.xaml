@@ -9,6 +9,11 @@
         WindowStyle="None" 
         ResizeMode="NoResize"
         Topmost="True"
+        Top="{Binding WindowTop, Mode=OneTime}"
+        Left="{Binding WindowLeft, Mode=OneTime}"
+        Width="{Binding WindowWidth, Mode=OneTime}"
+        Height="{Binding WindowHeight, Mode=OneTime}"
+
         Title="SelectorWindow">
 
     <Window.Resources>
@@ -23,7 +28,9 @@
     <Window.Background>
         <SolidColorBrush Opacity="0" Color="White"/>
     </Window.Background>
-    <Canvas x:Name="LayoutRoot">
+
+    <Canvas x:Name="LayoutRoot"
+            Margin="{Binding CanvasMargin, Mode=OneTime}">
 
         <Rectangle 
             x:Name="HideTop"

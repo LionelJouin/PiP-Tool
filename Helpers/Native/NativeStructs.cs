@@ -116,6 +116,11 @@ namespace Helpers.Native
                 return !r1.Equals(r2);
             }
 
+            public static Rect operator -(Rect r1, Rect r2)
+            {
+                return new Rectangle(r1.Left, r1.Top, r1.Width - (r2.Left + r2.Right), r1.Height - (r2.Top + r2.Left));
+            }
+
             public bool Equals(Rect r)
             {
                 return r.Left == Left && r.Top == Top && r.Right == Right && r.Bottom == Bottom;

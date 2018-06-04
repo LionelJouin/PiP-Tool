@@ -1,4 +1,5 @@
-﻿using Helpers.Native;
+﻿using System;
+using Helpers.Native;
 
 namespace PiP_Tool.DataModel
 {
@@ -16,9 +17,11 @@ namespace PiP_Tool.DataModel
             SelectedRegion = new NativeStructs.Rect(
                 selectedRegion.Left + WindowInfo.Border.Left,
                 selectedRegion.Top + WindowInfo.Border.Top,
-                selectedRegion.Right - WindowInfo.Border.Right,
-                selectedRegion.Bottom - WindowInfo.Border.Bottom
+                selectedRegion.Right + WindowInfo.Border.Left,
+                selectedRegion.Bottom + WindowInfo.Border.Top
                 );
+            Console.WriteLine(WindowInfo.Rect);
+            Console.WriteLine(SelectedRegion);
         }
 
     }

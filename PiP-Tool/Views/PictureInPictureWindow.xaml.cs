@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Interop;
 using PiP_Tool.DataModel;
@@ -15,6 +17,7 @@ namespace PiP_Tool.Views
 
         private readonly WindowInteropHelper _wih;
         private readonly PictureInPicture _pictureInPicture;
+        public Popup Popup;
 
         public PictureInPictureWindow(SelectedWindow selectedWindow)
         {
@@ -23,7 +26,12 @@ namespace PiP_Tool.Views
             _wih = new WindowInteropHelper(this);
             _pictureInPicture = new PictureInPicture();
             DataContext = _pictureInPicture;
+
             Loaded += (s, e) => _pictureInPicture.Init(_wih.Handle, selectedWindow);
+
+            var element = FindName("TopbarPopup");
+            if (element is Popup)
+                Popup = element as Popup;
         }
 
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
@@ -43,6 +51,38 @@ namespace PiP_Tool.Views
             {
                 Height = sizeInfo.NewSize.Width * _pictureInPicture.Ratio;
             }
+        }
+
+        protected override void OnLocationChanged(EventArgs e)
+        {
+            base.OnLocationChanged(e);
+            PopupPosition();
+        }
+
+        protected override void OnMouseEnter(MouseEventArgs e)
+        {
+            Popup.IsOpen = true;
+        }
+        protected override void OnMouseLeave(MouseEventArgs e)
+        {
+            if (!Popup.IsMouseOver)
+                Popup.IsOpen = false;
+        }
+        private void OpenPopup(object sender, RoutedEventArgs e)
+        {
+            Popup.IsOpen = true;
+        }
+        private void ClosePopup(object sender, RoutedEventArgs e)
+        {
+            if (!IsMouseOver)
+                Popup.IsOpen = false;
+        }
+
+        private void PopupPosition()
+        {
+            var offset = Popup.HorizontalOffset;
+            Popup.HorizontalOffset = offset + 1;
+            Popup.HorizontalOffset = offset;
         }
 
     }

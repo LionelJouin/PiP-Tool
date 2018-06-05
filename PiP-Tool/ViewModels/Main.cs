@@ -38,6 +38,7 @@ namespace PiP_Tool.ViewModels
             {
                 return new RelayCommand(() =>
                 {
+                    _selectorWindow?.Close();
                     _selectorWindow = new SelectorWindow(SelectedWindowInfo);
                     _selectorWindow.Show();
                 });

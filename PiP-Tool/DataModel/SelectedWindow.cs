@@ -20,8 +20,6 @@ namespace PiP_Tool.DataModel
                 selectedRegion.Right + WindowInfo.Border.Left,
                 selectedRegion.Bottom + WindowInfo.Border.Top
                 );
-            Console.WriteLine(WindowInfo.Rect);
-            Console.WriteLine(SelectedRegion);
         }
 
     }

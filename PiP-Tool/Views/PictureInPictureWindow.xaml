@@ -10,8 +10,33 @@
         Height="{Binding Height, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
         Width="{Binding Width, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
         WindowStyle="None" 
+        x:Name="Window"
         Topmost="True"
         WindowStartupLocation="Manual">
     <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="21*"/>
+            <ColumnDefinition Width="235*"/>
+        </Grid.ColumnDefinitions>
+        <Popup IsOpen="False"
+               x:Name="TopbarPopup"
+               PlacementTarget="{Binding ElementName=Window}"
+               Placement="Top"
+               VerticalOffset="0"
+               HorizontalOffset="0"
+               MouseEnter="OpenPopup"
+               MouseLeave="ClosePopup"
+               AllowsTransparency="True">
+            <Grid Height="30" 
+                  Width="{Binding Width, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" 
+                  Background="Black">
+                <Button Content="X" Width="30" Height="30" HorizontalAlignment="Right"/>
+                <Button Content="Resize" Width="30" Height="30" HorizontalAlignment="Right" Margin="0,0,30,0"/>
+            </Grid>
+            <!--<Canvas Height="50"
+                    Width="770" 
+                    Background="Red">
+            </Canvas>-->
+        </Popup>
     </Grid>
 </Window>

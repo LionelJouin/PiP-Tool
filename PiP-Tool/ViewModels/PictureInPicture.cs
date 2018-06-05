@@ -49,11 +49,12 @@ namespace PiP_Tool.ViewModels
         }
 
         public float Ratio { get; private set; }
-
+        
         private int _height;
         private int _width;
         private IntPtr _targetHandle, _thumbHandle;
         private SelectedWindow _selectedWindow;
+        private int _heightOffset;
 
         public void Init(IntPtr target, SelectedWindow selectedWindow)
         {
@@ -64,12 +65,17 @@ namespace PiP_Tool.ViewModels
             Ratio = SelectedWindow.Ratio;
         }
 
+        public void SetOffset(int heightOffset)
+        {
+            _heightOffset = heightOffset;
+        }
+
         public void Update()
         {
             if (_thumbHandle == IntPtr.Zero)
                 return;
             
-            var dest = new NativeStructs.Rect(0, 0, _width, _height);
+            var dest = new NativeStructs.Rect(0, _heightOffset, _width, _height);
 
             var props = new NativeStructs.DwmThumbnailProperties
             {

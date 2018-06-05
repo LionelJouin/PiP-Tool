@@ -45,6 +45,12 @@ namespace Helpers.Native
             public int y;
         }
 
+        public struct POINT
+        {
+            public int X;
+            public int Y;
+        }
+
         [StructLayout(LayoutKind.Sequential)]
         public struct Rect
         {

@@ -40,6 +40,9 @@ namespace Helpers.Native
         [return: MarshalAs(UnmanagedType.Bool)]
         [DllImport("user32.dll", SetLastError = true)]
         public static extern bool GetWindowInfo(IntPtr hwnd, ref WINDOWINFO pwi);
+
+        [DllImport("user32.dll")]
+        public static extern bool GetCursorPos(out POINT lpPoint);
         #endregion
 
         #region gdi32.dll

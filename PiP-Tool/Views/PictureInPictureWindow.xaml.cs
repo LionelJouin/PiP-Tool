@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Drawing;
+using System.Threading;
 using System.Windows;
-using System.Windows.Controls.Primitives;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
+using Helpers.Native;
 using PiP_Tool.DataModel;
 using PiP_Tool.ViewModels;
+using Point = System.Drawing.Point;
 
 namespace PiP_Tool.Views
 {
@@ -17,7 +21,10 @@ namespace PiP_Tool.Views
 
         private readonly WindowInteropHelper _wih;
         private readonly PictureInPicture _pictureInPicture;
-        public Popup Popup;
+
+        private const int TopBarHeight = 30;
+        private bool _renderSizeEventEnabled;
+        private readonly Grid _topBar;
 
         public PictureInPictureWindow(SelectedWindow selectedWindow)
         {
@@ -27,11 +34,9 @@ namespace PiP_Tool.Views
             _pictureInPicture = new PictureInPicture();
             DataContext = _pictureInPicture;
 
-            Loaded += (s, e) => _pictureInPicture.Init(_wih.Handle, selectedWindow);
+            _topBar = FindName("TopBar") as Grid;
 
-            var element = FindName("TopbarPopup");
-            if (element is Popup)
-                Popup = element as Popup;
+            Loaded += (s, e) => _pictureInPicture.Init(_wih.Handle, selectedWindow);
         }
 
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
@@ -40,49 +45,51 @@ namespace PiP_Tool.Views
 
             DragMove();
         }
-
         protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
         {
+            if (_renderSizeEventEnabled)
+            {
+                _renderSizeEventEnabled = false;
+                return;
+            }
+            var topBarHeight = 0;
+            if (IsMouseOver)
+                topBarHeight = TopBarHeight;
             if (sizeInfo.WidthChanged)
             {
-                Width = sizeInfo.NewSize.Height * _pictureInPicture.Ratio;
+                Width = (sizeInfo.NewSize.Height + topBarHeight) * _pictureInPicture.Ratio;
             }
             else
             {
-                Height = sizeInfo.NewSize.Width * _pictureInPicture.Ratio;
+                Height = sizeInfo.NewSize.Width * _pictureInPicture.Ratio + topBarHeight;
             }
         }
-
-        protected override void OnLocationChanged(EventArgs e)
-        {
-            base.OnLocationChanged(e);
-            PopupPosition();
-        }
-
+        
         protected override void OnMouseEnter(MouseEventArgs e)
         {
-            Popup.IsOpen = true;
+            if (_topBar.IsVisible)
+                return;
+            _renderSizeEventEnabled = true;
+            _topBar.Visibility = Visibility.Visible;
+            _pictureInPicture.SetOffset(TopBarHeight);
+            Top -= TopBarHeight;
+            Height = ActualHeight + TopBarHeight;
         }
         protected override void OnMouseLeave(MouseEventArgs e)
         {
-            if (!Popup.IsMouseOver)
-                Popup.IsOpen = false;
-        }
-        private void OpenPopup(object sender, RoutedEventArgs e)
-        {
-            Popup.IsOpen = true;
-        }
-        private void ClosePopup(object sender, RoutedEventArgs e)
-        {
-            if (!IsMouseOver)
-                Popup.IsOpen = false;
-        }
+            // Prevent OnMouseEnter, OnMouseLeave loop
+            Thread.Sleep(50);
+            NativeMethods.GetCursorPos(out var p);
+            var r = new Rectangle(Convert.ToInt32(Left), Convert.ToInt32(Top), Convert.ToInt32(Width), Convert.ToInt32(Height));
+            var pa = new Point(Convert.ToInt32(p.X), Convert.ToInt32(p.Y));
 
-        private void PopupPosition()
-        {
-            var offset = Popup.HorizontalOffset;
-            Popup.HorizontalOffset = offset + 1;
-            Popup.HorizontalOffset = offset;
+            if (!_topBar.IsVisible || r.Contains(pa))
+                return;
+            _topBar.Visibility = Visibility.Hidden;
+            _renderSizeEventEnabled = true;
+            _pictureInPicture.SetOffset(0);
+            Top += TopBarHeight;
+            Height = ActualHeight - TopBarHeight;
         }
 
     }

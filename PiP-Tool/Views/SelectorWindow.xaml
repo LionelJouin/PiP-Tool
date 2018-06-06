@@ -8,12 +8,10 @@
         AllowsTransparency="True" 
         WindowStyle="None" 
         ResizeMode="NoResize"
-        Topmost="True"
         Top="{Binding WindowTop, Mode=OneTime}"
         Left="{Binding WindowLeft, Mode=OneTime}"
         Width="{Binding WindowWidth, Mode=OneTime}"
         Height="{Binding WindowHeight, Mode=OneTime}"
-
         Title="SelectorWindow">
 
     <Window.Resources>

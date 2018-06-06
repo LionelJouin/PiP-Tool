@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using Helpers.Native;
 using PiP_Tool.DataModel;
 
@@ -91,7 +92,8 @@ namespace PiP_Tool.ViewModels
         public Selector(WindowInfo windowInfo)
         {
             _windowInfo = windowInfo;
-            _sizeRestriction = windowInfo.Rect - windowInfo.Border;
+            _windowInfo.SetForegroundWindow();
+            _sizeRestriction = _windowInfo.Rect - _windowInfo.Border;
             Top = 0;
             Left = 0;
             Height = MinHeight;

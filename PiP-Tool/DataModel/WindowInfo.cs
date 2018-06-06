@@ -67,6 +67,11 @@ namespace PiP_Tool.DataModel
             );
         }
 
+        public void SetForegroundWindow()
+        {
+            NativeMethods.SetForegroundWindow(Handle);
+        }
+
         [DllImport("dwmapi.dll")]
         public static extern int DwmGetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE dwAttribute, out NativeStructs.Rect pvAttribute, int cbAttribute);
 

@@ -4,33 +4,26 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="MainWindow" Height="100" Width="350">
+        Topmost="True"
+        Title="MainWindow" Height="100" Width="250">
     <Grid>
         
         <Button x:Name="ButtonPip" 
                 Content="Pip" 
                 HorizontalAlignment="Left" 
-                Margin="215,10,0,0" 
+                Margin="135,10,0,0" 
                 VerticalAlignment="Top" 
                 Width="75" 
                 RenderTransformOrigin="0.112,-0.412"  
                 Command="{Binding StartPictureInPicture}" Height="22" />
 
-        <Button x:Name="ButtonSelector" 
-                Content="Selector" 
-                HorizontalAlignment="Left" 
-                Margin="135,10,0,0" 
-                VerticalAlignment="Top" 
-                Width="75"
-                Command="{Binding StartSelector}" Height="22" />
-
         <ComboBox HorizontalAlignment="Left" 
                   Margin="10,10,0,0" 
                   VerticalAlignment="Top" 
                   Width="120"
-                  ItemsSource="{Binding Path=WindowsList}"
+                  ItemsSource="{Binding WindowsList}"
                   DisplayMemberPath="Title"
-                  SelectedItem="{Binding Path=SelectedWindowInfo}"/>
+                  SelectedItem="{Binding SelectedWindowInfo}"/>
 
     </Grid>
 </Window>

@@ -29,30 +29,28 @@ namespace PiP_Tool.ViewModels
                 });
             }
         }
-        public ICommand StartSelector
-        {
-            get
-            {
-                return new RelayCommand(() =>
-                {
-                    _selectorWindow?.Close();
-                    _selectorWindow = new SelectorWindow(SelectedWindowInfo);
-                    _selectorWindow.Show();
-                });
-            }
-        }
 
-        public WindowInfo SelectedWindowInfo { get; set; }
+        public WindowInfo SelectedWindowInfo
+        {
+            get => _selectedWindowInfo;
+            set
+            {
+                _selectedWindowInfo = value;
+                ShowSelector();
+            }
+
+        }
         public CollectionView WindowsList { get; }
 
         private SelectorWindow _selectorWindow;
+        private WindowInfo _selectedWindowInfo;
 
         public Main()
         {
             var openWindows = GetOpenWindows();
             WindowsList = new CollectionView(openWindows);
         }
-        
+
         public static List<WindowInfo> GetOpenWindows()
         {
             var shellWindow = NativeMethods.GetShellWindow();
@@ -79,6 +77,13 @@ namespace PiP_Tool.ViewModels
             }, 0);
 
             return windows;
+        }
+
+        private void ShowSelector()
+        {
+            _selectorWindow?.Close();
+            _selectorWindow = new SelectorWindow(SelectedWindowInfo);
+            _selectorWindow.Show();
         }
 
     }

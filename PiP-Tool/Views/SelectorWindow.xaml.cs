@@ -19,6 +19,9 @@ namespace PiP_Tool.Views
             ViewModel = new Selector(windowInfo);
             DataContext = ViewModel;
             InitializeComponent();
+
+            Show();
+            Activate();
         }
 
     }

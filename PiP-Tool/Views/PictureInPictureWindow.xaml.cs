@@ -7,6 +7,7 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using Helpers.Native;
 using PiP_Tool.DataModel;
+using PiP_Tool.Interfaces;
 using PiP_Tool.ViewModels;
 using Point = System.Drawing.Point;
 
@@ -36,7 +37,14 @@ namespace PiP_Tool.Views
 
             _topBar = FindName("TopBar") as Grid;
 
-            Loaded += (s, e) => _pictureInPicture.Init(_wih.Handle, selectedWindow);
+            Loaded += (s, e) =>
+            {
+                _pictureInPicture.Init(_wih.Handle, selectedWindow);
+                if (DataContext is ICloseable)
+                {
+                    (DataContext as ICloseable).RequestClose += (_, __) => Close();
+                }
+            };
         }
 
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)

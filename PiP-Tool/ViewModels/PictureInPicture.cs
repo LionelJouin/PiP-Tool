@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Windows.Input;
 using Helpers.Native;
 using PiP_Tool.DataModel;
+using PiP_Tool.Helpers;
 
 namespace PiP_Tool.ViewModels
 {
@@ -47,9 +49,22 @@ namespace PiP_Tool.ViewModels
                 NotifyPropertyChanged();
             }
         }
-
         public float Ratio { get; private set; }
-        
+
+        public ICommand Close => new RelayCommand(CloseWindow);
+        public ICommand ChangeSelectedWindow
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    var mainWindow = new MainWindow();
+                    mainWindow.Show();
+                    CloseWindow();
+                });
+            }
+        }
+
         private int _height;
         private int _width;
         private IntPtr _targetHandle, _thumbHandle;

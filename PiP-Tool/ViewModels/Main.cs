@@ -12,10 +12,8 @@ using PiP_Tool.Views;
 
 namespace PiP_Tool.ViewModels
 {
-    public class Main : BaseViewModel, ICloseable
+    public class Main : BaseViewModel
     {
-
-        public event EventHandler<EventArgs> RequestClose;
 
         public ICommand StartPictureInPicture
         {
@@ -25,13 +23,12 @@ namespace PiP_Tool.ViewModels
                 {
                     var selectedRegion = _selectorWindow.SelectedRegion;
                     _selectorWindow.Close();
-                    var main = new PictureInPictureWindow(new SelectedWindow(SelectedWindowInfo, selectedRegion));
-                    main.Show();
+                    var pip = new PictureInPictureWindow(new SelectedWindow(SelectedWindowInfo, selectedRegion));
+                    pip.Show();
                     CloseWindow();
                 });
             }
         }
-
         public ICommand StartSelector
         {
             get
@@ -45,9 +42,7 @@ namespace PiP_Tool.ViewModels
             }
         }
 
-
         public WindowInfo SelectedWindowInfo { get; set; }
-
         public CollectionView WindowsList { get; }
 
         private SelectorWindow _selectorWindow;
@@ -84,11 +79,6 @@ namespace PiP_Tool.ViewModels
             }, 0);
 
             return windows;
-        }
-
-        private void CloseWindow()
-        {
-            RequestClose?.Invoke(this, EventArgs.Empty);
         }
 
     }

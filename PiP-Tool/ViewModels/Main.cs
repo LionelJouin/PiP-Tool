@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Data;
@@ -7,7 +8,6 @@ using System.Windows.Input;
 using Helpers.Native;
 using PiP_Tool.DataModel;
 using PiP_Tool.Helpers;
-using PiP_Tool.Interfaces;
 using PiP_Tool.Views;
 
 namespace PiP_Tool.ViewModels
@@ -21,6 +21,8 @@ namespace PiP_Tool.ViewModels
             {
                 return new RelayCommand(() =>
                 {
+                    if (_selectorWindow == null)
+                        return;
                     var selectedRegion = _selectorWindow.SelectedRegion;
                     _selectorWindow.Close();
                     var pip = new PictureInPictureWindow(new SelectedWindow(SelectedWindowInfo, selectedRegion));
@@ -77,6 +79,11 @@ namespace PiP_Tool.ViewModels
             }, 0);
 
             return windows;
+        }
+
+        public void OnWindowClosing(object sender, CancelEventArgs e)
+        {
+            _selectorWindow?.Close();
         }
 
         private void ShowSelector()

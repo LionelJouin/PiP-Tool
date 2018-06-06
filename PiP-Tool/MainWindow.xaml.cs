@@ -1,4 +1,5 @@
-﻿using PiP_Tool.Interfaces;
+﻿using System;
+using PiP_Tool.Interfaces;
 using PiP_Tool.ViewModels;
 
 namespace PiP_Tool
@@ -9,18 +10,21 @@ namespace PiP_Tool
     public partial class MainWindow
     {
 
+        public readonly Main ViewModel;
+
         public MainWindow()
         {
-            DataContext = new Main();
+            ViewModel = new Main();
+            DataContext = ViewModel;
             InitializeComponent();
 
             Loaded += (s, e) =>
             {
-                if (DataContext is ICloseable)
-                {
-                    (DataContext as ICloseable).RequestClose += (_, __) => Close();
-                }
+                if (DataContext is ICloseable closeable)
+                    closeable.RequestClose += (_, __) => Close();
+                Closing += ViewModel.OnWindowClosing;
             };
+
         }
 
     }

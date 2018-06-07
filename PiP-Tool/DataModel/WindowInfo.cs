@@ -24,14 +24,27 @@ namespace PiP_Tool.DataModel
         public WindowInfo(IntPtr handle)
         {
             Handle = handle;
-
-            SetSizeAndPosition();
-            SetTitle();
-            SetWinInfo();
-            SetBorder();
+            RefreshInfo();
         }
 
-        private void SetSizeAndPosition()
+        public void RefreshInfo()
+        {
+            GetSizeAndPosition();
+            GetTitle();
+            GetWinInfo();
+            GetBorder();
+        }
+
+        public void SetAsForegroundWindow()
+        {
+            RefreshInfo();
+            if (IsMinimized)
+                NativeMethods.ShowWindow(Handle, ShowWindowCommands.Restore);
+            RefreshInfo();
+            NativeMethods.SetForegroundWindow(Handle);
+        }
+
+        private void GetSizeAndPosition()
         {
             if (!NativeMethods.GetWindowRect(Handle, out var rct)) return;
             Rect = rct;
@@ -39,7 +52,7 @@ namespace PiP_Tool.DataModel
             Size = new Size(rct.Right - rct.Left + 1, rct.Bottom - rct.Top + 1);
         }
 
-        private void SetTitle()
+        private void GetTitle()
         {
             var length = NativeMethods.GetWindowTextLength(Handle);
             if (length == 0) return;
@@ -49,14 +62,14 @@ namespace PiP_Tool.DataModel
             Title = builder.ToString();
         }
 
-        private void SetWinInfo()
+        private void GetWinInfo()
         {
             _winInfo = new NativeStructs.WINDOWINFO();
             _winInfo.cbSize = (uint)Marshal.SizeOf(_winInfo);
             NativeMethods.GetWindowInfo(Handle, ref _winInfo);
         }
 
-        private void SetBorder()
+        private void GetBorder()
         {
             DwmGetWindowAttribute(Handle, DWMWINDOWATTRIBUTE.ExtendedFrameBounds, out var frame, Marshal.SizeOf(typeof(NativeStructs.Rect)));
             Border = new NativeStructs.Rect(
@@ -65,11 +78,6 @@ namespace PiP_Tool.DataModel
                 Rect.Right - frame.Right,
                 Rect.Bottom - frame.Bottom
             );
-        }
-
-        public void SetForegroundWindow()
-        {
-            NativeMethods.SetForegroundWindow(Handle);
         }
 
         [DllImport("dwmapi.dll")]

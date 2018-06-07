@@ -92,7 +92,7 @@ namespace PiP_Tool.ViewModels
         public Selector(WindowInfo windowInfo)
         {
             _windowInfo = windowInfo;
-            _windowInfo.SetForegroundWindow();
+            _windowInfo.SetAsForegroundWindow();
             _sizeRestriction = _windowInfo.Rect - _windowInfo.Border;
             Top = 0;
             Left = 0;

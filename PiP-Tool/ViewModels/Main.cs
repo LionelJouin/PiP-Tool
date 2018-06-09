@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Runtime.InteropServices;
-using System.Text;
+using System.Linq;
 using System.Windows.Data;
 using System.Windows.Input;
-using Helpers.Native;
 using PiP_Tool.DataModel;
 using PiP_Tool.Helpers;
 using PiP_Tool.Views;
@@ -42,47 +39,43 @@ namespace PiP_Tool.ViewModels
             }
 
         }
-        public CollectionView WindowsList { get; }
+        public CollectionView WindowsList
+        {
+            get => _windowsList;
+            set
+            {
+                _windowsList = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private CollectionView _windowsList;
 
         private SelectorWindow _selectorWindow;
         private WindowInfo _selectedWindowInfo;
+        private readonly ProcessList _processList;
 
         public Main()
         {
-            var openWindows = GetOpenWindows();
-            WindowsList = new CollectionView(openWindows);
+            _processList = new ProcessList();
+            //_processList.OpenWindowsChanged += OpenWindowsChanged;
+            SetWindowsList();
         }
 
-        public static List<WindowInfo> GetOpenWindows()
+        private void SetWindowsList()
         {
-            var shellWindow = NativeMethods.GetShellWindow();
-            var windows = new List<WindowInfo>();
+            var sortedList = _processList.OpenWindows.OrderBy(x => x.Title);
+            WindowsList = new CollectionView(sortedList);
+        }
 
-            NativeMethods.EnumWindows(delegate (IntPtr hWnd, int lParam)
-            {
-                if (hWnd == shellWindow) return true;
-                if (!NativeMethods.IsWindowVisible(hWnd)) return true;
-
-                NativeMethods.DwmGetWindowAttribute(hWnd, DWMWINDOWATTRIBUTE.Cloaked, out var isCloacked, Marshal.SizeOf(typeof(bool)));
-                if (isCloacked) return true;
-
-                var length = NativeMethods.GetWindowTextLength(hWnd);
-                if (length == 0) return true;
-
-                var builder = new StringBuilder(length);
-                NativeMethods.GetWindowText(hWnd, builder, length + 1);
-
-                //windows[hWnd] = builder.ToString();
-                windows.Add(new WindowInfo(hWnd));
-                return true;
-
-            }, 0);
-
-            return windows;
+        private void OpenWindowsChanged(object sender, EventArgs e)
+        {
+            SetWindowsList();
         }
 
         public void OnWindowClosing(object sender, CancelEventArgs e)
         {
+            _processList.Dispose();
             _selectorWindow?.Close();
         }
 

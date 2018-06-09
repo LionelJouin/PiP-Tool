@@ -151,5 +151,6 @@ namespace Helpers.Native
                 return string.Format(CultureInfo.CurrentCulture, "{{Left={0},Top={1},Right={2},Bottom={3}}}", Left, Top, Right, Bottom);
             }
         }
+
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using PiP_Tool.Interfaces;
+﻿using PiP_Tool.Interfaces;
 using PiP_Tool.ViewModels;
 
 namespace PiP_Tool
@@ -26,6 +25,6 @@ namespace PiP_Tool
             };
 
         }
-
+        
     }
 }

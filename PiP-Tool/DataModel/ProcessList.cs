@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using Helpers.Native;
 
 namespace PiP_Tool.DataModel
@@ -43,6 +44,7 @@ namespace PiP_Tool.DataModel
         {
             OpenWindows = GetOpenWindows();
             OnOpenWindowsChanged();
+
         }
 
         private List<WindowInfo> GetOpenWindows()

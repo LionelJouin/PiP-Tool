@@ -21,7 +21,7 @@
                   Margin="10,10,0,0" 
                   VerticalAlignment="Top" 
                   Width="120"
-                  ItemsSource="{Binding WindowsList}"
+                  ItemsSource="{Binding WindowsList, UpdateSourceTrigger=PropertyChanged}"
                   DisplayMemberPath="Title"
                   SelectedItem="{Binding SelectedWindowInfo}"/>
 

@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows.Data;
 using System.Windows.Input;
 using PiP_Tool.DataModel;
 using PiP_Tool.Helpers;
@@ -34,12 +34,26 @@ namespace PiP_Tool.ViewModels
             get => _selectedWindowInfo;
             set
             {
+                if (_selectedWindowInfo == value)
+                    return;
                 _selectedWindowInfo = value;
                 ShowSelector();
+                NotifyPropertyChanged();
             }
-
         }
-        public CollectionView WindowsList
+        //public CollectionView WindowsList
+        //{
+        //    get => _windowsList;
+        //    set
+        //    {
+        //        _windowsList = value;
+        //        NotifyPropertyChanged();
+        //    }
+        //}
+
+        //private CollectionView _windowsList;
+
+        public ObservableCollection<WindowInfo> WindowsList
         {
             get => _windowsList;
             set
@@ -49,28 +63,40 @@ namespace PiP_Tool.ViewModels
             }
         }
 
-        private CollectionView _windowsList;
-
+        private ObservableCollection<WindowInfo> _windowsList;
         private SelectorWindow _selectorWindow;
         private WindowInfo _selectedWindowInfo;
         private readonly ProcessList _processList;
 
         public Main()
         {
+            WindowsList = new ObservableCollection<WindowInfo>();
+
             _processList = new ProcessList();
-            //_processList.OpenWindowsChanged += OpenWindowsChanged;
-            SetWindowsList();
+            _processList.OpenWindowsChanged += OpenWindowsChanged;
+            UpdateWindowsList();
         }
 
-        private void SetWindowsList()
+        private void UpdateWindowsList()
         {
-            var sortedList = _processList.OpenWindows.OrderBy(x => x.Title);
-            WindowsList = new CollectionView(sortedList);
+            var openWindows = _processList.OpenWindows;
+
+            var toAdd = openWindows.Where(x => WindowsList.All(y => x.Handle != y.Handle));
+            var toRemove = WindowsList.Where(x => openWindows.All(y => x.Handle != y.Handle));
+
+            foreach (var e in toAdd)
+            {
+                WindowsList.Add(e);
+            }
+            foreach (var e in toRemove)
+            {
+                WindowsList.Remove(e);
+            }
         }
 
         private void OpenWindowsChanged(object sender, EventArgs e)
         {
-            SetWindowsList();
+            UpdateWindowsList();
         }
 
         public void OnWindowClosing(object sender, CancelEventArgs e)

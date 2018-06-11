@@ -23,7 +23,7 @@ namespace PiP_Tool.Views
         private readonly WindowInteropHelper _wih;
         private readonly PictureInPicture _pictureInPicture;
 
-        private const int TopBarHeight = 30;
+        private const int TopBarHeight = 100;
         private bool _renderSizeEventEnabled;
         private readonly Grid _topBar;
 
@@ -61,18 +61,18 @@ namespace PiP_Tool.Views
                 return;
             }
             var topBarHeight = 0;
-            if (IsMouseOver)
+            if (_topBar.IsVisible)
                 topBarHeight = TopBarHeight;
             if (sizeInfo.WidthChanged)
             {
-                Width = (sizeInfo.NewSize.Height + topBarHeight) * _pictureInPicture.Ratio;
+                Width = (sizeInfo.NewSize.Height - topBarHeight) * _pictureInPicture.Ratio;
             }
             else
             {
                 Height = sizeInfo.NewSize.Width * _pictureInPicture.Ratio + topBarHeight;
             }
         }
-        
+
         protected override void OnMouseEnter(MouseEventArgs e)
         {
             if (_topBar.IsVisible)

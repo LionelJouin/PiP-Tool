@@ -1,12 +1,11 @@
-﻿using System;
-using Helpers.Native;
+﻿using Helpers.Native;
 
 namespace PiP_Tool.DataModel
 {
     public class SelectedWindow
     {
 
-        public WindowInfo WindowInfo { get; private set; }
+        public WindowInfo WindowInfo { get; }
         public NativeStructs.Rect SelectedRegion { get; set; }
 
         public float Ratio => WindowInfo.Size.Height > 0 ? SelectedRegion.Width / (float)SelectedRegion.Height : 0;

@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
 using Helpers.Native;
 
 namespace PiP_Tool.DataModel
@@ -14,37 +13,52 @@ namespace PiP_Tool.DataModel
 
         public List<WindowInfo> OpenWindows;
         public event EventHandler OpenWindowsChanged;
+        public event EventHandler ForegroundWindowChanged;
 
         private Process[] _processes;
-        private readonly IntPtr _winEventhook;
-        private readonly NativeMethods.WinEventDelegate _winEventProc;
+        private readonly IntPtr _createDestroyEventhook;
+        private readonly NativeMethods.WinEventDelegate _createDestroyEventProc;
+        private readonly IntPtr _foregroundEventhook;
+        private readonly NativeMethods.WinEventDelegate _foregroundEventProc;
 
         public ProcessList()
         {
             _processes = Process.GetProcesses();
             SetOpenWindows();
 
-            _winEventProc = WinEventProc;
-            _winEventhook = NativeMethods.SetWinEventHook(
+            _createDestroyEventProc = CreateDestroyEventProc;
+            _createDestroyEventhook = NativeMethods.SetWinEventHook(
                 (uint)EventConstants.EVENT_OBJECT_CREATE,
                 (uint)EventConstants.EVENT_OBJECT_DESTROY,
                 IntPtr.Zero,
-                _winEventProc,
+                _createDestroyEventProc,
+                0, 0,
+                (uint)EventConstants.WINEVENT_OUTOFCONTEXT | (uint)EventConstants.WINEVENT_SKIPOWNPROCESS
+            );
+            
+            _foregroundEventProc = ForegroundEventProc;
+            _foregroundEventhook = NativeMethods.SetWinEventHook(
+                (uint)EventConstants.EVENT_SYSTEM_FOREGROUND,
+                (uint)EventConstants.EVENT_SYSTEM_FOREGROUND,
+                IntPtr.Zero,
+                _foregroundEventProc,
                 0, 0,
                 (uint)EventConstants.WINEVENT_OUTOFCONTEXT | (uint)EventConstants.WINEVENT_SKIPOWNPROCESS
             );
         }
 
+        ~ProcessList() => Dispose();
+
         public void Dispose()
         {
-            NativeMethods.UnhookWinEvent(_winEventhook);
+            NativeMethods.UnhookWinEvent(_createDestroyEventhook);
+            NativeMethods.UnhookWinEvent(_foregroundEventhook);
         }
 
         private void SetOpenWindows()
         {
             OpenWindows = GetOpenWindows();
             OnOpenWindowsChanged();
-
         }
 
         private List<WindowInfo> GetOpenWindows()
@@ -73,7 +87,14 @@ namespace PiP_Tool.DataModel
             return windows;
         }
 
-        private void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
+        private void ForegroundEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
+        {
+            if (idObject != 0 || idChild != 0 || eventType != (uint)EventConstants.EVENT_OBJECT_CREATE)
+                return;
+            OnForegroundWindowChanged();
+        }
+
+        private void CreateDestroyEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
         {
             if (idObject != 0 || idChild != 0)
                 return;
@@ -81,10 +102,9 @@ namespace PiP_Tool.DataModel
             switch (eventType)
             {
                 case (uint)EventConstants.EVENT_OBJECT_CREATE:
-
                     NativeMethods.GetWindowThreadProcessId(hwnd, out var processId);
-                    if (processId == 0) return;
-
+                    if (processId == 0)
+                        return;
                     try
                     {
                         var p = Process.GetProcessById((int)processId);
@@ -99,11 +119,8 @@ namespace PiP_Tool.DataModel
                     {
                         // ignored
                     }
-
                     break;
-
                 case (uint)EventConstants.EVENT_OBJECT_DESTROY:
-
                     try
                     {
                         if (_processes.FirstOrDefault(x => x.MainWindowHandle == hwnd) == null) return;
@@ -114,7 +131,6 @@ namespace PiP_Tool.DataModel
                     {
                         // ignored
                     }
-
                     break;
             }
         }
@@ -122,6 +138,11 @@ namespace PiP_Tool.DataModel
         public void OnOpenWindowsChanged()
         {
             OpenWindowsChanged?.Invoke(this, new EventArgs());
+        }
+
+        public void OnForegroundWindowChanged()
+        {
+            ForegroundWindowChanged?.Invoke(this, new EventArgs());
         }
 
     }

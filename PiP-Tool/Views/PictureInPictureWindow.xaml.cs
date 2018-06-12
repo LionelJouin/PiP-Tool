@@ -23,7 +23,7 @@ namespace PiP_Tool.Views
         private readonly WindowInteropHelper _wih;
         private readonly PictureInPicture _pictureInPicture;
 
-        private const int TopBarHeight = 100;
+        private const int TopBarHeight = 30;
         private bool _renderSizeEventEnabled;
         private readonly Grid _topBar;
 

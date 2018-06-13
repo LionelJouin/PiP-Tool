@@ -9,16 +9,17 @@ namespace PiP_Tool.Views
     /// </summary>
     public partial class SelectorWindow
     {
-        
+
         public readonly Selector ViewModel;
 
         public NativeStructs.Rect SelectedRegion => ViewModel.SelectedRegion;
 
         public SelectorWindow(WindowInfo windowInfo)
         {
+            InitializeComponent();
+
             ViewModel = new Selector(windowInfo);
             DataContext = ViewModel;
-            InitializeComponent();
 
             Show();
             Activate();

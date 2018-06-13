@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Interop;
 using PiP_Tool.DataModel;
 using PiP_Tool.Helpers;
 using PiP_Tool.Views;
@@ -12,22 +13,9 @@ namespace PiP_Tool.ViewModels
     public class Main : BaseViewModel
     {
 
-        public ICommand StartPictureInPicture
-        {
-            get
-            {
-                return new RelayCommand(() =>
-                {
-                    if (_selectorWindow == null)
-                        return;
-                    var selectedRegion = _selectorWindow.SelectedRegion;
-                    _selectorWindow.Close();
-                    var pip = new PictureInPictureWindow(new SelectedWindow(SelectedWindowInfo, selectedRegion));
-                    pip.Show();
-                    CloseWindow();
-                });
-            }
-        }
+        public ICommand StartPipCommand { get; }
+        public ICommand LoadedCommand { get; }
+        public ICommand ClosingCommand { get; }
 
         public WindowInfo SelectedWindowInfo
         {
@@ -41,18 +29,6 @@ namespace PiP_Tool.ViewModels
                 NotifyPropertyChanged();
             }
         }
-        //public CollectionView WindowsList
-        //{
-        //    get => _windowsList;
-        //    set
-        //    {
-        //        _windowsList = value;
-        //        NotifyPropertyChanged();
-        //    }
-        //}
-
-        //private CollectionView _windowsList;
-
         public ObservableCollection<WindowInfo> WindowsList
         {
             get => _windowsList;
@@ -70,6 +46,10 @@ namespace PiP_Tool.ViewModels
 
         public Main()
         {
+            StartPipCommand = new RelayCommand(StartPipCommandExecute);
+            LoadedCommand = new RelayCommand(LoadedCommandExecute);
+            ClosingCommand = new RelayCommand(ClosingCommandExecute);
+
             WindowsList = new ObservableCollection<WindowInfo>();
 
             _processList = new ProcessList();
@@ -94,23 +74,44 @@ namespace PiP_Tool.ViewModels
             }
         }
 
-        private void OpenWindowsChanged(object sender, EventArgs e)
-        {
-            UpdateWindowsList();
-        }
-
-        public void OnWindowClosing(object sender, CancelEventArgs e)
-        {
-            _processList.Dispose();
-            _selectorWindow?.Close();
-        }
-
         private void ShowSelector()
         {
             _selectorWindow?.Close();
             _selectorWindow = new SelectorWindow(SelectedWindowInfo);
             _selectorWindow.Show();
         }
+
+        private void OpenWindowsChanged(object sender, EventArgs e)
+        {
+            UpdateWindowsList();
+        }
+
+        #region commands
+
+        private void StartPipCommandExecute()
+        {
+            if (_selectorWindow == null)
+                return;
+            var selectedRegion = _selectorWindow.SelectedRegion;
+            _selectorWindow.Close();
+            var pip = new PictureInPictureWindow(new SelectedWindow(SelectedWindowInfo, selectedRegion));
+            pip.Show();
+            CloseWindow();
+        }
+
+        private void LoadedCommandExecute()
+        {
+            var a = new WindowInteropHelper(Application.Current.MainWindow).Handle;
+            Console.WriteLine("koukou a : " + a);
+        }
+
+        private void ClosingCommandExecute()
+        {
+            _processList.Dispose();
+            _selectorWindow?.Close();
+        }
+
+        #endregion
 
     }
 }

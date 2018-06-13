@@ -3,6 +3,7 @@ using System.Windows.Input;
 using Helpers.Native;
 using PiP_Tool.DataModel;
 using PiP_Tool.Helpers;
+using PiP_Tool.Views;
 
 namespace PiP_Tool.ViewModels
 {

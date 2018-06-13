@@ -11,9 +11,40 @@ namespace PiP_Tool.DataModel
     public class ProcessList
     {
 
-        public List<WindowInfo> OpenWindows;
+        public List<WindowInfo> OpenWindows
+        {
+            get
+            {
+                var shellWindow = NativeMethods.GetShellWindow();
+                var windows = new List<WindowInfo>();
+
+                NativeMethods.EnumWindows(delegate (IntPtr hWnd, int lParam)
+                {
+                    if (ExcludedProcesses.Contains(hWnd)) return true;
+                    if (hWnd == shellWindow) return true;
+                    if (!NativeMethods.IsWindowVisible(hWnd)) return true;
+
+                    NativeMethods.DwmGetWindowAttribute(hWnd, DWMWINDOWATTRIBUTE.Cloaked, out var isCloacked, Marshal.SizeOf(typeof(bool)));
+                    if (isCloacked) return true;
+
+                    var length = NativeMethods.GetWindowTextLength(hWnd);
+                    if (length == 0) return true;
+
+                    var builder = new StringBuilder(length);
+                    NativeMethods.GetWindowText(hWnd, builder, length + 1);
+
+                    Console.WriteLine(hWnd);
+                    windows.Add(new WindowInfo(hWnd));
+                    return true;
+                }, 0);
+
+                return windows;
+            }
+        }
+        public bool ForegroundWindow;
         public event EventHandler OpenWindowsChanged;
         public event EventHandler ForegroundWindowChanged;
+        public List<IntPtr> ExcludedProcesses;
 
         private Process[] _processes;
         private readonly IntPtr _createDestroyEventhook;
@@ -23,8 +54,8 @@ namespace PiP_Tool.DataModel
 
         public ProcessList()
         {
+            ExcludedProcesses = new List<IntPtr>();
             _processes = Process.GetProcesses();
-            SetOpenWindows();
 
             _createDestroyEventProc = CreateDestroyEventProc;
             _createDestroyEventhook = NativeMethods.SetWinEventHook(
@@ -55,38 +86,6 @@ namespace PiP_Tool.DataModel
             NativeMethods.UnhookWinEvent(_foregroundEventhook);
         }
 
-        private void SetOpenWindows()
-        {
-            OpenWindows = GetOpenWindows();
-            OnOpenWindowsChanged();
-        }
-
-        private List<WindowInfo> GetOpenWindows()
-        {
-            var shellWindow = NativeMethods.GetShellWindow();
-            var windows = new List<WindowInfo>();
-
-            NativeMethods.EnumWindows(delegate (IntPtr hWnd, int lParam)
-            {
-                if (hWnd == shellWindow) return true;
-                if (!NativeMethods.IsWindowVisible(hWnd)) return true;
-
-                NativeMethods.DwmGetWindowAttribute(hWnd, DWMWINDOWATTRIBUTE.Cloaked, out var isCloacked, Marshal.SizeOf(typeof(bool)));
-                if (isCloacked) return true;
-
-                var length = NativeMethods.GetWindowTextLength(hWnd);
-                if (length == 0) return true;
-
-                var builder = new StringBuilder(length);
-                NativeMethods.GetWindowText(hWnd, builder, length + 1);
-
-                windows.Add(new WindowInfo(hWnd));
-                return true;
-            }, 0);
-
-            return windows;
-        }
-
         private void ForegroundEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
         {
             if (idObject != 0 || idChild != 0 || eventType != (uint)EventConstants.EVENT_OBJECT_CREATE)
@@ -113,7 +112,7 @@ namespace PiP_Tool.DataModel
                             return;
 
                         _processes = Process.GetProcesses();
-                        SetOpenWindows();
+                        OnOpenWindowsChanged();
                     }
                     catch (Exception)
                     {
@@ -125,7 +124,7 @@ namespace PiP_Tool.DataModel
                     {
                         if (_processes.FirstOrDefault(x => x.MainWindowHandle == hwnd) == null) return;
                         _processes = Process.GetProcesses();
-                        SetOpenWindows();
+                        OnOpenWindowsChanged();
                     }
                     catch (Exception)
                     {

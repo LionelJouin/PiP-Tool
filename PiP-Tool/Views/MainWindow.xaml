@@ -1,13 +1,29 @@
-﻿<Window x:Class="PiP_Tool.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:viewModels="clr-namespace:PiP_Tool.ViewModels" x:Class="PiP_Tool.Views.MainWindow"
         mc:Ignorable="d"
         Topmost="True"
         Title="MainWindow" Height="100" Width="250">
+
+    <Window.DataContext>
+        <viewModels:Main/>
+    </Window.DataContext>
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadedCommand}"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding ClosingCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
     <Grid>
-        
+
         <Button x:Name="ButtonPip" 
                 Content="Pip" 
                 HorizontalAlignment="Left" 
@@ -15,7 +31,7 @@
                 VerticalAlignment="Top" 
                 Width="75" 
                 RenderTransformOrigin="0.112,-0.412"  
-                Command="{Binding StartPictureInPicture}" Height="22" />
+                Command="{Binding StartPipCommand}" Height="22" />
 
         <ComboBox HorizontalAlignment="Left" 
                   Margin="10,10,0,0" 

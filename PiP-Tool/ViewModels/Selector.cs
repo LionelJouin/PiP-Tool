@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Input;
 using Helpers.Native;
 using PiP_Tool.DataModel;
 
@@ -7,16 +8,95 @@ namespace PiP_Tool.ViewModels
 {
     public class Selector : BaseViewModel
     {
-        public int WindowTop => _windowInfo.Position.Y;
-        public int WindowLeft => _windowInfo.Position.X;
-        public int WindowWidth => _windowInfo.Rect.Width;
-        public int WindowHeight => _windowInfo.Rect.Height;
-        public Thickness CanvasMargin => new Thickness(_windowInfo.Border.Left, _windowInfo.Border.Top, _windowInfo.Border.Right, _windowInfo.Border.Bottom);
 
-        public int MaxHeight => _sizeRestriction.Height;
-        public int MaxWidth => _sizeRestriction.Width;
-        public int MinHeight => 100;
-        public int MinWidth => 100;
+        #region public variables
+
+        public NativeStructs.Rect SelectedRegion => new NativeStructs.Rect(Left, Top, Width + Left, Top + Height);
+
+        public int WindowTop
+        {
+            get => _windowTop;
+            set
+            {
+                _windowTop = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public int WindowLeft
+        {
+            get => _windowLeft;
+            set
+            {
+                _windowLeft = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public int WindowWidth
+        {
+            get => _windowWidth;
+            set
+            {
+                _windowWidth = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public int WindowHeight
+        {
+            get => _windowHeight;
+            set
+            {
+                _windowHeight = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public Thickness CanvasMargin
+        {
+            get => _canvasMargin;
+            set
+            {
+                _canvasMargin = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public int MaxHeight
+        {
+            get => _maxHeight;
+            set
+            {
+                _maxHeight = value;
+                UpdateBottom();
+                NotifyPropertyChanged();
+            }
+        }
+        public int MaxWidth
+        {
+            get => _maxWidth;
+            set
+            {
+                _maxWidth = value;
+                UpdateRight();
+                NotifyPropertyChanged();
+            }
+        }
+        public int MinHeight
+        {
+            get => _minHeight;
+            set
+            {
+                _minHeight = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public int MinWidth
+        {
+            get => _minWidth;
+            set
+            {
+                _minWidth = value;
+                NotifyPropertyChanged();
+            }
+        }
 
         public int Height
         {
@@ -77,7 +157,20 @@ namespace PiP_Tool.ViewModels
             }
         }
 
-        public NativeStructs.Rect SelectedRegion => new NativeStructs.Rect(Left, Top, Width + Left, Top + Height);
+        #endregion
+
+        #region private variables
+
+        private int _windowTop;
+        private int _windowLeft;
+        private int _windowWidth;
+        private int _windowHeight;
+        private Thickness _canvasMargin;
+
+        private int _maxHeight;
+        private int _maxWidth;
+        private int _minHeight;
+        private int _minWidth;
 
         private int _height;
         private int _width;
@@ -89,20 +182,25 @@ namespace PiP_Tool.ViewModels
         private NativeStructs.Rect _sizeRestriction;
         private readonly WindowInfo _windowInfo;
 
+        #endregion
+
         public Selector(WindowInfo windowInfo)
         {
             _windowInfo = windowInfo;
             _windowInfo.SetAsForegroundWindow();
             _sizeRestriction = _windowInfo.Rect - _windowInfo.Border;
-            Top = 0;
-            Left = 0;
-            Height = MinHeight;
-            Width = MinWidth;
-        }
 
-        public Selector(NativeStructs.Rect sizeRestriction)
-        {
-            _sizeRestriction = sizeRestriction;
+            WindowTop = _windowInfo.Position.Y;
+            WindowLeft = _windowInfo.Position.X;
+            WindowWidth = _windowInfo.Rect.Width;
+            WindowHeight = _windowInfo.Rect.Height;
+            CanvasMargin = new Thickness(_windowInfo.Border.Left, _windowInfo.Border.Top, _windowInfo.Border.Right, _windowInfo.Border.Bottom);
+
+            MaxHeight = _sizeRestriction.Height;
+            MaxWidth = _sizeRestriction.Width;
+            MinHeight = 100;
+            MinWidth = 100;
+
             Top = 0;
             Left = 0;
             Height = MinHeight;

@@ -8,10 +8,10 @@
         AllowsTransparency="True" 
         WindowStyle="None" 
         ResizeMode="NoResize"
-        Top="{Binding WindowTop, Mode=OneTime}"
-        Left="{Binding WindowLeft, Mode=OneTime}"
-        Width="{Binding WindowWidth, Mode=OneTime}"
-        Height="{Binding WindowHeight, Mode=OneTime}"
+        Top="{Binding WindowTop, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+        Left="{Binding WindowLeft, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+        Width="{Binding WindowWidth, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+        Height="{Binding WindowHeight, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
         Title="SelectorWindow">
 
     <Window.Resources>
@@ -28,7 +28,7 @@
     </Window.Background>
 
     <Canvas x:Name="LayoutRoot"
-            Margin="{Binding CanvasMargin, Mode=OneTime}">
+            Margin="{Binding CanvasMargin, UpdateSourceTrigger=PropertyChanged}">
 
         <Rectangle 
             x:Name="HideTop"
@@ -36,46 +36,46 @@
             Canvas.Left="0"
             Opacity="{StaticResource Opacity}"
             Fill="Black"
-            Width="{Binding MaxWidth, Mode=OneTime}"
-            Height="{Binding (Canvas.Top), ElementName=Selector}"/>
+            Width="{Binding MaxWidth, UpdateSourceTrigger=PropertyChanged}"
+            Height="{Binding (Canvas.Top), ElementName=Selector, UpdateSourceTrigger=PropertyChanged}"/>
         <Rectangle
             x:Name="HideLeft"
-            Canvas.Top="{Binding (Canvas.Top), ElementName=Selector}"
+            Canvas.Top="{Binding (Canvas.Top), ElementName=Selector, UpdateSourceTrigger=PropertyChanged}"
             Canvas.Left="0"
             Opacity="{StaticResource Opacity}"
             Fill="Black"
-            Width="{Binding (Canvas.Left), ElementName=Selector}"
-            Height="{Binding ActualHeight, ElementName=Selector}"/>
+            Width="{Binding (Canvas.Left), ElementName=Selector, UpdateSourceTrigger=PropertyChanged}"
+            Height="{Binding ActualHeight, ElementName=Selector, UpdateSourceTrigger=PropertyChanged}"/>
         <Rectangle
             x:Name="HideBottom"
             Canvas.Bottom="0"
             Canvas.Left="0"
             Opacity="{StaticResource Opacity}"
             Fill="Black"
-            Width="{Binding MaxWidth, Mode=OneTime}"
-            Height="{Binding (Canvas.Bottom), ElementName=Selector}"
+            Width="{Binding MaxWidth, UpdateSourceTrigger=PropertyChanged}"
+            Height="{Binding (Canvas.Bottom), ElementName=Selector, UpdateSourceTrigger=PropertyChanged}"
         />
         <Rectangle
             x:Name="HideRight"
-            Canvas.Top="{Binding (Canvas.Top), ElementName=Selector}"
+            Canvas.Top="{Binding (Canvas.Top), ElementName=Selector, UpdateSourceTrigger=PropertyChanged}"
             Canvas.Right="0"
             Opacity="{StaticResource Opacity}"
             Fill="Black"
-            Width="{Binding (Canvas.Right), ElementName=Selector}"
-            Height="{Binding ActualHeight, ElementName=Selector}"
+            Width="{Binding (Canvas.Right), ElementName=Selector, UpdateSourceTrigger=PropertyChanged}"
+            Height="{Binding ActualHeight, ElementName=Selector, UpdateSourceTrigger=PropertyChanged}"
         />
 
         <ContentControl x:Name="Selector"
-                    MinHeight="{Binding MinHeight, Mode=OneTime}"
-                    MinWidth="{Binding MinWidth, Mode=OneTime}"
+                    MinHeight="{Binding MinHeight, UpdateSourceTrigger=PropertyChanged}"
+                    MinWidth="{Binding MinWidth, UpdateSourceTrigger=PropertyChanged}"
                     Width="{Binding Width, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                     Height="{Binding Height, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                    MaxHeight="{Binding MaxHeight, Mode=OneTime}"
-                    MaxWidth="{Binding MaxWidth, Mode=OneTime}"
+                    MaxHeight="{Binding MaxHeight, UpdateSourceTrigger=PropertyChanged}"
+                    MaxWidth="{Binding MaxWidth, UpdateSourceTrigger=PropertyChanged}"
                     Canvas.Top="{Binding Top, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                     Canvas.Left="{Binding Left, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                    Canvas.Bottom="{Binding Bottom, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
-                    Canvas.Right="{Binding Right, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
+                    Canvas.Bottom="{Binding Bottom, UpdateSourceTrigger=PropertyChanged}"
+                    Canvas.Right="{Binding Right, UpdateSourceTrigger=PropertyChanged}"
                     Selector.IsSelected="True"
                     Style="{StaticResource MoveResize}">
             <Rectangle Fill="White" x:Name="Selector2"

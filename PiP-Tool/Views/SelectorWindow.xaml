@@ -20,6 +20,12 @@
         <viewModels:Selector/>
     </Window.DataContext>
 
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding ClosingCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
     <Window.Resources>
         <ResourceDictionary>
             <system:Double x:Key="Opacity">0.75</system:Double>

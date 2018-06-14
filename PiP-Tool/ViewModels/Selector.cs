@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Input;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using Helpers.Native;
 using PiP_Tool.DataModel;
 using PiP_Tool.Interfaces;
@@ -11,6 +13,8 @@ namespace PiP_Tool.ViewModels
     {
 
         #region public
+
+        public ICommand ClosingCommand { get; }
 
         public event EventHandler<EventArgs> RequestClose;
 
@@ -189,6 +193,7 @@ namespace PiP_Tool.ViewModels
 
         public Selector()
         {
+            ClosingCommand = new RelayCommand(ClosingCommandExecute);
             MessengerInstance.Register<WindowInfo>(this, Init);
             MessengerInstance.Register<Action<NativeStructs.Rect>>(this, StartPip);
         }
@@ -232,6 +237,16 @@ namespace PiP_Tool.ViewModels
             MessengerInstance.Unregister<Action<NativeStructs.Rect>>(this);
             cb(SelectedRegion);
         }
+
+        #region commands
+
+        private void ClosingCommandExecute()
+        {
+            MessengerInstance.Unregister<WindowInfo>(this);
+            MessengerInstance.Unregister<Action<NativeStructs.Rect>>(this);
+        }
+
+        #endregion
 
     }
 }

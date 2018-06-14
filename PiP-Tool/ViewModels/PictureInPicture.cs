@@ -173,6 +173,7 @@ namespace PiP_Tool.ViewModels
 
         private void CloseCommandExecute()
         {
+            MessengerInstance.Unregister<SelectedWindow>(this);
             RequestClose?.Invoke(this, EventArgs.Empty);
         }
 

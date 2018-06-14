@@ -32,8 +32,7 @@ namespace PiP_Tool.DataModel
 
                     var builder = new StringBuilder(length);
                     NativeMethods.GetWindowText(hWnd, builder, length + 1);
-
-                    Console.WriteLine(hWnd);
+                    
                     windows.Add(new WindowInfo(hWnd));
                     return true;
                 }, 0);

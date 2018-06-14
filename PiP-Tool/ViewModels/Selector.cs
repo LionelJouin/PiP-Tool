@@ -1,6 +1,4 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Input;
+﻿using System.Windows;
 using Helpers.Native;
 using PiP_Tool.DataModel;
 
@@ -9,7 +7,7 @@ namespace PiP_Tool.ViewModels
     public class Selector : BaseViewModel
     {
 
-        #region public variables
+        #region public
 
         public NativeStructs.Rect SelectedRegion => new NativeStructs.Rect(Left, Top, Width + Left, Top + Height);
 
@@ -159,7 +157,7 @@ namespace PiP_Tool.ViewModels
 
         #endregion
 
-        #region private variables
+        #region private
 
         private int _windowTop;
         private int _windowLeft;

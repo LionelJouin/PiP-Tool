@@ -13,6 +13,8 @@ namespace PiP_Tool.ViewModels
     public class Main : BaseViewModel
     {
 
+        #region public
+
         public ICommand StartPipCommand { get; }
         public ICommand LoadedCommand { get; }
         public ICommand ClosingCommand { get; }
@@ -39,10 +41,16 @@ namespace PiP_Tool.ViewModels
             }
         }
 
+        #endregion
+
+        #region private
+
         private ObservableCollection<WindowInfo> _windowsList;
         private SelectorWindow _selectorWindow;
         private WindowInfo _selectedWindowInfo;
         private readonly ProcessList _processList;
+
+        #endregion
 
         public Main()
         {
@@ -102,7 +110,6 @@ namespace PiP_Tool.ViewModels
         private void LoadedCommandExecute()
         {
             var a = new WindowInteropHelper(Application.Current.MainWindow).Handle;
-            Console.WriteLine("koukou a : " + a);
         }
 
         private void ClosingCommandExecute()

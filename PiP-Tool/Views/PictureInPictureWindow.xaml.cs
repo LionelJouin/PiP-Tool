@@ -19,8 +19,7 @@ namespace PiP_Tool.Views
     /// </summary>
     public partial class PictureInPictureWindow
     {
-
-        private readonly WindowInteropHelper _wih;
+        
         private readonly PictureInPicture _pictureInPicture;
 
         private const int TopBarHeight = 30;
@@ -30,20 +29,16 @@ namespace PiP_Tool.Views
         public PictureInPictureWindow(SelectedWindow selectedWindow)
         {
             InitializeComponent();
-
-            _wih = new WindowInteropHelper(this);
-            _pictureInPicture = new PictureInPicture();
-            DataContext = _pictureInPicture;
+            
+            _pictureInPicture = DataContext as PictureInPicture;
 
             _topBar = FindName("TopBar") as Grid;
 
             Loaded += (s, e) =>
             {
-                _pictureInPicture.Init(_wih.Handle, selectedWindow);
-                if (DataContext is ICloseable)
-                {
-                    (DataContext as ICloseable).RequestClose += (_, __) => Close();
-                }
+                _pictureInPicture.Init(new WindowInteropHelper(this).Handle, selectedWindow);
+                if (DataContext is ICloseable closeable)
+                    closeable.RequestClose += (_, __) => Close();
             };
         }
 
@@ -53,6 +48,7 @@ namespace PiP_Tool.Views
 
             DragMove();
         }
+
         protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
         {
             if (_renderSizeEventEnabled)
@@ -79,10 +75,11 @@ namespace PiP_Tool.Views
                 return;
             _renderSizeEventEnabled = true;
             _topBar.Visibility = Visibility.Visible;
-            _pictureInPicture.SetOffset(TopBarHeight);
+            _pictureInPicture.HeightOffset = TopBarHeight;
             Top -= TopBarHeight;
             Height = ActualHeight + TopBarHeight;
         }
+
         protected override void OnMouseLeave(MouseEventArgs e)
         {
             // Prevent OnMouseEnter, OnMouseLeave loop
@@ -95,7 +92,7 @@ namespace PiP_Tool.Views
                 return;
             _topBar.Visibility = Visibility.Hidden;
             _renderSizeEventEnabled = true;
-            _pictureInPicture.SetOffset(0);
+            _pictureInPicture.HeightOffset = 0;
             Top += TopBarHeight;
             Height = ActualHeight - TopBarHeight;
         }

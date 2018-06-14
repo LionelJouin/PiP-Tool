@@ -10,6 +10,11 @@ namespace PiP_Tool.ViewModels
     public class PictureInPicture : BaseViewModel
     {
 
+        #region public
+
+        public ICommand CloseCommand { get; }
+        public ICommand ChangeSelectedWindowCommand { get; }
+
         public SelectedWindow SelectedWindow
         {
             get => _selectedWindow;
@@ -30,6 +35,7 @@ namespace PiP_Tool.ViewModels
             }
         }
 
+        public int HeightOffset;
         public int Height
         {
             get => _height;
@@ -52,25 +58,22 @@ namespace PiP_Tool.ViewModels
         }
         public float Ratio { get; private set; }
 
-        public ICommand Close => new RelayCommand(CloseWindow);
-        public ICommand ChangeSelectedWindow
-        {
-            get
-            {
-                return new RelayCommand(() =>
-                {
-                    var mainWindow = new MainWindow();
-                    mainWindow.Show();
-                    CloseWindow();
-                });
-            }
-        }
+        #endregion
+
+        #region private
 
         private int _height;
         private int _width;
         private IntPtr _targetHandle, _thumbHandle;
         private SelectedWindow _selectedWindow;
-        private int _heightOffset;
+
+        #endregion
+
+        public PictureInPicture()
+        {
+            CloseCommand = new RelayCommand(CloseWindow);
+            ChangeSelectedWindowCommand = new RelayCommand(ChangeSelectedWindowCommandExecute);
+        }
 
         public void Init(IntPtr target, SelectedWindow selectedWindow)
         {
@@ -81,17 +84,12 @@ namespace PiP_Tool.ViewModels
             Ratio = SelectedWindow.Ratio;
         }
 
-        public void SetOffset(int heightOffset)
-        {
-            _heightOffset = heightOffset;
-        }
-
         public void Update()
         {
             if (_thumbHandle == IntPtr.Zero)
                 return;
-            
-            var dest = new NativeStructs.Rect(0, _heightOffset, _width, _height);
+
+            var dest = new NativeStructs.Rect(0, HeightOffset, _width, _height);
 
             var props = new NativeStructs.DwmThumbnailProperties
             {
@@ -105,5 +103,15 @@ namespace PiP_Tool.ViewModels
             NativeMethods.DwmUpdateThumbnailProperties(_thumbHandle, ref props);
         }
 
+        #region commands
+
+        private void ChangeSelectedWindowCommandExecute()
+        {
+            var mainWindow = new MainWindow();
+            mainWindow.Show();
+            CloseWindow();
+        }
+
+        #endregion
     }
 }

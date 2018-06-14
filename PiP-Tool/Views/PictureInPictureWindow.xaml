@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:PiP_Tool.ViewModels"
         mc:Ignorable="d"
         Title="PictureInPictureWindow" 
         ResizeMode="CanResizeWithGrip" 
@@ -13,17 +14,22 @@
         x:Name="Window"
         Topmost="True"
         WindowStartupLocation="Manual">
+
+    <Window.DataContext>
+        <viewModels:PictureInPicture/>
+    </Window.DataContext>
+
     <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
         <Grid x:Name="TopBar" Visibility="Hidden" HorizontalAlignment="Right">
 
             <Button Content="X" 
                     HorizontalAlignment="Left" 
                     VerticalAlignment="Top" 
-                    Command="{Binding Close}" 
+                    Command="{Binding CloseCommand}" 
                     Height="30" 
                     Width="30"/>
             <Button Content="Resize" 
-                    Command="{Binding ChangeSelectedWindow}" 
+                    Command="{Binding ChangeSelectedWindowCommand}" 
                     HorizontalAlignment="Left" 
                     VerticalAlignment="Top" 
                     Height="30" 

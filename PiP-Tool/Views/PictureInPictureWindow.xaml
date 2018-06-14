@@ -4,12 +4,16 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:PiP_Tool.ViewModels"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:command="http://www.galasoft.ch/mvvmlight"
         mc:Ignorable="d"
         Title="PictureInPictureWindow" 
         ResizeMode="CanResizeWithGrip" 
         AllowsTransparency="True"
         Height="{Binding Height, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
         Width="{Binding Width, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+        Top="{Binding Top, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+        Left="{Binding Left, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
         WindowStyle="None" 
         x:Name="Window"
         Topmost="True"
@@ -19,8 +23,23 @@
         <viewModels:PictureInPicture/>
     </Window.DataContext>
 
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <command:EventToCommand Command="{Binding LoadedCommand}" PassEventArgsToCommand="True"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="SizeChanged">
+            <command:EventToCommand Command="{Binding SizeChangedCommand}" PassEventArgsToCommand="True" />
+        </i:EventTrigger>
+        <i:EventTrigger EventName="MouseEnter">
+            <command:EventToCommand Command="{Binding MouseEnterCommand}" PassEventArgsToCommand="True" />
+        </i:EventTrigger>
+        <i:EventTrigger EventName="MouseLeave">
+            <command:EventToCommand Command="{Binding MouseLeaveCommand}" PassEventArgsToCommand="True" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
     <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-        <Grid x:Name="TopBar" Visibility="Hidden" HorizontalAlignment="Right">
+        <Grid x:Name="TopBar" Visibility="{Binding TopBarVisibility, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Right">
 
             <Button Content="X" 
                     HorizontalAlignment="Left" 

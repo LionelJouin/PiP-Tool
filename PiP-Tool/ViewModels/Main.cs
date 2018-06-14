@@ -4,16 +4,21 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
+using Helpers.Native;
 using PiP_Tool.DataModel;
-using PiP_Tool.Helpers;
+using PiP_Tool.Interfaces;
 using PiP_Tool.Views;
 
 namespace PiP_Tool.ViewModels
 {
-    public class Main : BaseViewModel
+    public class Main : ViewModelBase, ICloseable
     {
 
         #region public
+
+        public event EventHandler<EventArgs> RequestClose;
 
         public ICommand StartPipCommand { get; }
         public ICommand LoadedCommand { get; }
@@ -28,7 +33,7 @@ namespace PiP_Tool.ViewModels
                     return;
                 _selectedWindowInfo = value;
                 ShowSelector();
-                NotifyPropertyChanged();
+                RaisePropertyChanged();
             }
         }
         public ObservableCollection<WindowInfo> WindowsList
@@ -37,7 +42,7 @@ namespace PiP_Tool.ViewModels
             set
             {
                 _windowsList = value;
-                NotifyPropertyChanged();
+                RaisePropertyChanged();
             }
         }
 
@@ -85,8 +90,18 @@ namespace PiP_Tool.ViewModels
         private void ShowSelector()
         {
             _selectorWindow?.Close();
-            _selectorWindow = new SelectorWindow(SelectedWindowInfo);
+            _selectorWindow = new SelectorWindow();
+            MessengerInstance.Send(SelectedWindowInfo);
             _selectorWindow.Show();
+            _selectorWindow.Activate();
+        }
+
+        private void StartPip(NativeStructs.Rect selectedRegion)
+        {
+            var pip = new PictureInPictureWindow();
+            MessengerInstance.Send(new SelectedWindow(SelectedWindowInfo, selectedRegion));
+            pip.Show();
+            RequestClose?.Invoke(this, EventArgs.Empty);
         }
 
         private void OpenWindowsChanged(object sender, EventArgs e)
@@ -98,18 +113,12 @@ namespace PiP_Tool.ViewModels
 
         private void StartPipCommandExecute()
         {
-            if (_selectorWindow == null)
-                return;
-            var selectedRegion = _selectorWindow.SelectedRegion;
-            _selectorWindow.Close();
-            var pip = new PictureInPictureWindow(new SelectedWindow(SelectedWindowInfo, selectedRegion));
-            pip.Show();
-            CloseWindow();
+            MessengerInstance.Send<Action<NativeStructs.Rect>>(StartPip);
         }
 
         private void LoadedCommandExecute()
         {
-            var a = new WindowInteropHelper(Application.Current.MainWindow).Handle;
+            var thisHandle = new WindowInteropHelper(Application.Current.MainWindow).Handle;
         }
 
         private void ClosingCommandExecute()

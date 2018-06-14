@@ -1,6 +1,4 @@
-﻿using Helpers.Native;
-using PiP_Tool.DataModel;
-using Selector = PiP_Tool.ViewModels.Selector;
+﻿using PiP_Tool.Interfaces;
 
 namespace PiP_Tool.Views
 {
@@ -10,19 +8,15 @@ namespace PiP_Tool.Views
     public partial class SelectorWindow
     {
 
-        public readonly Selector ViewModel;
-
-        public NativeStructs.Rect SelectedRegion => ViewModel.SelectedRegion;
-
-        public SelectorWindow(WindowInfo windowInfo)
+        public SelectorWindow()
         {
             InitializeComponent();
 
-            ViewModel = new Selector(windowInfo);
-            DataContext = ViewModel;
-
-            Show();
-            Activate();
+            Loaded += (s, e) =>
+            {
+                if (DataContext is ICloseable closeable)
+                    closeable.RequestClose += (_, __) => Close();
+            };
         }
 
     }

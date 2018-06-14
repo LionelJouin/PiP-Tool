@@ -1,13 +1,18 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
+using GalaSoft.MvvmLight;
 using Helpers.Native;
 using PiP_Tool.DataModel;
+using PiP_Tool.Interfaces;
 
 namespace PiP_Tool.ViewModels
 {
-    public class Selector : BaseViewModel
+    public class Selector : ViewModelBase, ICloseable
     {
 
         #region public
+
+        public event EventHandler<EventArgs> RequestClose;
 
         public NativeStructs.Rect SelectedRegion => new NativeStructs.Rect(Left, Top, Width + Left, Top + Height);
 
@@ -17,7 +22,7 @@ namespace PiP_Tool.ViewModels
             set
             {
                 _windowTop = value;
-                NotifyPropertyChanged();
+                RaisePropertyChanged();
             }
         }
         public int WindowLeft
@@ -26,7 +31,7 @@ namespace PiP_Tool.ViewModels
             set
             {
                 _windowLeft = value;
-                NotifyPropertyChanged();
+                RaisePropertyChanged();
             }
         }
         public int WindowWidth
@@ -35,7 +40,7 @@ namespace PiP_Tool.ViewModels
             set
             {
                 _windowWidth = value;
-                NotifyPropertyChanged();
+                RaisePropertyChanged();
             }
         }
         public int WindowHeight
@@ -44,7 +49,7 @@ namespace PiP_Tool.ViewModels
             set
             {
                 _windowHeight = value;
-                NotifyPropertyChanged();
+                RaisePropertyChanged();
             }
         }
         public Thickness CanvasMargin
@@ -53,7 +58,7 @@ namespace PiP_Tool.ViewModels
             set
             {
                 _canvasMargin = value;
-                NotifyPropertyChanged();
+                RaisePropertyChanged();
             }
         }
 
@@ -64,7 +69,7 @@ namespace PiP_Tool.ViewModels
             {
                 _maxHeight = value;
                 UpdateBottom();
-                NotifyPropertyChanged();
+                RaisePropertyChanged();
             }
         }
         public int MaxWidth
@@ -74,7 +79,7 @@ namespace PiP_Tool.ViewModels
             {
                 _maxWidth = value;
                 UpdateRight();
-                NotifyPropertyChanged();
+                RaisePropertyChanged();
             }
         }
         public int MinHeight
@@ -83,7 +88,7 @@ namespace PiP_Tool.ViewModels
             set
             {
                 _minHeight = value;
-                NotifyPropertyChanged();
+                RaisePropertyChanged();
             }
         }
         public int MinWidth
@@ -92,7 +97,7 @@ namespace PiP_Tool.ViewModels
             set
             {
                 _minWidth = value;
-                NotifyPropertyChanged();
+                RaisePropertyChanged();
             }
         }
 
@@ -103,7 +108,7 @@ namespace PiP_Tool.ViewModels
             {
                 _height = value;
                 UpdateBottom();
-                NotifyPropertyChanged();
+                RaisePropertyChanged();
             }
         }
         public int Width
@@ -113,7 +118,7 @@ namespace PiP_Tool.ViewModels
             {
                 _width = value;
                 UpdateRight();
-                NotifyPropertyChanged();
+                RaisePropertyChanged();
             }
         }
         public int Top
@@ -123,7 +128,7 @@ namespace PiP_Tool.ViewModels
             {
                 _top = value;
                 UpdateBottom();
-                NotifyPropertyChanged();
+                RaisePropertyChanged();
             }
         }
         public int Left
@@ -133,7 +138,7 @@ namespace PiP_Tool.ViewModels
             {
                 _left = value;
                 UpdateRight();
-                NotifyPropertyChanged();
+                RaisePropertyChanged();
             }
         }
         public int Bottom
@@ -142,7 +147,7 @@ namespace PiP_Tool.ViewModels
             set
             {
                 _bottom = value;
-                NotifyPropertyChanged();
+                RaisePropertyChanged();
             }
         }
         public int Right
@@ -151,7 +156,7 @@ namespace PiP_Tool.ViewModels
             set
             {
                 _right = value;
-                NotifyPropertyChanged();
+                RaisePropertyChanged();
             }
         }
 
@@ -178,12 +183,19 @@ namespace PiP_Tool.ViewModels
         private int _right;
 
         private NativeStructs.Rect _sizeRestriction;
-        private readonly WindowInfo _windowInfo;
+        private WindowInfo _windowInfo;
 
         #endregion
 
-        public Selector(WindowInfo windowInfo)
+        public Selector()
         {
+            MessengerInstance.Register<WindowInfo>(this, Init);
+            MessengerInstance.Register<Action<NativeStructs.Rect>>(this, StartPip);
+        }
+
+        private void Init(WindowInfo windowInfo)
+        {
+            MessengerInstance.Unregister<WindowInfo>(this);
             _windowInfo = windowInfo;
             _windowInfo.SetAsForegroundWindow();
             _sizeRestriction = _windowInfo.Rect - _windowInfo.Border;
@@ -213,6 +225,12 @@ namespace PiP_Tool.ViewModels
         private void UpdateRight()
         {
             Right = MaxWidth - (Left + Width);
+        }
+
+        private void StartPip(Action<NativeStructs.Rect> cb)
+        {
+            MessengerInstance.Unregister<Action<NativeStructs.Rect>>(this);
+            cb(SelectedRegion);
         }
 
     }

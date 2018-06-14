@@ -4,6 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
+        xmlns:viewModels="clr-namespace:PiP_Tool.ViewModels"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
         AllowsTransparency="True" 
         WindowStyle="None" 
@@ -13,6 +15,10 @@
         Width="{Binding WindowWidth, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
         Height="{Binding WindowHeight, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
         Title="SelectorWindow">
+
+    <Window.DataContext>
+        <viewModels:Selector/>
+    </Window.DataContext>
 
     <Window.Resources>
         <ResourceDictionary>

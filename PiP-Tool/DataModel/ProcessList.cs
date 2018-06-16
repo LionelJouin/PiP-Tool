@@ -4,12 +4,16 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows;
+using System.Windows.Interop;
 using Helpers.Native;
 
 namespace PiP_Tool.DataModel
 {
     public class ProcessList
     {
+
+        #region public
 
         public List<WindowInfo> OpenWindows
         {
@@ -18,9 +22,11 @@ namespace PiP_Tool.DataModel
                 var shellWindow = NativeMethods.GetShellWindow();
                 var windows = new List<WindowInfo>();
 
+                SetExcludedProcesses();
+
                 NativeMethods.EnumWindows(delegate (IntPtr hWnd, int lParam)
                 {
-                    if (ExcludedProcesses.Contains(hWnd)) return true;
+                    if (_excludedProcesses.Contains(hWnd)) return true;
                     if (hWnd == shellWindow) return true;
                     if (!NativeMethods.IsWindowVisible(hWnd)) return true;
 
@@ -32,7 +38,7 @@ namespace PiP_Tool.DataModel
 
                     var builder = new StringBuilder(length);
                     NativeMethods.GetWindowText(hWnd, builder, length + 1);
-                    
+
                     windows.Add(new WindowInfo(hWnd));
                     return true;
                 }, 0);
@@ -43,17 +49,23 @@ namespace PiP_Tool.DataModel
         public bool ForegroundWindow;
         public event EventHandler OpenWindowsChanged;
         public event EventHandler ForegroundWindowChanged;
-        public List<IntPtr> ExcludedProcesses;
 
+        #endregion
+
+        #region private
+
+        private List<IntPtr> _excludedProcesses;
         private Process[] _processes;
         private readonly IntPtr _createDestroyEventhook;
         private readonly NativeMethods.WinEventDelegate _createDestroyEventProc;
         private readonly IntPtr _foregroundEventhook;
         private readonly NativeMethods.WinEventDelegate _foregroundEventProc;
 
+        #endregion
+
         public ProcessList()
         {
-            ExcludedProcesses = new List<IntPtr>();
+            _excludedProcesses = new List<IntPtr>();
             _processes = Process.GetProcesses();
 
             _createDestroyEventProc = CreateDestroyEventProc;
@@ -65,7 +77,7 @@ namespace PiP_Tool.DataModel
                 0, 0,
                 (uint)EventConstants.WINEVENT_OUTOFCONTEXT | (uint)EventConstants.WINEVENT_SKIPOWNPROCESS
             );
-            
+
             _foregroundEventProc = ForegroundEventProc;
             _foregroundEventhook = NativeMethods.SetWinEventHook(
                 (uint)EventConstants.EVENT_SYSTEM_FOREGROUND,
@@ -141,6 +153,17 @@ namespace PiP_Tool.DataModel
         public void OnForegroundWindowChanged()
         {
             ForegroundWindowChanged?.Invoke(this, new EventArgs());
+        }
+
+        private void SetExcludedProcesses()
+        {
+            var windowsList = Application.Current.Windows.Cast<Window>();
+            _excludedProcesses = new List<IntPtr>();
+            foreach (var window in windowsList)
+            {
+                var handle = new WindowInteropHelper(window).Handle;
+                _excludedProcesses.Add(handle);
+            }
         }
 
     }

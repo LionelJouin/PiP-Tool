@@ -118,7 +118,9 @@ namespace PiP_Tool.ViewModels
 
         private void LoadedCommandExecute()
         {
+            
             var thisHandle = new WindowInteropHelper(Application.Current.MainWindow).Handle;
+            //_processList.ExcludedProcesses.Add(thisHandle);
         }
 
         private void ClosingCommandExecute()

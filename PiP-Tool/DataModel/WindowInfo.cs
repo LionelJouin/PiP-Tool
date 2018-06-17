@@ -10,7 +10,7 @@ namespace PiP_Tool.DataModel
     public class WindowInfo
     {
 
-        public IntPtr Handle { get; set; }
+        public IntPtr Handle { get; }
         public string Title { get; private set; }
         public Point Position { get; private set; }
         public Size Size { get; private set; }
@@ -71,7 +71,7 @@ namespace PiP_Tool.DataModel
 
         private void GetBorder()
         {
-            DwmGetWindowAttribute(Handle, DWMWINDOWATTRIBUTE.ExtendedFrameBounds, out var frame, Marshal.SizeOf(typeof(NativeStructs.Rect)));
+            NativeMethods.DwmGetWindowAttribute(Handle, DWMWINDOWATTRIBUTE.ExtendedFrameBounds, out NativeStructs.Rect frame, Marshal.SizeOf(typeof(NativeStructs.Rect)));
             Border = new NativeStructs.Rect(
                 frame.Left - Rect.Left,
                 frame.Top - Rect.Top,
@@ -80,8 +80,30 @@ namespace PiP_Tool.DataModel
             );
         }
 
-        [DllImport("dwmapi.dll")]
-        public static extern int DwmGetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE dwAttribute, out NativeStructs.Rect pvAttribute, int cbAttribute);
+        public override bool Equals(object obj)
+        {
+            return obj is WindowInfo windowInfo && Handle.Equals(windowInfo.Handle);
+        }
+
+        protected bool Equals(WindowInfo other)
+        {
+            return Handle.Equals(other.Handle);
+        }
+
+        public override int GetHashCode()
+        {
+            return Handle.GetHashCode();
+        }
+
+        public static bool operator ==(WindowInfo left, WindowInfo right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(WindowInfo left, WindowInfo right)
+        {
+            return !Equals(left, right);
+        }
 
     }
 }

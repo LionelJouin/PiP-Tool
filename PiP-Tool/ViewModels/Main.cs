@@ -67,6 +67,7 @@ namespace PiP_Tool.ViewModels
 
             _processList = new ProcessList();
             _processList.OpenWindowsChanged += OpenWindowsChanged;
+            _processList.ForegroundWindowChanged += ForegroundWindowChanged;
             UpdateWindowsList();
         }
 
@@ -74,8 +75,8 @@ namespace PiP_Tool.ViewModels
         {
             var openWindows = _processList.OpenWindows;
 
-            var toAdd = openWindows.Where(x => WindowsList.All(y => x.Handle != y.Handle));
-            var toRemove = WindowsList.Where(x => openWindows.All(y => x.Handle != y.Handle));
+            var toAdd = openWindows.Where(x => WindowsList.All(y => x != y));
+            var toRemove = WindowsList.Where(x => openWindows.All(y => x != y));
 
             foreach (var e in toAdd)
             {
@@ -109,6 +110,14 @@ namespace PiP_Tool.ViewModels
             UpdateWindowsList();
         }
 
+        private void ForegroundWindowChanged(object sender, EventArgs e)
+        {
+            UpdateWindowsList();
+            var foregroundWindow = _processList.ForegroundWindow;
+            if (foregroundWindow != null)
+                SelectedWindowInfo = foregroundWindow;
+        }
+
         #region commands
 
         private void StartPipCommandExecute()
@@ -118,7 +127,6 @@ namespace PiP_Tool.ViewModels
 
         private void LoadedCommandExecute()
         {
-            
             var thisHandle = new WindowInteropHelper(Application.Current.MainWindow).Handle;
             //_processList.ExcludedProcesses.Add(thisHandle);
         }

@@ -26,11 +26,11 @@ namespace PiP_Tool.DataModel
 
                 NativeMethods.EnumWindows(delegate (IntPtr hWnd, int lParam)
                 {
-                    if (_excludedProcesses.Contains(hWnd)) return true;
+                    if (_excludedWindows.Contains(hWnd)) return true;
                     if (hWnd == shellWindow) return true;
                     if (!NativeMethods.IsWindowVisible(hWnd)) return true;
 
-                    NativeMethods.DwmGetWindowAttribute(hWnd, DWMWINDOWATTRIBUTE.Cloaked, out var isCloacked, Marshal.SizeOf(typeof(bool)));
+                    NativeMethods.DwmGetWindowAttribute(hWnd, DWMWINDOWATTRIBUTE.Cloaked, out bool isCloacked, Marshal.SizeOf(typeof(bool)));
                     if (isCloacked) return true;
 
                     var length = NativeMethods.GetWindowTextLength(hWnd);
@@ -46,7 +46,14 @@ namespace PiP_Tool.DataModel
                 return windows;
             }
         }
-        public bool ForegroundWindow;
+        public WindowInfo ForegroundWindow
+        {
+            get
+            {
+                var foregroundWindow = NativeMethods.GetForegroundWindow();
+                return OpenWindows.FirstOrDefault(x => x.Handle == foregroundWindow);
+            }
+        }
         public event EventHandler OpenWindowsChanged;
         public event EventHandler ForegroundWindowChanged;
 
@@ -54,7 +61,7 @@ namespace PiP_Tool.DataModel
 
         #region private
 
-        private List<IntPtr> _excludedProcesses;
+        private List<IntPtr> _excludedWindows;
         private Process[] _processes;
         private readonly IntPtr _createDestroyEventhook;
         private readonly NativeMethods.WinEventDelegate _createDestroyEventProc;
@@ -65,7 +72,7 @@ namespace PiP_Tool.DataModel
 
         public ProcessList()
         {
-            _excludedProcesses = new List<IntPtr>();
+            _excludedWindows = new List<IntPtr>();
             _processes = Process.GetProcesses();
 
             _createDestroyEventProc = CreateDestroyEventProc;
@@ -99,7 +106,7 @@ namespace PiP_Tool.DataModel
 
         private void ForegroundEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
         {
-            if (idObject != 0 || idChild != 0 || eventType != (uint)EventConstants.EVENT_OBJECT_CREATE)
+            if (idObject != 0 || idChild != 0 || eventType != (uint)EventConstants.EVENT_SYSTEM_FOREGROUND)
                 return;
             OnForegroundWindowChanged();
         }
@@ -158,11 +165,11 @@ namespace PiP_Tool.DataModel
         private void SetExcludedProcesses()
         {
             var windowsList = Application.Current.Windows.Cast<Window>();
-            _excludedProcesses = new List<IntPtr>();
+            _excludedWindows = new List<IntPtr>();
             foreach (var window in windowsList)
             {
                 var handle = new WindowInteropHelper(window).Handle;
-                _excludedProcesses.Add(handle);
+                _excludedWindows.Add(handle);
             }
         }
 

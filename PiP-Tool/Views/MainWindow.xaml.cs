@@ -1,4 +1,5 @@
-﻿using PiP_Tool.Interfaces;
+﻿using System.Windows.Input;
+using PiP_Tool.Interfaces;
 
 namespace PiP_Tool.Views
 {
@@ -18,6 +19,13 @@ namespace PiP_Tool.Views
                     closeable.RequestClose += (_, __) => Close();
             };
         }
-        
+
+        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseLeftButtonDown(e);
+
+            DragMove();
+        }
+
     }
 }

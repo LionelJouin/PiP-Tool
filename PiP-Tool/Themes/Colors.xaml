@@ -1,0 +1,9 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <SolidColorBrush x:Key="Background" Color="#FF2D2D30" Opacity="0.95" />
+    <SolidColorBrush x:Key="ButtonDefault" Color="Transparent" />
+    <SolidColorBrush x:Key="ButtonHover" Color="#FF7C7C7C" />
+    <SolidColorBrush x:Key="TextColor" Color="White" />
+
+</ResourceDictionary>

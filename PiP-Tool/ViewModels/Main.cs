@@ -21,7 +21,7 @@ namespace PiP_Tool.ViewModels
         public event EventHandler<EventArgs> RequestClose;
 
         public ICommand StartPipCommand { get; }
-        public ICommand LoadedCommand { get; }
+        public ICommand QuitCommand { get; }
         public ICommand ClosingCommand { get; }
 
         public WindowInfo SelectedWindowInfo
@@ -60,7 +60,7 @@ namespace PiP_Tool.ViewModels
         public Main()
         {
             StartPipCommand = new RelayCommand(StartPipCommandExecute);
-            LoadedCommand = new RelayCommand(LoadedCommandExecute);
+            QuitCommand = new RelayCommand(QuitCommandExecute);
             ClosingCommand = new RelayCommand(ClosingCommandExecute);
 
             WindowsList = new ObservableCollection<WindowInfo>();
@@ -125,10 +125,15 @@ namespace PiP_Tool.ViewModels
             MessengerInstance.Send<Action<NativeStructs.Rect>>(StartPip);
         }
 
-        private void LoadedCommandExecute()
+        private void QuitCommandExecute()
         {
-            var thisHandle = new WindowInteropHelper(Application.Current.MainWindow).Handle;
-            //_processList.ExcludedProcesses.Add(thisHandle);
+            var windowsList = Application.Current.Windows.Cast<Window>();
+            foreach (var window in windowsList)
+            {
+                if (window.DataContext != this)
+                    window.Close();
+            }
+            RequestClose?.Invoke(this, EventArgs.Empty);
         }
 
         private void ClosingCommandExecute()

@@ -1,45 +1,96 @@
 ﻿<Window
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:viewModels="clr-namespace:PiP_Tool.ViewModels" x:Class="PiP_Tool.Views.MainWindow"
-        mc:Ignorable="d"
-        Topmost="True"
-        Title="MainWindow" Height="100" Width="250">
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:viewModels="clr-namespace:PiP_Tool.ViewModels" x:Class="PiP_Tool.Views.MainWindow"
+    mc:Ignorable="d"
+    Topmost="True"
+    AllowsTransparency="True" 
+    ResizeMode="NoResize"
+    Title="MainWindow" Height="50" Width="450" WindowStyle="None">
 
     <Window.DataContext>
         <viewModels:Main/>
     </Window.DataContext>
 
     <i:Interaction.Triggers>
-        <i:EventTrigger EventName="Loaded">
-            <i:InvokeCommandAction Command="{Binding LoadedCommand}"/>
-        </i:EventTrigger>
         <i:EventTrigger EventName="Closing">
             <i:InvokeCommandAction Command="{Binding ClosingCommand}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Themes/Generic.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Window.Background>
+        <StaticResource ResourceKey="Background" />
+    </Window.Background>
+
     <Grid>
 
-        <Button x:Name="ButtonPip" 
-                Content="Pip" 
+        <!--<Button x:Name="drag" 
                 HorizontalAlignment="Left" 
-                Margin="135,10,0,0" 
                 VerticalAlignment="Top" 
-                Width="75" 
-                RenderTransformOrigin="0.112,-0.412"  
-                Command="{Binding StartPipCommand}" Height="22" />
+                Margin="0,0,0,0" 
+                Width="50" 
+                Height="50" 
+                FontSize="14"
+                BorderBrush="#FF7C7C7C"
+                Opacity="0.5"
+                Command="{Binding StartPipCommand}" 
+                BorderThickness="0"
+                FontFamily="/PiP-Tool;component/Assets/#Flaticon" Content="&#xF100;" Foreground="White" />-->
 
         <ComboBox HorizontalAlignment="Left" 
-                  Margin="10,10,0,0" 
                   VerticalAlignment="Top" 
-                  Width="120"
+                  Margin="50,0,0,0" 
+                  Width="300"
+                  Height="50" 
+                  BorderThickness="0" 
+                  FontSize="14"
+                  Opacity="0.5"
                   ItemsSource="{Binding WindowsList, UpdateSourceTrigger=PropertyChanged}"
                   DisplayMemberPath="Title"
-                  SelectedItem="{Binding SelectedWindowInfo}"/>
+                  SelectedItem="{Binding SelectedWindowInfo}">
+            <ComboBox.ItemContainerStyle>
+                <Style TargetType="ComboBoxItem">
+                    <Setter Property="Width" Value="300"/>
+                </Style>
+            </ComboBox.ItemContainerStyle>
+        </ComboBox>
+
+        <Button x:Name="ButtonPip" 
+                HorizontalAlignment="Left" 
+                VerticalAlignment="Top" 
+                Margin="350,0,0,0" 
+                Width="50" 
+                Height="50" 
+                FontSize="14"
+                BorderBrush="#FF7C7C7C"
+                Opacity="0.5"
+                Command="{Binding StartPipCommand}" 
+                BorderThickness="0"
+                FontFamily="/PiP-Tool;component/Assets/#Flaticon" Content="&#xF101;" Foreground="White" />
+
+        <Button x:Name="ButtonQuit"
+                HorizontalAlignment="Left" 
+                VerticalAlignment="Top" 
+                Margin="400,0,0,0" 
+                Width="50" 
+                Height="50" 
+                FontSize="14"
+                BorderBrush="#e81123"
+                Opacity="0.5"
+                Command="{Binding QuitCommand}" 
+                BorderThickness="0" 
+                FontFamily="/PiP-Tool;component/Assets/#Flaticon" Content="&#xF102;" Foreground="White" />
 
     </Grid>
 </Window>

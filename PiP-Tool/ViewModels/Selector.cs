@@ -200,8 +200,15 @@ namespace PiP_Tool.ViewModels
 
         private void Init(WindowInfo windowInfo)
         {
+
             MessengerInstance.Unregister<WindowInfo>(this);
             _windowInfo = windowInfo;
+            if (windowInfo == null)
+            {
+                ClosingCommandExecute();
+                RequestClose?.Invoke(this, EventArgs.Empty);
+                return;
+            }
             _windowInfo.SetAsForegroundWindow();
             _sizeRestriction = _windowInfo.Rect - _windowInfo.Border;
 

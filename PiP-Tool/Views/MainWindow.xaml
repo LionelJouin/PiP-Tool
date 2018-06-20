@@ -60,7 +60,7 @@
                   DisplayMemberPath="Title"
                   SelectedItem="{Binding SelectedWindowInfo}">
             <ComboBox.ItemContainerStyle>
-                <Style TargetType="ComboBoxItem">
+                <Style TargetType="ComboBoxItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
                     <Setter Property="Width" Value="300"/>
                 </Style>
             </ComboBox.ItemContainerStyle>

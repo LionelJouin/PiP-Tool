@@ -40,23 +40,21 @@
 
     <Grid>
 
-        <!--<Button x:Name="drag" 
+        <Label x:Name="drag" 
                 HorizontalAlignment="Left" 
                 VerticalAlignment="Top" 
-                Margin="0,0,0,0" 
-                Width="50" 
+                HorizontalContentAlignment="Center" 
+                VerticalContentAlignment="Center"
+                Width="30" 
                 Height="50" 
-                FontSize="14"
-                BorderBrush="#FF7C7C7C"
+                FontSize="16"
                 Opacity="0.5"
-                Command="{Binding StartPipCommand}" 
-                BorderThickness="0"
-                FontFamily="/PiP-Tool;component/Assets/#Flaticon" Content="&#xF100;" Foreground="White" />-->
+                FontFamily="/PiP-Tool;component/Assets/#Flaticon" Content="&#xF100;" Foreground="White" />
 
         <ComboBox HorizontalAlignment="Left" 
                   VerticalAlignment="Top" 
-                  Margin="50,0,0,0" 
-                  Width="300"
+                  Margin="30,0,0,-1" 
+                  Width="320"
                   Height="50" 
                   BorderThickness="0" 
                   FontSize="14"
@@ -66,7 +64,7 @@
                   SelectedItem="{Binding SelectedWindowInfo}">
             <ComboBox.ItemContainerStyle>
                 <Style TargetType="ComboBoxItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                    <Setter Property="Width" Value="300"/>
+                    <Setter Property="Width" Value="320"/>
                 </Style>
             </ComboBox.ItemContainerStyle>
         </ComboBox>

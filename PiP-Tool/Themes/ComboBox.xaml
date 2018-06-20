@@ -91,8 +91,9 @@
                                 <Border Name="DropDownBorder" 
                                         Background="{StaticResource Background}" 
                                         Margin="0"
-                                        CornerRadius="0" 
-                                        BorderThickness="0"/>
+                                        BorderBrush="{StaticResource ButtonHover}"
+                                        BorderThickness="1, 0, 1, 1"
+                                        CornerRadius="0" />
 
                                 <ScrollViewer Margin="0" SnapsToDevicePixels="True">
                                     <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained" />

@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System.Windows;
+using System.Windows.Input;
 using PiP_Tool.Interfaces;
 
 namespace PiP_Tool.Views
@@ -8,7 +9,10 @@ namespace PiP_Tool.Views
     /// </summary>
     public partial class MainWindow
     {
-        
+
+        private bool _dragging;
+        private Point _anchorPoint;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -20,11 +24,28 @@ namespace PiP_Tool.Views
             };
         }
 
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            if (!_dragging)
+                return;
+            Left = Left + e.GetPosition(this).X - _anchorPoint.X;
+        }
+
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
         {
-            base.OnMouseLeftButtonDown(e);
+            _anchorPoint = e.GetPosition(this);
+            _dragging = true;
+            CaptureMouse();
+            e.Handled = true;
+        }
 
-            DragMove();
+        protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
+        {
+            if (!_dragging)
+                return;
+            ReleaseMouseCapture();
+            _dragging = false;
+            e.Handled = true;
         }
 
     }

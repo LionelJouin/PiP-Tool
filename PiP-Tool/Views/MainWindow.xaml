@@ -8,7 +8,9 @@
     mc:Ignorable="d"
     Topmost="True"
     AllowsTransparency="True" 
+    Top="0"
     ResizeMode="NoResize"
+    BorderThickness="1, 0, 1, 1" 
     Title="MainWindow" Height="50" Width="450" WindowStyle="None">
 
     <Window.DataContext>
@@ -32,6 +34,9 @@
     <Window.Background>
         <StaticResource ResourceKey="Background" />
     </Window.Background>
+    <Window.BorderBrush>
+        <StaticResource ResourceKey="ButtonHover" />
+    </Window.BorderBrush>
 
     <Grid>
 

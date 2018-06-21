@@ -38,22 +38,30 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
+    <Window.Background>
+        <StaticResource ResourceKey="Background" />
+    </Window.Background>
+
     <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
         <Grid x:Name="TopBar" Visibility="{Binding TopBarVisibility, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Right">
 
-            <Button Content="X" 
-                    HorizontalAlignment="Left" 
+            <Button HorizontalAlignment="Left" 
                     VerticalAlignment="Top" 
                     Command="{Binding CloseCommand}" 
                     Height="30" 
-                    Width="30"/>
-            <Button Content="Resize" 
-                    Command="{Binding ChangeSelectedWindowCommand}" 
-                    HorizontalAlignment="Left" 
+                    Width="30" 
+                    BorderBrush="#e81123"
+                    Opacity="0.5"
+                    FontFamily="/PiP-Tool;component/Assets/#Flaticon" Content="&#xF102;" Foreground="White" />
+            <Button HorizontalAlignment="Left" 
                     VerticalAlignment="Top" 
+                    Command="{Binding ChangeSelectedWindowCommand}" 
                     Height="30" 
                     Width="30" 
-                    Margin="-30,0,0,0"/>
+                    BorderBrush="#FF7C7C7C"
+                    Opacity="0.5"
+                    Margin="-30,0,0,0"
+                    FontFamily="/PiP-Tool;component/Assets/#Flaticon" Content="&#xF103;" Foreground="White" />
 
         </Grid>
     </Grid>

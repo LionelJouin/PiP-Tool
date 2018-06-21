@@ -13,7 +13,7 @@
     </Style>
 
     <ControlTemplate x:Key="ResizeTemplate" TargetType="{x:Type Control}">
-        <Border BorderBrush="White" BorderThickness="1">
+        <Border BorderBrush="White" Opacity="0.5" BorderThickness="1">
             <Grid SnapsToDevicePixels="True" Opacity="1">
                 <local:ResizeThumb Cursor="SizeNS" Margin="0 -8 0 0"
                            VerticalAlignment="Top" HorizontalAlignment="Stretch"/>

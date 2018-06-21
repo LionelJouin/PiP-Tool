@@ -20,6 +20,8 @@ namespace PiP_Tool.ViewModels
 
         #region public
 
+        public const int MinSize = 100;
+
         public event EventHandler<EventArgs> RequestClose;
 
         public ICommand LoadedCommand { get; }
@@ -29,6 +31,26 @@ namespace PiP_Tool.ViewModels
         public ICommand MouseEnterCommand { get; }
         public ICommand MouseLeaveCommand { get; }
 
+        public int MinHeight
+        {
+            get => _minHeight;
+            set
+            {
+                _minHeight = value;
+                Update();
+                RaisePropertyChanged();
+            }
+        }
+        public int MinWidth
+        {
+            get => _minWidth;
+            set
+            {
+                _minWidth = value;
+                Update();
+                RaisePropertyChanged();
+            }
+        }
         public int Top
         {
             get => _top;
@@ -92,6 +114,8 @@ namespace PiP_Tool.ViewModels
         private int _heightOffset;
         private Visibility _topBarVisibility;
         private bool _renderSizeEventDisabled;
+        private int _minHeight;
+        private int _minWidth;
         private int _top;
         private int _left;
         private int _height;
@@ -107,10 +131,13 @@ namespace PiP_Tool.ViewModels
             CloseCommand = new RelayCommand(CloseCommandExecute);
             ChangeSelectedWindowCommand = new RelayCommand(ChangeSelectedWindowCommandExecute);
             SizeChangedCommand = new RelayCommand<SizeChangedEventArgs>(SizeChangedCommandExecute);
-            MouseEnterCommand = new RelayCommand(MouseEnterCommandExecute);
-            MouseLeaveCommand = new RelayCommand(MouseLeaveCommandExecute);
+            MouseEnterCommand = new RelayCommand<MouseEventArgs>(MouseEnterCommandExecute);
+            MouseLeaveCommand = new RelayCommand<MouseEventArgs>(MouseLeaveCommandExecute);
 
             MessengerInstance.Register<SelectedWindow>(this, InitSelectedWindow);
+
+            MinHeight = MinSize;
+            MinWidth = MinSize;
         }
 
         private void InitSelectedWindow(SelectedWindow selectedWindow)
@@ -125,6 +152,10 @@ namespace PiP_Tool.ViewModels
             Width = _selectedWindow.SelectedRegion.Width;
             Top = 200;
             Left = 200;
+            if (Height < Width)
+                MinWidth = MinSize * (int)Ratio;
+            else if (Width < Height)
+                MinHeight = MinSize * (int)_selectedWindow.RatioHeightByWidth;
             _renderSizeEventDisabled = false;
             Init();
         }
@@ -193,27 +224,35 @@ namespace PiP_Tool.ViewModels
                 topBarHeight = TopBarHeight;
             if (sizeInfo.WidthChanged)
             {
-                Width = Convert.ToInt32((sizeInfo.NewSize.Height - topBarHeight) * Ratio);
+                var width = Convert.ToInt32((sizeInfo.NewSize.Height - topBarHeight) * Ratio);
+                if (width < MinWidth)
+                    width = MinWidth;
+                Width = width;
             }
             else
             {
-                Height = Convert.ToInt32(sizeInfo.NewSize.Width * Ratio + topBarHeight);
+                var height = Convert.ToInt32(sizeInfo.NewSize.Width * Ratio + topBarHeight);
+                if (height < MinHeight)
+                    height = MinHeight;
+                Height = height;
             }
         }
 
-        private void MouseEnterCommandExecute()
+        private void MouseEnterCommandExecute(MouseEventArgs e)
         {
             if (TopBarIsVisible)
                 return;
             _renderSizeEventDisabled = true;
             TopBarVisibility = Visibility.Visible;
             _heightOffset = TopBarHeight;
-            Top -= TopBarHeight;
+            Top = Top - TopBarHeight;
             Height = Height + TopBarHeight;
+            MinHeight = MinHeight + TopBarHeight;
             _renderSizeEventDisabled = false;
+            e.Handled = true;
         }
 
-        private void MouseLeaveCommandExecute()
+        private void MouseLeaveCommandExecute(MouseEventArgs e)
         {
             // Prevent OnMouseEnter, OnMouseLeave loop
             Thread.Sleep(50);
@@ -226,9 +265,11 @@ namespace PiP_Tool.ViewModels
             TopBarVisibility = Visibility.Hidden;
             _renderSizeEventDisabled = true;
             _heightOffset = 0;
-            Top += TopBarHeight;
+            Top = Top + TopBarHeight;
+            MinHeight = MinHeight - TopBarHeight;
             Height = Height - TopBarHeight;
             _renderSizeEventDisabled = false;
+            e.Handled = true;
         }
 
         #endregion

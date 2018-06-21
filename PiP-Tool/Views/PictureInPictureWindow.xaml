@@ -10,6 +10,8 @@
         Title="PictureInPictureWindow" 
         ResizeMode="CanResizeWithGrip" 
         AllowsTransparency="True"
+        MinHeight="{Binding MinHeight, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+        MinWidth="{Binding MinWidth, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
         Height="{Binding Height, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
         Width="{Binding Width, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
         Top="{Binding Top, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 

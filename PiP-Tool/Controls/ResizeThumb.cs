@@ -26,8 +26,14 @@ namespace PiP_Tool.Controls
             {
                 case VerticalAlignment.Bottom:
                     deltaVertical = Math.Min(-e.VerticalChange, designerItem.ActualHeight - designerItem.MinHeight);
-                    if (e.VerticalChange <= 0 || e.VerticalChange > 0 && Canvas.GetTop(designerItem) + designerItem.ActualHeight < designerItem.MaxHeight)
-                        designerItem.Height -= deltaVertical;
+                    if (e.VerticalChange <= 0 || e.VerticalChange > 0 &&
+                        Canvas.GetTop(designerItem) + designerItem.ActualHeight < designerItem.MaxHeight)
+                    {
+                        var height = designerItem.Height - deltaVertical;
+                        if (Canvas.GetTop(designerItem) + height > designerItem.MaxHeight)
+                            height = designerItem.MaxHeight - Canvas.GetTop(designerItem);
+                        designerItem.Height = height;
+                    }
                     break;
                 case VerticalAlignment.Top:
                     deltaVertical = Math.Min(e.VerticalChange, designerItem.ActualHeight - designerItem.MinHeight);
@@ -51,8 +57,14 @@ namespace PiP_Tool.Controls
                     break;
                 case HorizontalAlignment.Right:
                     deltaHorizontal = Math.Min(-e.HorizontalChange, designerItem.ActualWidth - designerItem.MinWidth);
-                    if (e.HorizontalChange <= 0 || e.HorizontalChange > 0 && Canvas.GetLeft(designerItem) + designerItem.ActualWidth < designerItem.MaxWidth)
-                        designerItem.Width -= deltaHorizontal;
+                    if (e.HorizontalChange <= 0 || e.HorizontalChange > 0 &&
+                        Canvas.GetLeft(designerItem) + designerItem.ActualWidth < designerItem.MaxWidth)
+                    {
+                        var width = designerItem.Width - deltaHorizontal;
+                        if (Canvas.GetLeft(designerItem) + width > designerItem.MaxWidth)
+                            width = designerItem.MaxWidth - Canvas.GetLeft(designerItem);
+                        designerItem.Width = width;
+                    }
                     break;
             }
 

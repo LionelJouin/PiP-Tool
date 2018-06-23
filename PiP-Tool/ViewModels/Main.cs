@@ -75,15 +75,15 @@ namespace PiP_Tool.ViewModels
             var openWindows = _processList.OpenWindows;
 
             var toAdd = openWindows.Where(x => WindowsList.All(y => x != y));
-            var toRemove = WindowsList.Where(x => openWindows.All(y => x != y));
+            var toRemove = WindowsList.Where(x => openWindows.All(y => x != y)).ToList();
 
             foreach (var e in toAdd)
             {
                 WindowsList.Add(e);
             }
-            foreach (var e in toRemove)
+            for (var index = 0; index < toRemove.Count; index++)
             {
-                WindowsList.Remove(e);
+                WindowsList.Remove(toRemove[index]);
             }
         }
 

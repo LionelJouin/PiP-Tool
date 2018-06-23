@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Interop;
 using GalaSoft.MvvmLight;
@@ -11,6 +12,8 @@ using Helpers.Native;
 using PiP_Tool.DataModel;
 using PiP_Tool.Interfaces;
 using PiP_Tool.Views;
+using Application = System.Windows.Application;
+using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using Point = System.Drawing.Point;
 
 namespace PiP_Tool.ViewModels
@@ -21,6 +24,7 @@ namespace PiP_Tool.ViewModels
         #region public
 
         public const int MinSize = 100;
+        public const float DefaultSizePercentage = 0.25f;
 
         public event EventHandler<EventArgs> RequestClose;
 
@@ -152,11 +156,28 @@ namespace PiP_Tool.ViewModels
             Width = _selectedWindow.SelectedRegion.Width;
             Top = 200;
             Left = 200;
+
+            // set Min size
             if (Height < Width)
                 MinWidth = MinSize * (int)Ratio;
             else if (Width < Height)
                 MinHeight = MinSize * (int)_selectedWindow.RatioHeightByWidth;
+
+            // set Default size
+            var resolution = Screen.PrimaryScreen.Bounds;
+            if (Height > resolution.Height * DefaultSizePercentage)
+            {
+                Height = (int)(resolution.Height * DefaultSizePercentage);
+                Width = Convert.ToInt32(Height * Ratio);
+            }
+            if (Width > resolution.Width * DefaultSizePercentage)
+            {
+                Width = (int)(resolution.Width * DefaultSizePercentage);
+                Height = Convert.ToInt32(Width * _selectedWindow.RatioHeightByWidth);
+            }
+
             _renderSizeEventDisabled = false;
+
             Init();
         }
 

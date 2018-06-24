@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -10,7 +11,7 @@ using Helpers.Native;
 
 namespace PiP_Tool.DataModel
 {
-    public class ProcessList
+    public class ProcessList : IDisposable
     {
 
         #region public
@@ -62,7 +63,7 @@ namespace PiP_Tool.DataModel
         #region private
 
         private List<IntPtr> _excludedWindows;
-        private Process[] _processes;
+        private Hashtable _processes;
         private readonly IntPtr _createDestroyEventhook;
         private readonly NativeMethods.WinEventDelegate _createDestroyEventProc;
         private readonly IntPtr _foregroundEventhook;
@@ -73,7 +74,7 @@ namespace PiP_Tool.DataModel
         public ProcessList()
         {
             _excludedWindows = new List<IntPtr>();
-            _processes = Process.GetProcesses();
+            GetProcesses();
 
             _createDestroyEventProc = CreateDestroyEventProc;
             _createDestroyEventhook = NativeMethods.SetWinEventHook(
@@ -111,25 +112,38 @@ namespace PiP_Tool.DataModel
             OnForegroundWindowChanged();
         }
 
+        private void GetProcesses()
+        {
+            _processes = new Hashtable();
+            foreach (var p in Process.GetProcesses())
+            {
+                if (p.Id != 0)
+                    _processes.Add(p.Id, p);
+            }
+        }
+
         private void CreateDestroyEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
         {
             if (idObject != 0 || idChild != 0)
                 return;
 
+            if (hwnd == IntPtr.Zero)
+                return;
+
+            NativeMethods.GetWindowThreadProcessId(hwnd, out var processId);
+            if (processId == 0)
+                return;
+
             switch (eventType)
             {
                 case (uint)EventConstants.EVENT_OBJECT_CREATE:
-                    NativeMethods.GetWindowThreadProcessId(hwnd, out var processId);
-                    if (processId == 0)
-                        return;
                     try
                     {
-                        var p = Process.GetProcessById((int)processId);
-
-                        if (_processes.FirstOrDefault(x => x.Id == p.Id) != null)
+                        if (_processes.ContainsKey((int)processId))
                             return;
-
-                        _processes = Process.GetProcesses();
+                        
+                        var p = Process.GetProcessById((int)processId);
+                        _processes.Add(p.Id, p);
                         OnOpenWindowsChanged();
                     }
                     catch (Exception)
@@ -140,8 +154,11 @@ namespace PiP_Tool.DataModel
                 case (uint)EventConstants.EVENT_OBJECT_DESTROY:
                     try
                     {
-                        if (_processes.FirstOrDefault(x => x.MainWindowHandle == hwnd) == null) return;
-                        _processes = Process.GetProcesses();
+                        if (!_processes.ContainsKey((int)processId))
+                            return;
+
+                        var p = Process.GetProcessById((int)processId);
+                        _processes.Remove(p.Id);
                         OnOpenWindowsChanged();
                     }
                     catch (Exception)

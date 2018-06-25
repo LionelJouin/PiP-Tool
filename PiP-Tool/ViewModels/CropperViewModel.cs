@@ -3,13 +3,13 @@ using System.Windows;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
-using Helpers.Native;
 using PiP_Tool.DataModel;
 using PiP_Tool.Interfaces;
+using PiP_Tool.Native;
 
 namespace PiP_Tool.ViewModels
 {
-    public class Selector : ViewModelBase, ICloseable
+    public class CropperViewModel : ViewModelBase, ICloseable
     {
 
         #region public
@@ -191,7 +191,7 @@ namespace PiP_Tool.ViewModels
 
         #endregion
 
-        public Selector()
+        public CropperViewModel()
         {
             ClosingCommand = new RelayCommand(ClosingCommandExecute);
             MessengerInstance.Register<WindowInfo>(this, Init);

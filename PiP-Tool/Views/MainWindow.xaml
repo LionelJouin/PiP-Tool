@@ -14,7 +14,7 @@
     Title="MainWindow" Height="50" Width="450" WindowStyle="None">
 
     <Window.DataContext>
-        <viewModels:Main/>
+        <viewModels:MainViewModel/>
     </Window.DataContext>
 
     <i:Interaction.Triggers>

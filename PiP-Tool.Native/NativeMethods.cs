@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
-using static Helpers.Native.NativeStructs;
 
-namespace Helpers.Native
+namespace PiP_Tool.Native
 {
     public static class NativeMethods
     {
@@ -19,7 +18,7 @@ namespace Helpers.Native
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool GetWindowRect(IntPtr hWnd, out Rect lpRect);
+        public static extern bool GetWindowRect(IntPtr hWnd, out NativeStructs.Rect lpRect);
 
         [DllImport("user32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -40,10 +39,10 @@ namespace Helpers.Native
 
         [return: MarshalAs(UnmanagedType.Bool)]
         [DllImport("user32.dll", SetLastError = true)]
-        public static extern bool GetWindowInfo(IntPtr hwnd, ref WINDOWINFO pwi);
+        public static extern bool GetWindowInfo(IntPtr hwnd, ref NativeStructs.WINDOWINFO pwi);
 
         [DllImport("user32.dll")]
-        public static extern bool GetCursorPos(out POINT lpPoint);
+        public static extern bool GetCursorPos(out NativeStructs.POINT lpPoint);
 
         [DllImport("user32.dll")]
         public static extern IntPtr SetForegroundWindow(IntPtr hWnd);
@@ -83,7 +82,7 @@ namespace Helpers.Native
         public static extern int DwmGetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE dwAttribute, out bool pvAttribute, int cbAttribute);
 
         [DllImport("dwmapi.dll")]
-        public static extern int DwmGetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE dwAttribute, out Rect pvAttribute, int cbAttribute);
+        public static extern int DwmGetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE dwAttribute, out NativeStructs.Rect pvAttribute, int cbAttribute);
 
         [DllImport("dwmapi.dll")]
         public static extern int DwmRegisterThumbnail(IntPtr dest, IntPtr src, out IntPtr thumb);
@@ -92,10 +91,10 @@ namespace Helpers.Native
         public static extern int DwmUnregisterThumbnail(IntPtr thumb);
 
         [DllImport("dwmapi.dll")]
-        public static extern int DwmQueryThumbnailSourceSize(IntPtr thumb, out Psize size);
+        public static extern int DwmQueryThumbnailSourceSize(IntPtr thumb, out NativeStructs.Psize size);
 
         [DllImport("dwmapi.dll")]
-        public static extern int DwmUpdateThumbnailProperties(IntPtr hThumb, ref DwmThumbnailProperties props);
+        public static extern int DwmUpdateThumbnailProperties(IntPtr hThumb, ref NativeStructs.DwmThumbnailProperties props);
 
         #endregion
 

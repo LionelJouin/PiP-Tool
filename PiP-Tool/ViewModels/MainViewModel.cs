@@ -5,14 +5,14 @@ using System.Windows;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
-using Helpers.Native;
 using PiP_Tool.DataModel;
 using PiP_Tool.Interfaces;
+using PiP_Tool.Native;
 using PiP_Tool.Views;
 
 namespace PiP_Tool.ViewModels
 {
-    public class Main : ViewModelBase, ICloseable
+    public class MainViewModel : ViewModelBase, ICloseable
     {
 
         #region public
@@ -56,7 +56,7 @@ namespace PiP_Tool.ViewModels
 
         #endregion
 
-        public Main()
+        public MainViewModel()
         {
             StartPipCommand = new RelayCommand(StartPipCommandExecute);
             QuitCommand = new RelayCommand(QuitCommandExecute);

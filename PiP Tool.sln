@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.15
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers", "Helpers\Helpers.csproj", "{C1E4ED3B-147C-4F7C-8F78-007ABB3ACF3A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiP-Tool.Native", "PiP-Tool.Native\PiP-Tool.Native.csproj", "{C1E4ED3B-147C-4F7C-8F78-007ABB3ACF3A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiP-Tool", "PiP-Tool\PiP-Tool.csproj", "{C11CF462-9B98-4FAF-9ECB-7A069599BA15}"
 EndProject
@@ -24,5 +24,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4CE73404-1EC3-4514-BA3F-28DC2C47E048}
 	EndGlobalSection
 EndGlobal

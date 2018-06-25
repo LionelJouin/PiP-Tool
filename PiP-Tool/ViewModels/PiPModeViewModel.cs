@@ -8,9 +8,9 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
-using Helpers.Native;
 using PiP_Tool.DataModel;
 using PiP_Tool.Interfaces;
+using PiP_Tool.Native;
 using PiP_Tool.Views;
 using Application = System.Windows.Application;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
@@ -18,7 +18,7 @@ using Point = System.Drawing.Point;
 
 namespace PiP_Tool.ViewModels
 {
-    public class PictureInPicture : ViewModelBase, ICloseable
+    public class PiPModeViewModel : ViewModelBase, ICloseable
     {
 
         #region public
@@ -129,7 +129,7 @@ namespace PiP_Tool.ViewModels
 
         #endregion
 
-        public PictureInPicture()
+        public PiPModeViewModel()
         {
             LoadedCommand = new RelayCommand(LoadedCommandExecute);
             CloseCommand = new RelayCommand(CloseCommandExecute);

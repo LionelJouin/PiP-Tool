@@ -22,7 +22,7 @@
         WindowStartupLocation="Manual">
 
     <Window.DataContext>
-        <viewModels:PictureInPicture/>
+        <viewModels:PiPModeViewModel/>
     </Window.DataContext>
 
     <i:Interaction.Triggers>

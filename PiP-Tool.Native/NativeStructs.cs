@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Runtime.InteropServices;
 
-namespace Helpers.Native
+namespace PiP_Tool.Native
 {
     public static class NativeStructs
     {

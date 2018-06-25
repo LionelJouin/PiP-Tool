@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Helpers.Native
+namespace PiP_Tool.Native
 {
 
     [Flags]

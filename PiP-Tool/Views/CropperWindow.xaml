@@ -17,7 +17,7 @@
         Title="SelectorWindow">
 
     <Window.DataContext>
-        <viewModels:Selector/>
+        <viewModels:CropperViewModel/>
     </Window.DataContext>
 
     <i:Interaction.Triggers>

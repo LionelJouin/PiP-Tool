@@ -7,8 +7,8 @@
     <ProjectGuid>{C1E4ED3B-147C-4F7C-8F78-007ABB3ACF3A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Helpers</RootNamespace>
-    <AssemblyName>Helpers</AssemblyName>
+    <RootNamespace>PiP_Tool.Native</RootNamespace>
+    <AssemblyName>PiP-Tool.Native</AssemblyName>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -41,9 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Native\NativeEnums.cs" />
-    <Compile Include="Native\NativeMethods.cs" />
-    <Compile Include="Native\NativeStructs.cs" />
+    <Compile Include="NativeEnums.cs" />
+    <Compile Include="NativeMethods.cs" />
+    <Compile Include="NativeStructs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

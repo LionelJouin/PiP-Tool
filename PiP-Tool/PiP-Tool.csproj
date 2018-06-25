@@ -95,15 +95,16 @@
     <Compile Include="Interfaces\ICloseable.cs" />
     <Compile Include="DataModel\SelectedWindow.cs" />
     <Compile Include="DataModel\WindowInfo.cs" />
-    <Compile Include="Views\PictureInPictureWindow.xaml.cs">
-      <DependentUpon>PictureInPictureWindow.xaml</DependentUpon>
+    <Compile Include="Services\ProcessesService.cs" />
+    <Compile Include="Views\PiPModeWindow.xaml.cs">
+      <DependentUpon>PiPModeWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SelectorWindow.xaml.cs">
-      <DependentUpon>SelectorWindow.xaml</DependentUpon>
+    <Compile Include="Views\CropperWindow.xaml.cs">
+      <DependentUpon>CropperWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\Main.cs" />
-    <Compile Include="ViewModels\PictureInPicture.cs" />
-    <Compile Include="ViewModels\Selector.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\PiPModeViewModel.cs" />
+    <Compile Include="ViewModels\CropperViewModel.cs" />
     <Page Include="Themes\Button.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -140,11 +141,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\PictureInPictureWindow.xaml">
+    <Page Include="Views\PiPModeWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\SelectorWindow.xaml">
+    <Page Include="Views\CropperWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -180,9 +181,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Helpers\Helpers.csproj">
+    <ProjectReference Include="..\PiP-Tool.Native\PiP-Tool.Native.csproj">
       <Project>{C1E4ED3B-147C-4F7C-8F78-007ABB3ACF3A}</Project>
-      <Name>Helpers</Name>
+      <Name>PiP-Tool.Native</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

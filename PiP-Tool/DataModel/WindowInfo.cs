@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
-using Helpers.Native;
+using PiP_Tool.Native;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 

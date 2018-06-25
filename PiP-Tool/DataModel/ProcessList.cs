@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Interop;
-using Helpers.Native;
+using PiP_Tool.Native;
 
 namespace PiP_Tool.DataModel
 {
@@ -169,12 +169,12 @@ namespace PiP_Tool.DataModel
             }
         }
 
-        public void OnOpenWindowsChanged()
+        private void OnOpenWindowsChanged()
         {
             OpenWindowsChanged?.Invoke(this, new EventArgs());
         }
 
-        public void OnForegroundWindowChanged()
+        private void OnForegroundWindowChanged()
         {
             ForegroundWindowChanged?.Invoke(this, new EventArgs());
         }

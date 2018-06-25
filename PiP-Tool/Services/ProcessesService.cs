@@ -7,15 +7,17 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Interop;
+using PiP_Tool.DataModel;
 using PiP_Tool.Native;
 
-namespace PiP_Tool.DataModel
+namespace PiP_Tool.Services
 {
-    public class ProcessList : IDisposable
+    public class ProcessesService : IDisposable
     {
 
         #region public
 
+        public static ProcessesService Instance => _instance ?? (_instance = new ProcessesService());
         public List<WindowInfo> OpenWindows
         {
             get
@@ -62,6 +64,7 @@ namespace PiP_Tool.DataModel
 
         #region private
 
+        private static ProcessesService _instance;
         private List<IntPtr> _excludedWindows;
         private Hashtable _processes;
         private readonly IntPtr _createDestroyEventhook;
@@ -71,7 +74,10 @@ namespace PiP_Tool.DataModel
 
         #endregion
 
-        public ProcessList()
+        /// <summary>
+        /// Constructor (Singleton so private)
+        /// </summary>
+        private ProcessesService()
         {
             _excludedWindows = new List<IntPtr>();
             GetProcesses();
@@ -97,31 +103,48 @@ namespace PiP_Tool.DataModel
             );
         }
 
-        ~ProcessList() => Dispose();
+        /// <summary>
+        /// Destructor
+        /// </summary>
+        ~ProcessesService() => Dispose();
 
+        /// <summary>
+        /// Dispose: Unhook, singleton
+        /// </summary>
         public void Dispose()
         {
+            _instance = null;
             NativeMethods.UnhookWinEvent(_createDestroyEventhook);
             NativeMethods.UnhookWinEvent(_foregroundEventhook);
         }
 
+        /// <summary>
+        /// Callback function that the system calls in response to event sytem foreground
+        /// </summary>
+        /// <param name="hWinEventHook">Handle to an event hook function</param>
+        /// <param name="eventType">Specifies the event that occurred</param>
+        /// <param name="hwnd">Handle to the window that generates the event, or NULL if no window is associated with the event</param>
+        /// <param name="idObject">Identifies the object associated with the event</param>
+        /// <param name="idChild">Identifies whether the event was triggered by an object or a child element of the object</param>
+        /// <param name="dwEventThread">Identifies the thread that generated the event, or the thread that owns the current window</param>
+        /// <param name="dwmsEventTime">Specifies the time, in milliseconds, that the event was generated</param>
         private void ForegroundEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
         {
             if (idObject != 0 || idChild != 0 || eventType != (uint)EventConstants.EVENT_SYSTEM_FOREGROUND)
                 return;
-            OnForegroundWindowChanged();
+            ForegroundWindowChanged?.Invoke(this, new EventArgs());
         }
 
-        private void GetProcesses()
-        {
-            _processes = new Hashtable();
-            foreach (var p in Process.GetProcesses())
-            {
-                if (p.Id != 0)
-                    _processes.Add(p.Id, p);
-            }
-        }
-
+        /// <summary>
+        /// Callback function that the system calls in response to events object create or destroy
+        /// </summary>
+        /// <param name="hWinEventHook">Handle to an event hook function</param>
+        /// <param name="eventType">Specifies the event that occurred</param>
+        /// <param name="hwnd">Handle to the window that generates the event, or NULL if no window is associated with the event</param>
+        /// <param name="idObject">Identifies the object associated with the event</param>
+        /// <param name="idChild">Identifies whether the event was triggered by an object or a child element of the object</param>
+        /// <param name="dwEventThread">Identifies the thread that generated the event, or the thread that owns the current window</param>
+        /// <param name="dwmsEventTime">Specifies the time, in milliseconds, that the event was generated</param>
         private void CreateDestroyEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
         {
             if (idObject != 0 || idChild != 0)
@@ -141,10 +164,10 @@ namespace PiP_Tool.DataModel
                     {
                         if (_processes.ContainsKey((int)processId))
                             return;
-                        
+
                         var p = Process.GetProcessById((int)processId);
                         _processes.Add(p.Id, p);
-                        OnOpenWindowsChanged();
+                        OpenWindowsChanged?.Invoke(this, new EventArgs());
                     }
                     catch (Exception)
                     {
@@ -159,7 +182,7 @@ namespace PiP_Tool.DataModel
 
                         var p = Process.GetProcessById((int)processId);
                         _processes.Remove(p.Id);
-                        OnOpenWindowsChanged();
+                        OpenWindowsChanged?.Invoke(this, new EventArgs());
                     }
                     catch (Exception)
                     {
@@ -169,16 +192,22 @@ namespace PiP_Tool.DataModel
             }
         }
 
-        private void OnOpenWindowsChanged()
+        /// <summary>
+        /// Get all current processes
+        /// </summary>
+        private void GetProcesses()
         {
-            OpenWindowsChanged?.Invoke(this, new EventArgs());
+            _processes = new Hashtable();
+            foreach (var p in Process.GetProcesses())
+            {
+                if (p.Id != 0)
+                    _processes.Add(p.Id, p);
+            }
         }
 
-        private void OnForegroundWindowChanged()
-        {
-            ForegroundWindowChanged?.Invoke(this, new EventArgs());
-        }
-
+        /// <summary>
+        /// Get all windows of this software and add them to excluded list
+        /// </summary>
         private void SetExcludedProcesses()
         {
             var windowsList = Application.Current.Windows.Cast<Window>();

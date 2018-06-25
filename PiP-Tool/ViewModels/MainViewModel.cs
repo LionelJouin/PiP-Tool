@@ -8,6 +8,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using PiP_Tool.DataModel;
 using PiP_Tool.Interfaces;
 using PiP_Tool.Native;
+using PiP_Tool.Services;
 using PiP_Tool.Views;
 
 namespace PiP_Tool.ViewModels
@@ -52,7 +53,6 @@ namespace PiP_Tool.ViewModels
         private ObservableCollection<WindowInfo> _windowsList;
         private SelectorWindow _selectorWindow;
         private WindowInfo _selectedWindowInfo;
-        private readonly ProcessList _processList;
 
         #endregion
 
@@ -64,15 +64,14 @@ namespace PiP_Tool.ViewModels
 
             WindowsList = new ObservableCollection<WindowInfo>();
 
-            _processList = new ProcessList();
-            _processList.OpenWindowsChanged += OpenWindowsChanged;
-            _processList.ForegroundWindowChanged += ForegroundWindowChanged;
+            ProcessesService.Instance.OpenWindowsChanged += OpenWindowsChanged;
+            ProcessesService.Instance.ForegroundWindowChanged += ForegroundWindowChanged;
             UpdateWindowsList();
         }
 
         private void UpdateWindowsList()
         {
-            var openWindows = _processList.OpenWindows;
+            var openWindows = ProcessesService.Instance.OpenWindows;
 
             var toAdd = openWindows.Where(x => WindowsList.All(y => x != y));
             var toRemove = WindowsList.Where(x => openWindows.All(y => x != y)).ToList();
@@ -112,7 +111,7 @@ namespace PiP_Tool.ViewModels
         private void ForegroundWindowChanged(object sender, EventArgs e)
         {
             UpdateWindowsList();
-            var foregroundWindow = _processList.ForegroundWindow;
+            var foregroundWindow = ProcessesService.Instance.ForegroundWindow;
             if (foregroundWindow != null)
                 SelectedWindowInfo = foregroundWindow;
         }
@@ -137,7 +136,7 @@ namespace PiP_Tool.ViewModels
 
         private void ClosingCommandExecute()
         {
-            _processList.Dispose();
+            ProcessesService.Instance.Dispose();
             _selectorWindow?.Close();
         }
 

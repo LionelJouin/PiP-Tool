@@ -6,11 +6,19 @@ namespace PiP_Tool.Controls
     public class MoveThumb : Thumb
     {
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public MoveThumb()
         {
             DragDelta += MoveDragDelta;
         }
 
+        /// <summary>
+        /// Move event handler
+        /// </summary>
+        /// <param name="sender">The source of the event</param>
+        /// <param name="e">Event arguments</param>
         private void MoveDragDelta(object sender, DragDeltaEventArgs e)
         {
             var designerItem = DataContext as ContentControl;

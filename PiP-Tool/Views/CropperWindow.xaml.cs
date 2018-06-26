@@ -3,12 +3,15 @@
 namespace PiP_Tool.Views
 {
     /// <summary>
-    /// Logique d'interaction pour SelectorWindow.xaml
+    /// Logique d'interaction pour CropperWindow.xaml
     /// </summary>
-    public partial class SelectorWindow
+    public partial class CropperWindow
     {
 
-        public SelectorWindow()
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public CropperWindow()
         {
             InitializeComponent();
 

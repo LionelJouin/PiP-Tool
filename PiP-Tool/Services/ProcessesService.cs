@@ -17,7 +17,9 @@ namespace PiP_Tool.Services
 
         #region public
 
-        public static ProcessesService Instance => _instance ?? (_instance = new ProcessesService());
+        /// <summary>
+        /// Gets all open windows exepted <see cref="_excludedWindows"/> 
+        /// </summary>
         public List<WindowInfo> OpenWindows
         {
             get
@@ -49,6 +51,9 @@ namespace PiP_Tool.Services
                 return windows;
             }
         }
+        /// <summary>
+        /// Gets current foreground window
+        /// </summary>
         public WindowInfo ForegroundWindow
         {
             get
@@ -59,6 +64,11 @@ namespace PiP_Tool.Services
         }
         public event EventHandler OpenWindowsChanged;
         public event EventHandler ForegroundWindowChanged;
+
+        /// <summary>
+        /// Gets the instance of the singleton
+        /// </summary>
+        public static ProcessesService Instance => _instance ?? (_instance = new ProcessesService());
 
         #endregion
 

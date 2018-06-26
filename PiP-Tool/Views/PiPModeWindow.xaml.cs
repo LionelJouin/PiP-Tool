@@ -3,14 +3,17 @@ using PiP_Tool.Interfaces;
 
 namespace PiP_Tool.Views
 {
-    /// <inheritdoc cref="PictureInPictureWindow" />
+    /// <inheritdoc cref="PiPModeWindow" />
     /// <summary>
-    /// Logique d'interaction pour PictureInPictureWindow.xaml
+    /// Logique d'interaction pour PiPModeWindow.xaml
     /// </summary>
-    public partial class PictureInPictureWindow
+    public partial class PiPModeWindow
     {
 
-        public PictureInPictureWindow()
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public PiPModeWindow()
         {
             InitializeComponent();
 

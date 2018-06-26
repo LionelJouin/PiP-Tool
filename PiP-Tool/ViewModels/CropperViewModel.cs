@@ -15,11 +15,16 @@ namespace PiP_Tool.ViewModels
         #region public
 
         public ICommand ClosingCommand { get; }
-
         public event EventHandler<EventArgs> RequestClose;
 
+        /// <summary>
+        /// Gets selected region
+        /// </summary>
         public NativeStructs.Rect SelectedRegion => new NativeStructs.Rect(Left, Top, Width + Left, Top + Height);
 
+        /// <summary>
+        /// Gets or sets top property of the window
+        /// </summary>
         public int WindowTop
         {
             get => _windowTop;
@@ -29,6 +34,9 @@ namespace PiP_Tool.ViewModels
                 RaisePropertyChanged();
             }
         }
+        /// <summary>
+        /// Gets or sets left property of the window
+        /// </summary>
         public int WindowLeft
         {
             get => _windowLeft;
@@ -38,6 +46,9 @@ namespace PiP_Tool.ViewModels
                 RaisePropertyChanged();
             }
         }
+        /// <summary>
+        /// Gets or sets width property of the window
+        /// </summary>
         public int WindowWidth
         {
             get => _windowWidth;
@@ -47,6 +58,9 @@ namespace PiP_Tool.ViewModels
                 RaisePropertyChanged();
             }
         }
+        /// <summary>
+        /// Gets or sets height property of the window
+        /// </summary>
         public int WindowHeight
         {
             get => _windowHeight;
@@ -56,6 +70,9 @@ namespace PiP_Tool.ViewModels
                 RaisePropertyChanged();
             }
         }
+        /// <summary>
+        /// Gets or sets canvas margin (border of the window to crop)
+        /// </summary>
         public Thickness CanvasMargin
         {
             get => _canvasMargin;
@@ -66,6 +83,9 @@ namespace PiP_Tool.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets max height property of the region to crop
+        /// </summary>
         public int MaxHeight
         {
             get => _maxHeight;
@@ -76,6 +96,9 @@ namespace PiP_Tool.ViewModels
                 RaisePropertyChanged();
             }
         }
+        /// <summary>
+        /// Gets or sets max width property of the region to crop
+        /// </summary>
         public int MaxWidth
         {
             get => _maxWidth;
@@ -86,6 +109,9 @@ namespace PiP_Tool.ViewModels
                 RaisePropertyChanged();
             }
         }
+        /// <summary>
+        /// Gets or sets min height property of the region to crop
+        /// </summary>
         public int MinHeight
         {
             get => _minHeight;
@@ -95,6 +121,9 @@ namespace PiP_Tool.ViewModels
                 RaisePropertyChanged();
             }
         }
+        /// <summary>
+        /// Gets or sets min width property of the region to crop
+        /// </summary>
         public int MinWidth
         {
             get => _minWidth;
@@ -105,6 +134,9 @@ namespace PiP_Tool.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets height property of the region to crop
+        /// </summary>
         public int Height
         {
             get => _height;
@@ -115,6 +147,9 @@ namespace PiP_Tool.ViewModels
                 RaisePropertyChanged();
             }
         }
+        /// <summary>
+        /// Gets or sets width property of the region to crop
+        /// </summary>
         public int Width
         {
             get => _width;
@@ -125,6 +160,9 @@ namespace PiP_Tool.ViewModels
                 RaisePropertyChanged();
             }
         }
+        /// <summary>
+        /// Gets or sets top property of the region to crop
+        /// </summary>
         public int Top
         {
             get => _top;
@@ -135,6 +173,9 @@ namespace PiP_Tool.ViewModels
                 RaisePropertyChanged();
             }
         }
+        /// <summary>
+        /// Gets or sets left property of the region to crop
+        /// </summary>
         public int Left
         {
             get => _left;
@@ -145,6 +186,10 @@ namespace PiP_Tool.ViewModels
                 RaisePropertyChanged();
             }
         }
+        /// <summary>
+        /// Gets or sets bottom property of the region to crop
+        /// Updated by <see cref="UpdateBottom"/>
+        /// </summary>
         public int Bottom
         {
             get => _bottom;
@@ -154,6 +199,10 @@ namespace PiP_Tool.ViewModels
                 RaisePropertyChanged();
             }
         }
+        /// <summary>
+        /// Gets or sets right property of the region to crop
+        /// Updated by <see cref="UpdateRight"/>
+        /// </summary>
         public int Right
         {
             get => _right;
@@ -191,6 +240,9 @@ namespace PiP_Tool.ViewModels
 
         #endregion
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public CropperViewModel()
         {
             ClosingCommand = new RelayCommand(ClosingCommandExecute);
@@ -198,9 +250,12 @@ namespace PiP_Tool.ViewModels
             MessengerInstance.Register<Action<NativeStructs.Rect>>(this, StartPip);
         }
 
+        /// <summary>
+        /// Called from <see cref="MainViewModel"/> to init window to crop
+        /// </summary>
+        /// <param name="windowInfo">data of the window to crop</param>
         private void Init(WindowInfo windowInfo)
         {
-
             MessengerInstance.Unregister<WindowInfo>(this);
             _windowInfo = windowInfo;
             if (windowInfo == null)
@@ -229,16 +284,26 @@ namespace PiP_Tool.ViewModels
             Width = MinWidth;
         }
 
+        /// <summary>
+        /// Called by <see cref="Height"/> or <see cref="Top"/> to update <see cref="Bottom"/>
+        /// </summary>
         private void UpdateBottom()
         {
             Bottom = MaxHeight - (Top + Height);
         }
 
+        /// <summary>
+        /// Called by <see cref="Width"/> or <see cref="Left"/> to update <see cref="Right"/>
+        /// </summary>
         private void UpdateRight()
         {
             Right = MaxWidth - (Left + Width);
         }
 
+        /// <summary>
+        /// Called from <see cref="MainViewModel"/> to get cropped region and start PiP mode
+        /// </summary>
+        /// <param name="cb">Callback with cropped region</param>
         private void StartPip(Action<NativeStructs.Rect> cb)
         {
             MessengerInstance.Unregister<Action<NativeStructs.Rect>>(this);
@@ -247,6 +312,9 @@ namespace PiP_Tool.ViewModels
 
         #region commands
 
+        /// <summary>
+        /// Executed when the window is closing. Unregister messengers
+        /// </summary>
         private void ClosingCommandExecute()
         {
             MessengerInstance.Unregister<WindowInfo>(this);

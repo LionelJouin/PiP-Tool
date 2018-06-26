@@ -25,9 +25,10 @@ namespace PiP_Tool.ViewModels
 
         public const int MinSize = 100;
         public const float DefaultSizePercentage = 0.25f;
+        public const int TopBarHeight = 30;
 
         public event EventHandler<EventArgs> RequestClose;
-
+        
         public ICommand LoadedCommand { get; }
         public ICommand CloseCommand { get; }
         public ICommand ChangeSelectedWindowCommand { get; }
@@ -35,6 +36,9 @@ namespace PiP_Tool.ViewModels
         public ICommand MouseEnterCommand { get; }
         public ICommand MouseLeaveCommand { get; }
 
+        /// <summary>
+        /// Gets or sets min height property of the window
+        /// </summary>
         public int MinHeight
         {
             get => _minHeight;
@@ -45,6 +49,9 @@ namespace PiP_Tool.ViewModels
                 RaisePropertyChanged();
             }
         }
+        /// <summary>
+        /// Gets or sets min width property of the window
+        /// </summary>
         public int MinWidth
         {
             get => _minWidth;
@@ -55,6 +62,9 @@ namespace PiP_Tool.ViewModels
                 RaisePropertyChanged();
             }
         }
+        /// <summary>
+        /// Gets or sets top property of the window
+        /// </summary>
         public int Top
         {
             get => _top;
@@ -65,6 +75,9 @@ namespace PiP_Tool.ViewModels
                 RaisePropertyChanged();
             }
         }
+        /// <summary>
+        /// Gets or sets left property of the window
+        /// </summary>
         public int Left
         {
             get => _left;
@@ -75,6 +88,9 @@ namespace PiP_Tool.ViewModels
                 RaisePropertyChanged();
             }
         }
+        /// <summary>
+        /// Gets or sets height property of the window
+        /// </summary>
         public int Height
         {
             get => _height;
@@ -85,6 +101,9 @@ namespace PiP_Tool.ViewModels
                 RaisePropertyChanged();
             }
         }
+        /// <summary>
+        /// Gets or sets width property of the window
+        /// </summary>
         public int Width
         {
             get => _width;
@@ -95,7 +114,13 @@ namespace PiP_Tool.ViewModels
                 RaisePropertyChanged();
             }
         }
+        /// <summary>
+        /// Gets or sets ratio of the window
+        /// </summary>
         public float Ratio { get; private set; }
+        /// <summary>
+        /// Gets or sets visibility of the topbar
+        /// </summary>
         public Visibility TopBarVisibility
         {
             get => _topBarVisibility;
@@ -106,14 +131,14 @@ namespace PiP_Tool.ViewModels
                 RaisePropertyChanged();
             }
         }
-
+        /// <summary>
+        /// Gets if topbar is visible
+        /// </summary>
         public bool TopBarIsVisible => TopBarVisibility == Visibility.Visible;
 
         #endregion
 
         #region private
-
-        private const int TopBarHeight = 30;
 
         private int _heightOffset;
         private Visibility _topBarVisibility;
@@ -129,6 +154,9 @@ namespace PiP_Tool.ViewModels
 
         #endregion
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public PiPModeViewModel()
         {
             LoadedCommand = new RelayCommand(LoadedCommandExecute);
@@ -144,6 +172,10 @@ namespace PiP_Tool.ViewModels
             MinWidth = MinSize;
         }
 
+        /// <summary>
+        /// Set selected region' data. Set position and size of this window
+        /// </summary>
+        /// <param name="selectedWindow">Selected window to use in pip mode</param>
         private void InitSelectedWindow(SelectedWindow selectedWindow)
         {
             MessengerInstance.Unregister<SelectedWindow>(this);
@@ -181,6 +213,9 @@ namespace PiP_Tool.ViewModels
             Init();
         }
 
+        /// <summary>
+        /// Register dwm thumbnail properties
+        /// </summary>
         private void Init()
         {
             if (_selectedWindow == null || _selectedWindow.WindowInfo.Handle == IntPtr.Zero || _targetHandle == IntPtr.Zero)
@@ -193,6 +228,9 @@ namespace PiP_Tool.ViewModels
                 Update();
         }
 
+        /// <summary>
+        /// Update dwm thumbnail properties
+        /// </summary>
         private void Update()
         {
             if (_thumbHandle == IntPtr.Zero)
@@ -214,6 +252,9 @@ namespace PiP_Tool.ViewModels
 
         #region commands
 
+        /// <summary>
+        /// Executed when the window is loaded. Get handle of the window and call <see cref="Init()"/> 
+        /// </summary>
         private void LoadedCommandExecute()
         {
             var windowsList = Application.Current.Windows.Cast<Window>();
@@ -223,19 +264,29 @@ namespace PiP_Tool.ViewModels
             Init();
         }
 
+        /// <summary>
+        /// Executed on click on close button. Close this window
+        /// </summary>
         private void CloseCommandExecute()
         {
             MessengerInstance.Unregister<SelectedWindow>(this);
             RequestClose?.Invoke(this, EventArgs.Empty);
         }
 
+        /// <summary>
+        /// Executed on click on change selected window button. Close this window and open <see cref="MainWindow"/>
+        /// </summary>
         private void ChangeSelectedWindowCommandExecute()
         {
             var mainWindow = new MainWindow();
             mainWindow.Show();
-            RequestClose?.Invoke(this, EventArgs.Empty);
+            CloseCommandExecute();
         }
 
+        /// <summary>
+        /// Executed on window size change
+        /// </summary>
+        /// <param name="sizeInfo">Event arguments</param>
         private void SizeChangedCommandExecute(SizeChangedEventArgs sizeInfo)
         {
             if (_renderSizeEventDisabled)
@@ -259,6 +310,10 @@ namespace PiP_Tool.ViewModels
             }
         }
 
+        /// <summary>
+        /// Executed on mouse enter. Open top bar
+        /// </summary>
+        /// <param name="e">Event arguments</param>
         private void MouseEnterCommandExecute(MouseEventArgs e)
         {
             if (TopBarIsVisible)
@@ -273,6 +328,10 @@ namespace PiP_Tool.ViewModels
             e.Handled = true;
         }
 
+        /// <summary>
+        /// Executed on mouse leave. Close top bar
+        /// </summary>
+        /// <param name="e">Event arguments</param>
         private void MouseLeaveCommandExecute(MouseEventArgs e)
         {
             // Prevent OnMouseEnter, OnMouseLeave loop

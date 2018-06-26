@@ -1,4 +1,4 @@
-﻿<Window x:Class="PiP_Tool.Views.SelectorWindow"
+﻿<Window x:Class="PiP_Tool.Views.CropperWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -14,7 +14,7 @@
         Left="{Binding WindowLeft, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
         Width="{Binding WindowWidth, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
         Height="{Binding WindowHeight, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-        Title="SelectorWindow">
+        Title="CropperWindow">
 
     <Window.DataContext>
         <viewModels:CropperViewModel/>
@@ -49,15 +49,15 @@
             Opacity="{StaticResource Opacity}"
             Fill="Black"
             Width="{Binding MaxWidth, UpdateSourceTrigger=PropertyChanged}"
-            Height="{Binding (Canvas.Top), ElementName=Selector, UpdateSourceTrigger=PropertyChanged}"/>
+            Height="{Binding (Canvas.Top), ElementName=Cropper, UpdateSourceTrigger=PropertyChanged}"/>
         <Rectangle
             x:Name="HideLeft"
-            Canvas.Top="{Binding (Canvas.Top), ElementName=Selector, UpdateSourceTrigger=PropertyChanged}"
+            Canvas.Top="{Binding (Canvas.Top), ElementName=Cropper, UpdateSourceTrigger=PropertyChanged}"
             Canvas.Left="0"
             Opacity="{StaticResource Opacity}"
             Fill="Black"
-            Width="{Binding (Canvas.Left), ElementName=Selector, UpdateSourceTrigger=PropertyChanged}"
-            Height="{Binding ActualHeight, ElementName=Selector, UpdateSourceTrigger=PropertyChanged}"/>
+            Width="{Binding (Canvas.Left), ElementName=Cropper, UpdateSourceTrigger=PropertyChanged}"
+            Height="{Binding ActualHeight, ElementName=Cropper, UpdateSourceTrigger=PropertyChanged}"/>
         <Rectangle
             x:Name="HideBottom"
             Canvas.Bottom="0"
@@ -65,19 +65,19 @@
             Opacity="{StaticResource Opacity}"
             Fill="Black"
             Width="{Binding MaxWidth, UpdateSourceTrigger=PropertyChanged}"
-            Height="{Binding (Canvas.Bottom), ElementName=Selector, UpdateSourceTrigger=PropertyChanged}"
+            Height="{Binding (Canvas.Bottom), ElementName=Cropper, UpdateSourceTrigger=PropertyChanged}"
         />
         <Rectangle
             x:Name="HideRight"
-            Canvas.Top="{Binding (Canvas.Top), ElementName=Selector, UpdateSourceTrigger=PropertyChanged}"
+            Canvas.Top="{Binding (Canvas.Top), ElementName=Cropper, UpdateSourceTrigger=PropertyChanged}"
             Canvas.Right="0"
             Opacity="{StaticResource Opacity}"
             Fill="Black"
-            Width="{Binding (Canvas.Right), ElementName=Selector, UpdateSourceTrigger=PropertyChanged}"
-            Height="{Binding ActualHeight, ElementName=Selector, UpdateSourceTrigger=PropertyChanged}"
+            Width="{Binding (Canvas.Right), ElementName=Cropper, UpdateSourceTrigger=PropertyChanged}"
+            Height="{Binding ActualHeight, ElementName=Cropper, UpdateSourceTrigger=PropertyChanged}"
         />
 
-        <ContentControl x:Name="Selector"
+        <ContentControl x:Name="Cropper"
                     MinHeight="{Binding MinHeight, UpdateSourceTrigger=PropertyChanged}"
                     MinWidth="{Binding MinWidth, UpdateSourceTrigger=PropertyChanged}"
                     Width="{Binding Width, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
@@ -90,7 +90,7 @@
                     Canvas.Right="{Binding Right, UpdateSourceTrigger=PropertyChanged}"
                     Selector.IsSelected="True"
                     Style="{StaticResource MoveResize}">
-            <Rectangle Fill="White" x:Name="Selector2"
+            <Rectangle Fill="White"
                         Stretch="Fill"
                         Opacity="0.01"
                         IsHitTestVisible="False"/>

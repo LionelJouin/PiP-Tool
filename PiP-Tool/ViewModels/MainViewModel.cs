@@ -24,6 +24,9 @@ namespace PiP_Tool.ViewModels
         public ICommand QuitCommand { get; }
         public ICommand ClosingCommand { get; }
 
+        /// <summary>
+        /// Gets or sets selected window info and call <see cref="ShowCropper"/>
+        /// </summary>
         public WindowInfo SelectedWindowInfo
         {
             get => _selectedWindowInfo;
@@ -32,10 +35,13 @@ namespace PiP_Tool.ViewModels
                 if (_selectedWindowInfo == value)
                     return;
                 _selectedWindowInfo = value;
-                ShowSelector();
+                ShowCropper();
                 RaisePropertyChanged();
             }
         }
+        /// <summary>
+        /// Gets or sets windows list
+        /// </summary>
         public ObservableCollection<WindowInfo> WindowsList
         {
             get => _windowsList;
@@ -51,11 +57,14 @@ namespace PiP_Tool.ViewModels
         #region private
 
         private ObservableCollection<WindowInfo> _windowsList;
-        private SelectorWindow _selectorWindow;
+        private CropperWindow _cropperWindow;
         private WindowInfo _selectedWindowInfo;
 
         #endregion
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public MainViewModel()
         {
             StartPipCommand = new RelayCommand(StartPipCommandExecute);
@@ -64,11 +73,14 @@ namespace PiP_Tool.ViewModels
 
             WindowsList = new ObservableCollection<WindowInfo>();
 
-            ProcessesService.Instance.OpenWindowsChanged += OpenWindowsChanged;
+            ProcessesService.Instance.OpenWindowsChanged += (s, e) => UpdateWindowsList();
             ProcessesService.Instance.ForegroundWindowChanged += ForegroundWindowChanged;
             UpdateWindowsList();
         }
 
+        /// <summary>
+        /// Update <see cref="WindowsList"/> with <see cref="ProcessesService.OpenWindows"/> 
+        /// </summary>
         private void UpdateWindowsList()
         {
             var openWindows = ProcessesService.Instance.OpenWindows;
@@ -86,28 +98,35 @@ namespace PiP_Tool.ViewModels
             }
         }
 
-        private void ShowSelector()
+        /// <summary>
+        /// Close old cropper if exist, and open new with <see cref="SelectedWindowInfo"/>
+        /// </summary>
+        private void ShowCropper()
         {
-            _selectorWindow?.Close();
-            _selectorWindow = new SelectorWindow();
+            _cropperWindow?.Close();
+            _cropperWindow = new CropperWindow();
             MessengerInstance.Send(SelectedWindowInfo);
-            _selectorWindow.Show();
-            _selectorWindow.Activate();
+            _cropperWindow.Show();
+            _cropperWindow.Activate();
         }
 
+        /// <summary>
+        /// Callback in <see cref="StartPipCommandExecute"/>. Show <see cref="PiPModeWindow"/> and send selected window
+        /// </summary>
+        /// <param name="selectedRegion"></param>
         private void StartPip(NativeStructs.Rect selectedRegion)
         {
-            var pip = new PictureInPictureWindow();
+            var pip = new PiPModeWindow();
             MessengerInstance.Send(new SelectedWindow(SelectedWindowInfo, selectedRegion));
             pip.Show();
             RequestClose?.Invoke(this, EventArgs.Empty);
         }
 
-        private void OpenWindowsChanged(object sender, EventArgs e)
-        {
-            UpdateWindowsList();
-        }
-
+        /// <summary>
+        /// Called when foreground window changed. Change <see cref="SelectedWindowInfo"/>
+        /// </summary>
+        /// <param name="sender">The source of the event</param>
+        /// <param name="e">Event arguments</param>
         private void ForegroundWindowChanged(object sender, EventArgs e)
         {
             UpdateWindowsList();
@@ -118,11 +137,17 @@ namespace PiP_Tool.ViewModels
 
         #region commands
 
+        /// <summary>
+        /// Executed on click on change selected window button. Send message with <see cref="StartPip"/> callback
+        /// </summary>
         private void StartPipCommandExecute()
         {
             MessengerInstance.Send<Action<NativeStructs.Rect>>(StartPip);
         }
 
+        /// <summary>
+        /// Executed on click on quit button
+        /// </summary>
         private void QuitCommandExecute()
         {
             var windowsList = Application.Current.Windows.Cast<Window>();
@@ -134,10 +159,13 @@ namespace PiP_Tool.ViewModels
             RequestClose?.Invoke(this, EventArgs.Empty);
         }
 
+        /// <summary>
+        /// Executed when the window is closing. Dispose <see cref="ProcessesService"/>. Close <see cref="CropperWindow"/>
+        /// </summary>
         private void ClosingCommandExecute()
         {
             ProcessesService.Instance.Dispose();
-            _selectorWindow?.Close();
+            _cropperWindow?.Close();
         }
 
         #endregion

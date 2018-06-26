@@ -13,6 +13,9 @@ namespace PiP_Tool.Views
         private bool _dragging;
         private Point _anchorPoint;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
@@ -24,6 +27,10 @@ namespace PiP_Tool.Views
             };
         }
 
+        /// <summary>
+        /// Move window if dragging
+        /// </summary>
+        /// <param name="e">Event arguments</param>
         protected override void OnMouseMove(MouseEventArgs e)
         {
             if (!_dragging)
@@ -31,6 +38,10 @@ namespace PiP_Tool.Views
             Left = Left + e.GetPosition(this).X - _anchorPoint.X;
         }
 
+        /// <summary>
+        /// Start dragging
+        /// </summary>
+        /// <param name="e">Event arguments</param>
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
         {
             _anchorPoint = e.GetPosition(this);
@@ -39,6 +50,10 @@ namespace PiP_Tool.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        /// Stop dragging
+        /// </summary>
+        /// <param name="e">Event arguments</param>
         protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
         {
             if (!_dragging)

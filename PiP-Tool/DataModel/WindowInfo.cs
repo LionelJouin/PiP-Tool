@@ -10,6 +10,8 @@ namespace PiP_Tool.DataModel
     public class WindowInfo
     {
 
+        #region public
+
         public IntPtr Handle { get; }
         public string Title { get; private set; }
         public Point Position { get; private set; }
@@ -17,16 +19,32 @@ namespace PiP_Tool.DataModel
         public NativeStructs.Rect Rect { get; private set; }
         public NativeStructs.Rect Border { get; set; }
 
+        /// <summary>
+        /// Gets if window is minimized
+        /// </summary>
         public bool IsMinimized => (_winInfo.dwStyle & (uint)WindowStyles.WS_MINIMIZE) == (uint)WindowStyles.WS_MINIMIZE;
+
+        #endregion
+
+        #region private
 
         private NativeStructs.WINDOWINFO _winInfo;
 
+        #endregion
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="handle">Handle of the window</param>
         public WindowInfo(IntPtr handle)
         {
             Handle = handle;
             RefreshInfo();
         }
-
+        
+        /// <summary>
+        /// Refresh all window informations (size, position, title, style, border...)
+        /// </summary>
         public void RefreshInfo()
         {
             GetSizeAndPosition();
@@ -35,6 +53,9 @@ namespace PiP_Tool.DataModel
             GetBorder();
         }
 
+        /// <summary>
+        /// set this window as foreground window
+        /// </summary>
         public void SetAsForegroundWindow()
         {
             RefreshInfo();
@@ -44,6 +65,9 @@ namespace PiP_Tool.DataModel
             NativeMethods.SetForegroundWindow(Handle);
         }
 
+        /// <summary>
+        /// Get window size and position
+        /// </summary>
         private void GetSizeAndPosition()
         {
             if (!NativeMethods.GetWindowRect(Handle, out var rct)) return;
@@ -52,6 +76,9 @@ namespace PiP_Tool.DataModel
             Size = new Size(rct.Right - rct.Left + 1, rct.Bottom - rct.Top + 1);
         }
 
+        /// <summary>
+        /// Get window title
+        /// </summary>
         private void GetTitle()
         {
             var length = NativeMethods.GetWindowTextLength(Handle);
@@ -62,6 +89,9 @@ namespace PiP_Tool.DataModel
             Title = builder.ToString();
         }
 
+        /// <summary>
+        /// Get window info (window style...)
+        /// </summary>
         private void GetWinInfo()
         {
             _winInfo = new NativeStructs.WINDOWINFO();
@@ -69,6 +99,9 @@ namespace PiP_Tool.DataModel
             NativeMethods.GetWindowInfo(Handle, ref _winInfo);
         }
 
+        /// <summary>
+        /// Get window border size
+        /// </summary>
         private void GetBorder()
         {
             NativeMethods.DwmGetWindowAttribute(Handle, DWMWINDOWATTRIBUTE.ExtendedFrameBounds, out NativeStructs.Rect frame, Marshal.SizeOf(typeof(NativeStructs.Rect)));
@@ -80,26 +113,52 @@ namespace PiP_Tool.DataModel
             );
         }
 
+        /// <summary>
+        /// Check if obj if is WindowInfo and compare handle
+        /// </summary>
+        /// <param name="obj">object to compare</param>
+        /// <returns>Handles are equals</returns>
         public override bool Equals(object obj)
         {
             return obj is WindowInfo windowInfo && Handle.Equals(windowInfo.Handle);
         }
 
+        /// <summary>
+        /// Compare handle
+        /// </summary>
+        /// <param name="other">WindowInfo to compare</param>
+        /// <returns>Handles are equals</returns>
         protected bool Equals(WindowInfo other)
         {
             return Handle.Equals(other.Handle);
         }
 
+        /// <summary>
+        /// Get hashcode of the Handle
+        /// </summary>
+        /// <returns>Hashcode of the Handle</returns>
         public override int GetHashCode()
         {
             return Handle.GetHashCode();
         }
 
+        /// <summary>
+        /// Equality operator override
+        /// </summary>
+        /// <param name="left">Left member of the comparison</param>
+        /// <param name="right">Right member of the comparison</param>
+        /// <returns>Handles are equals</returns>
         public static bool operator ==(WindowInfo left, WindowInfo right)
         {
             return Equals(left, right);
         }
 
+        /// <summary>
+        /// Inequality operator override
+        /// </summary>
+        /// <param name="left">Left member of the comparison</param>
+        /// <param name="right">Right member of the comparison</param>
+        /// <returns>Handles are not equals</returns>
         public static bool operator !=(WindowInfo left, WindowInfo right)
         {
             return !Equals(left, right);

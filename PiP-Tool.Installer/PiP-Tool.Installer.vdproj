@@ -118,67 +118,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_0EA29C3D090A43699FFB109179BD4C71"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_623656A2B54B593B25CBCE655E0B7A78"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_90268640BA736946523F133A2C687E6C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_56AF4C136CA756113A439EB3BC74ACF9"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_6DB3C32FC5CF4A590336356E9D3FEE3A"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_603A7B7B61F9E27540B8828A22828ACF"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_D42EE4684CE116524850DBD47F3EA69F"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_39E128C7F30B3387FB2EDA23CE658BAE"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_D49F85DD5941BD5FA071B31272A31D47"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_13CB0AE82869F4B7B69C3ABE6C1CABA5"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_60BA37EB20BC7C9A9F2E9A65C5D9CA42"
+        "OwnerKey" = "8:_D254C57E4DF64B9CBE654D8A74550408"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -190,7 +130,67 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_D254C57E4DF64B9CBE654D8A74550408"
+        "OwnerKey" = "8:_60BA37EB20BC7C9A9F2E9A65C5D9CA42"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_13CB0AE82869F4B7B69C3ABE6C1CABA5"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_D49F85DD5941BD5FA071B31272A31D47"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_39E128C7F30B3387FB2EDA23CE658BAE"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_D42EE4684CE116524850DBD47F3EA69F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_603A7B7B61F9E27540B8828A22828ACF"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_6DB3C32FC5CF4A590336356E9D3FEE3A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_56AF4C136CA756113A439EB3BC74ACF9"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_90268640BA736946523F133A2C687E6C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_623656A2B54B593B25CBCE655E0B7A78"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_0EA29C3D090A43699FFB109179BD4C71"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -450,11 +450,6 @@
             "AssemblyAsmDisplayName" = "8:GalaSoft.MvvmLight, Version=5.4.1.0, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_53A51BF003E4987C0593EF5F3491ED38"
-                    {
-                    "Name" = "8:GalaSoft.MvvmLight.DLL"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:GalaSoft.MvvmLight.DLL"
             "TargetName" = "8:"
@@ -481,11 +476,6 @@
             "AssemblyAsmDisplayName" = "8:System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_56AF4C136CA756113A439EB3BC74ACF9"
-                    {
-                    "Name" = "8:System.Windows.Interactivity.DLL"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:System.Windows.Interactivity.DLL"
             "TargetName" = "8:"
@@ -574,11 +564,6 @@
             "AssemblyAsmDisplayName" = "8:PiP-Tool.Native, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_623656A2B54B593B25CBCE655E0B7A78"
-                    {
-                    "Name" = "8:PiP-Tool.Native.DLL"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:PiP-Tool.Native.DLL"
             "TargetName" = "8:"
@@ -636,11 +621,6 @@
             "AssemblyAsmDisplayName" = "8:GalaSoft.MvvmLight.Platform, Version=5.4.1.0, Culture=neutral, PublicKeyToken=5f873c45e98af8a1, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_90268640BA736946523F133A2C687E6C"
-                    {
-                    "Name" = "8:GalaSoft.MvvmLight.Platform.DLL"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:GalaSoft.MvvmLight.Platform.DLL"
             "TargetName" = "8:"
@@ -818,7 +798,7 @@
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
         "ProductVersion" = "8:1.0.0"
-        "Manufacturer" = "8:LionelJouin"
+        "Manufacturer" = "8:Lionel Jouin"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:https://github.com/LionelJouin/PiP-Tool"
         "Title" = "8:PiP-Tool"

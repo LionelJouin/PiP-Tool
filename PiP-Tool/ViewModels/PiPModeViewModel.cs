@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
@@ -28,11 +29,10 @@ namespace PiP_Tool.ViewModels
         public const int TopBarHeight = 30;
 
         public event EventHandler<EventArgs> RequestClose;
-        
+
         public ICommand LoadedCommand { get; }
         public ICommand CloseCommand { get; }
         public ICommand ChangeSelectedWindowCommand { get; }
-        public ICommand SizeChangedCommand { get; }
         public ICommand MouseEnterCommand { get; }
         public ICommand MouseLeaveCommand { get; }
 
@@ -45,7 +45,7 @@ namespace PiP_Tool.ViewModels
             set
             {
                 _minHeight = value;
-                Update();
+                UpdateDwmThumbnail();
                 RaisePropertyChanged();
             }
         }
@@ -58,7 +58,7 @@ namespace PiP_Tool.ViewModels
             set
             {
                 _minWidth = value;
-                Update();
+                UpdateDwmThumbnail();
                 RaisePropertyChanged();
             }
         }
@@ -71,7 +71,7 @@ namespace PiP_Tool.ViewModels
             set
             {
                 _top = value;
-                Update();
+                UpdateDwmThumbnail();
                 RaisePropertyChanged();
             }
         }
@@ -84,7 +84,7 @@ namespace PiP_Tool.ViewModels
             set
             {
                 _left = value;
-                Update();
+                UpdateDwmThumbnail();
                 RaisePropertyChanged();
             }
         }
@@ -97,7 +97,7 @@ namespace PiP_Tool.ViewModels
             set
             {
                 _height = value;
-                Update();
+                UpdateDwmThumbnail();
                 RaisePropertyChanged();
             }
         }
@@ -110,12 +110,12 @@ namespace PiP_Tool.ViewModels
             set
             {
                 _width = value;
-                Update();
+                UpdateDwmThumbnail();
                 RaisePropertyChanged();
             }
         }
         /// <summary>
-        /// Gets or sets ratio of the window
+        /// Gets or sets ratio of the pip region
         /// </summary>
         public float Ratio { get; private set; }
         /// <summary>
@@ -127,7 +127,7 @@ namespace PiP_Tool.ViewModels
             set
             {
                 _topBarVisibility = value;
-                Update();
+                UpdateDwmThumbnail();
                 RaisePropertyChanged();
             }
         }
@@ -154,6 +154,7 @@ namespace PiP_Tool.ViewModels
 
         #endregion
 
+        /// <inheritdoc />
         /// <summary>
         /// Constructor
         /// </summary>
@@ -162,7 +163,6 @@ namespace PiP_Tool.ViewModels
             LoadedCommand = new RelayCommand(LoadedCommandExecute);
             CloseCommand = new RelayCommand(CloseCommandExecute);
             ChangeSelectedWindowCommand = new RelayCommand(ChangeSelectedWindowCommandExecute);
-            SizeChangedCommand = new RelayCommand<SizeChangedEventArgs>(SizeChangedCommandExecute);
             MouseEnterCommand = new RelayCommand<MouseEventArgs>(MouseEnterCommandExecute);
             MouseLeaveCommand = new RelayCommand<MouseEventArgs>(MouseLeaveCommandExecute);
 
@@ -195,28 +195,20 @@ namespace PiP_Tool.ViewModels
             else if (Width < Height)
                 MinHeight = MinSize * (int)_selectedWindow.RatioHeightByWidth;
 
-            // set Default size
-            var resolution = Screen.PrimaryScreen.Bounds;
-            if (Height > resolution.Height * DefaultSizePercentage)
-            {
-                Height = (int)(resolution.Height * DefaultSizePercentage);
-                Width = Convert.ToInt32(Height * Ratio);
-            }
-            if (Width > resolution.Width * DefaultSizePercentage)
-            {
-                Width = (int)(resolution.Width * DefaultSizePercentage);
-                Height = Convert.ToInt32(Width * _selectedWindow.RatioHeightByWidth);
-            }
-
             _renderSizeEventDisabled = false;
 
-            Init();
+            SetDefaultSize();
+            SetAsForegroundWindow();
+
+            InitDwmThumbnail();
+
+            ((HwndSource)PresentationSource.FromVisual(ThisWindow()))?.AddHook(DragHook);
         }
 
         /// <summary>
         /// Register dwm thumbnail properties
         /// </summary>
-        private void Init()
+        private void InitDwmThumbnail()
         {
             if (_selectedWindow == null || _selectedWindow.WindowInfo.Handle == IntPtr.Zero || _targetHandle == IntPtr.Zero)
                 return;
@@ -225,13 +217,13 @@ namespace PiP_Tool.ViewModels
                 NativeMethods.DwmUnregisterThumbnail(_thumbHandle);
 
             if (NativeMethods.DwmRegisterThumbnail(_targetHandle, _selectedWindow.WindowInfo.Handle, out _thumbHandle) == 0)
-                Update();
+                UpdateDwmThumbnail();
         }
 
         /// <summary>
         /// Update dwm thumbnail properties
         /// </summary>
-        private void Update()
+        private void UpdateDwmThumbnail()
         {
             if (_thumbHandle == IntPtr.Zero)
                 return;
@@ -250,10 +242,89 @@ namespace PiP_Tool.ViewModels
             NativeMethods.DwmUpdateThumbnailProperties(_thumbHandle, ref props);
         }
 
+        /// <summary>
+        /// Set this window as foreground window
+        /// </summary>
+        public void SetAsForegroundWindow()
+        {
+            var thisWindow = ThisWindow();
+            if (thisWindow == null)
+                return;
+            thisWindow.Show();
+            thisWindow.Activate();
+            var handle = new WindowInteropHelper(thisWindow).Handle;
+            NativeMethods.SetForegroundWindow(handle);
+        }
+
+        /// <summary>
+        /// Set default size of this window
+        /// </summary>
+        public void SetDefaultSize()
+        {
+            _renderSizeEventDisabled = true;
+            var resolution = Screen.PrimaryScreen.Bounds;
+            if (Height > resolution.Height * DefaultSizePercentage)
+            {
+                Height = (int)(resolution.Height * DefaultSizePercentage);
+                Width = Convert.ToInt32(Height * Ratio);
+            }
+            if (Width > resolution.Width * DefaultSizePercentage)
+            {
+                Width = (int)(resolution.Width * DefaultSizePercentage);
+                Height = Convert.ToInt32(Width * _selectedWindow.RatioHeightByWidth);
+            }
+            _renderSizeEventDisabled = false;
+        }
+
+        /// <summary>
+        /// Gets this window
+        /// </summary>
+        /// <returns>This window</returns>
+        private Window ThisWindow()
+        {
+            var windowsList = Application.Current.Windows.Cast<Window>();
+            return windowsList.FirstOrDefault(window => window.DataContext == this);
+        }
+
+        /// <summary>
+        /// Keep aspect ratio on window resize
+        /// https://stackoverflow.com/questions/2471867/resize-a-wpf-window-but-maintain-proportions
+        /// </summary>
+        /// <param name="hwnd">The window handle.</param>
+        /// <param name="msg">The message ID.</param>
+        /// <param name="wParam">The message's wParam value.</param>
+        /// <param name="lParam">The message's lParam value.</param>
+        /// <param name="handeled">A value that indicates whether the message was handled. Set the value to true if the message was handled; otherwise, false.</param>
+        /// <returns>The appropriate return value depends on the particular message. See the message documentation details for the Win32 message being handled.</returns>
+        private IntPtr DragHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handeled)
+        {
+            if ((WM)msg != WM.WINDOWPOSCHANGING)
+                return IntPtr.Zero;
+
+            if (_renderSizeEventDisabled)
+                return IntPtr.Zero;
+
+            var position = (NativeStructs.WINDOWPOS)Marshal.PtrToStructure(lParam, typeof(NativeStructs.WINDOWPOS));
+
+            if ((position.flags & (int)SWP.NOMOVE) != 0 ||
+                HwndSource.FromHwnd(hwnd)?.RootVisual == null) return IntPtr.Zero;
+
+            var topBarHeight = 0;
+            if (TopBarIsVisible)
+                topBarHeight = TopBarHeight;
+
+            position.cx = (int)((position.cy - topBarHeight)* Ratio);
+
+            Marshal.StructureToPtr(position, lParam, true);
+            handeled = true;
+
+            return IntPtr.Zero;
+        }
+
         #region commands
 
         /// <summary>
-        /// Executed when the window is loaded. Get handle of the window and call <see cref="Init()"/> 
+        /// Executed when the window is loaded. Get handle of the window and call <see cref="InitDwmThumbnail"/> 
         /// </summary>
         private void LoadedCommandExecute()
         {
@@ -261,7 +332,7 @@ namespace PiP_Tool.ViewModels
             var thisWindow = windowsList.FirstOrDefault(x => x.DataContext == this);
             if (thisWindow != null)
                 _targetHandle = new WindowInteropHelper(thisWindow).Handle;
-            Init();
+            InitDwmThumbnail();
         }
 
         /// <summary>
@@ -281,33 +352,6 @@ namespace PiP_Tool.ViewModels
             var mainWindow = new MainWindow();
             mainWindow.Show();
             CloseCommandExecute();
-        }
-
-        /// <summary>
-        /// Executed on window size change
-        /// </summary>
-        /// <param name="sizeInfo">Event arguments</param>
-        private void SizeChangedCommandExecute(SizeChangedEventArgs sizeInfo)
-        {
-            if (_renderSizeEventDisabled)
-                return;
-            var topBarHeight = 0;
-            if (TopBarIsVisible)
-                topBarHeight = TopBarHeight;
-            if (sizeInfo.WidthChanged)
-            {
-                var width = Convert.ToInt32((sizeInfo.NewSize.Height - topBarHeight) * Ratio);
-                if (width < MinWidth)
-                    width = MinWidth;
-                Width = width;
-            }
-            else
-            {
-                var height = Convert.ToInt32(sizeInfo.NewSize.Width * Ratio + topBarHeight);
-                if (height < MinHeight)
-                    height = MinHeight;
-                Height = height;
-            }
         }
 
         /// <summary>

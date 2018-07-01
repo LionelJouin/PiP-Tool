@@ -240,6 +240,7 @@ namespace PiP_Tool.ViewModels
 
         #endregion
 
+        /// <inheritdoc />
         /// <summary>
         /// Constructor
         /// </summary>

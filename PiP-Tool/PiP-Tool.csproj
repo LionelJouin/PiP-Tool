@@ -24,6 +24,10 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
+    <SupportUrl>https://github.com/LionelJouin/PiP-Tool</SupportUrl>
+    <ErrorReportUrl>https://github.com/LionelJouin/PiP-Tool</ErrorReportUrl>
+    <ProductName>PiP-Tool</ProductName>
+    <PublisherName>Lionel Jouin</PublisherName>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>

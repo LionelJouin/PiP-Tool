@@ -19,7 +19,7 @@ using Point = System.Drawing.Point;
 
 namespace PiP_Tool.ViewModels
 {
-    public class PiPModeViewModel : ViewModelBase, ICloseable
+    public class PiPModeViewModel : ViewModelBase, ICloseable, IDisposable
     {
 
         #region public
@@ -32,6 +32,7 @@ namespace PiP_Tool.ViewModels
 
         public ICommand LoadedCommand { get; }
         public ICommand CloseCommand { get; }
+        public ICommand ClosingCommand { get; }
         public ICommand ChangeSelectedWindowCommand { get; }
         public ICommand MouseEnterCommand { get; }
         public ICommand MouseLeaveCommand { get; }
@@ -162,6 +163,7 @@ namespace PiP_Tool.ViewModels
         {
             LoadedCommand = new RelayCommand(LoadedCommandExecute);
             CloseCommand = new RelayCommand(CloseCommandExecute);
+            ClosingCommand = new RelayCommand(ClosingCommandExecute);
             ChangeSelectedWindowCommand = new RelayCommand(ChangeSelectedWindowCommandExecute);
             MouseEnterCommand = new RelayCommand<MouseEventArgs>(MouseEnterCommandExecute);
             MouseLeaveCommand = new RelayCommand<MouseEventArgs>(MouseLeaveCommandExecute);
@@ -321,6 +323,15 @@ namespace PiP_Tool.ViewModels
             return IntPtr.Zero;
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Remove DragHook
+        /// </summary>
+        public void Dispose()
+        {
+            ((HwndSource)PresentationSource.FromVisual(ThisWindow()))?.RemoveHook(DragHook);
+        }
+
         #region commands
 
         /// <summary>
@@ -342,6 +353,14 @@ namespace PiP_Tool.ViewModels
         {
             MessengerInstance.Unregister<SelectedWindow>(this);
             RequestClose?.Invoke(this, EventArgs.Empty);
+        }
+
+        /// <summary>
+        /// Executed when the window is closing.
+        /// </summary>
+        private void ClosingCommandExecute()
+        {
+            Dispose();
         }
 
         /// <summary>

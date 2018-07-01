@@ -48,6 +48,7 @@
         <Grid x:Name="TopBar" Visibility="{Binding TopBarVisibility, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Right">
 
             <Button HorizontalAlignment="Left" 
+                    ToolTip="{StaticResource Quit}"
                     VerticalAlignment="Top" 
                     Command="{Binding CloseCommand}" 
                     Height="30" 
@@ -56,6 +57,7 @@
                     Opacity="0.5"
                     FontFamily="/PiP-Tool;component/Assets/#Flaticon" Content="&#xF102;" Foreground="White" />
             <Button HorizontalAlignment="Left" 
+                    ToolTip="{StaticResource SelectNewWindow}"
                     VerticalAlignment="Top" 
                     Command="{Binding ChangeSelectedWindowCommand}" 
                     Height="30" 

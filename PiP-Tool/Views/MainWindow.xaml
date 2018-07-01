@@ -33,6 +33,7 @@
     <Grid>
 
         <Label x:Name="drag" 
+                ToolTip="{StaticResource DragThisWindow}"
                 HorizontalAlignment="Left" 
                 VerticalAlignment="Top" 
                 HorizontalContentAlignment="Center" 
@@ -44,6 +45,7 @@
                 FontFamily="/PiP-Tool;component/Assets/#Flaticon" Content="&#xF100;" Foreground="White" />
 
         <ComboBox HorizontalAlignment="Left" 
+                  ToolTip="{StaticResource SelectWindow}"
                   VerticalAlignment="Top" 
                   Margin="30,0,0,-1" 
                   Width="320"
@@ -62,6 +64,7 @@
         </ComboBox>
 
         <Button x:Name="ButtonPip" 
+                ToolTip="{StaticResource EnterPiPMode}"
                 HorizontalAlignment="Left" 
                 VerticalAlignment="Top" 
                 Margin="350,0,0,0" 
@@ -75,6 +78,7 @@
                 FontFamily="/PiP-Tool;component/Assets/#Flaticon" Content="&#xF101;" Foreground="White" />
 
         <Button x:Name="ButtonQuit"
+                ToolTip="{StaticResource Quit}"
                 HorizontalAlignment="Left" 
                 VerticalAlignment="Top" 
                 Margin="400,0,0,0" 

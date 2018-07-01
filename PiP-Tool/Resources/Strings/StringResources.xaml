@@ -1,0 +1,9 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+    <system:String x:Key="DragThisWindow">Drag this window</system:String>
+    <system:String x:Key="SelectWindow">Select a window</system:String>
+    <system:String x:Key="EnterPiPMode">Enter in PiP mode</system:String>
+    <system:String x:Key="Quit">Quit</system:String>
+    <system:String x:Key="SelectNewWindow">Select a new window</system:String>
+</ResourceDictionary>

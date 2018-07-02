@@ -26,6 +26,7 @@ namespace PiP_Tool.ViewModels
 
         public const int MinSize = 100;
         public const float DefaultSizePercentage = 0.25f;
+        public const float DefaultPositionPercentage = 0.1f;
         public const int TopBarHeight = 30;
 
         public event EventHandler<EventArgs> RequestClose;
@@ -153,6 +154,8 @@ namespace PiP_Tool.ViewModels
         private IntPtr _targetHandle, _thumbHandle;
         private SelectedWindow _selectedWindow;
 
+        private enum Position { TopLeft, TopRight, BottomLeft, BottomRight }
+
         #endregion
 
         /// <inheritdoc />
@@ -199,7 +202,8 @@ namespace PiP_Tool.ViewModels
 
             _renderSizeEventDisabled = false;
 
-            SetDefaultSize();
+            SetSize(DefaultSizePercentage);
+            SetPosition(Position.BottomLeft);
             SetAsForegroundWindow();
 
             InitDwmThumbnail();
@@ -259,22 +263,55 @@ namespace PiP_Tool.ViewModels
         }
 
         /// <summary>
-        /// Set default size of this window
+        /// Set size of this window
         /// </summary>
-        public void SetDefaultSize()
+        private void SetSize(float sizePercentage)
         {
             _renderSizeEventDisabled = true;
             var resolution = Screen.PrimaryScreen.Bounds;
-            if (Height > resolution.Height * DefaultSizePercentage)
+            if (Height > resolution.Height * sizePercentage)
             {
-                Height = (int)(resolution.Height * DefaultSizePercentage);
+                Height = (int)(resolution.Height * sizePercentage);
                 Width = Convert.ToInt32(Height * Ratio);
             }
-            if (Width > resolution.Width * DefaultSizePercentage)
+            if (Width > resolution.Width * sizePercentage)
             {
-                Width = (int)(resolution.Width * DefaultSizePercentage);
+                Width = (int)(resolution.Width * sizePercentage);
                 Height = Convert.ToInt32(Width * _selectedWindow.RatioHeightByWidth);
             }
+            _renderSizeEventDisabled = false;
+        }
+
+        /// <summary>
+        /// Set position of this window
+        /// </summary>
+        private void SetPosition(Position position)
+        {
+            _renderSizeEventDisabled = true;
+            var resolution = Screen.PrimaryScreen.Bounds;
+            var top = 0;
+            var left = 0;
+            switch (position)
+            {
+                case Position.TopLeft:
+                    top = (int) (resolution.Height * DefaultPositionPercentage);
+                    left = (int)(resolution.Width * DefaultPositionPercentage);
+                    break;
+                case Position.TopRight:
+                    top = (int)(resolution.Height * DefaultPositionPercentage);
+                    left = resolution.Width - Width - (int)(resolution.Width * DefaultPositionPercentage);
+                    break;
+                case Position.BottomLeft:
+                    top = resolution.Height - Height - (int)(resolution.Height * DefaultPositionPercentage);
+                    left = (int)(resolution.Width * DefaultPositionPercentage);
+                    break;
+                case Position.BottomRight:
+                    top = resolution.Height - Height - (int)(resolution.Height * DefaultPositionPercentage);
+                    left = resolution.Width - Width - (int)(resolution.Width * DefaultPositionPercentage);
+                    break;
+            }
+            Top = top;
+            Left = left;
             _renderSizeEventDisabled = false;
         }
 

@@ -204,7 +204,6 @@ namespace PiP_Tool.ViewModels
 
             SetSize(DefaultSizePercentage);
             SetPosition(Position.BottomLeft);
-            SetAsForegroundWindow();
 
             InitDwmThumbnail();
 
@@ -246,20 +245,6 @@ namespace PiP_Tool.ViewModels
             };
 
             NativeMethods.DwmUpdateThumbnailProperties(_thumbHandle, ref props);
-        }
-
-        /// <summary>
-        /// Set this window as foreground window
-        /// </summary>
-        public void SetAsForegroundWindow()
-        {
-            var thisWindow = ThisWindow();
-            if (thisWindow == null)
-                return;
-            thisWindow.Show();
-            thisWindow.Activate();
-            var handle = new WindowInteropHelper(thisWindow).Handle;
-            NativeMethods.SetForegroundWindow(handle);
         }
 
         /// <summary>

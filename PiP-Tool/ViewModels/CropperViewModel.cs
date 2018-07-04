@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Interop;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using PiP_Tool.DataModel;
@@ -283,6 +286,35 @@ namespace PiP_Tool.ViewModels
             Left = 0;
             Height = MinHeight;
             Width = MinWidth;
+            
+            SetAsForegroundWindow();
+        }
+
+        /// <summary>
+        /// Gets this window
+        /// </summary>
+        /// <returns>This window</returns>
+        private Window ThisWindow()
+        {
+            var windowsList = Application.Current.Windows.Cast<Window>();
+            return windowsList.FirstOrDefault(window => window.DataContext == this);
+        }
+        
+        /// <summary>
+        /// Set this window as foreground window
+        /// </summary>
+        public void SetAsForegroundWindow()
+        {
+            var thisWindow = ThisWindow();
+            if (thisWindow == null)
+                return;
+            thisWindow.Show();
+            thisWindow.Activate();
+            thisWindow.Topmost = true;
+            thisWindow.Topmost = false;
+            thisWindow.Focus();
+            var handle = new WindowInteropHelper(thisWindow).Handle;
+            NativeMethods.SetForegroundWindow(handle);
         }
 
         /// <summary>

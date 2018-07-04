@@ -209,14 +209,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\Icon-white.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\Icon-black.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Assets\Icon.ico" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

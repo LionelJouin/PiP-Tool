@@ -108,7 +108,6 @@ namespace PiP_Tool.ViewModels
             _cropperWindow = new CropperWindow();
             MessengerInstance.Send(SelectedWindowInfo);
             _cropperWindow.Show();
-            _cropperWindow.Activate();
         }
 
         /// <summary>

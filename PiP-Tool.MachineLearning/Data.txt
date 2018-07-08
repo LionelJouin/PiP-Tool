@@ -1,15 +1,12 @@
-﻿100.0,Google Chrome,abc - Youtube
-100.0,Google Chrome,aerc - Youtube
-100.0,Google Chrome,atr - Youtube
-110.0,Google Chrome,abc - Youtube
-110.0,Google Chrome,abc - Youtube
-100.0,Google Chrome,azs - Youtube
-100.0,Google Chrome,rettret re - Youtube
-100.0,Google Chrome,zer zr zer - Youtube
-100.0,Google Chrome,aezrbh - Youtube
-300.0,Google Chrome,fgh - Facebook
-300.0,Google Chrome,fgh - Facebook
-300.0,Google Chrome,fgh - Facebook
-150.0,Google Chrome,abrtyc - Google
-150.0,Google Chrome,abct - Google
-160.0,Google Chrome,abreyc - Google
+﻿150 100 400 600,Google Chrome,abc - Youtube,0,0,1080,1920
+150 100 400 600,Google Chrome,urc - Youtube,0,0,1080,1920
+150 100 400 600,Google Chrome,tyaezrerbc - Youtube,0,0,1080,1920
+150 100 400 600,Google Chrome,atyubrez rz rc - Youtube,0,0,1080,1920
+150 100 400 600,Google Chrome,mo ygf zer - Youtube,0,0,1080,1920
+150 100 400 600,Google Chrome,abc - Youtube,0,0,1080,1920
+150 100 400 600,Google Chrome,abc - Youtube,0,0,1080,1920
+75 0 400 600,Google Chrome,yxzz zer - Facebook,100,0,780,1500
+0 0 1080 1920,Google Chrome,fgh - Facebook,0,0,1080,1920
+0 0 1080 1920,Google Chrome,jeuxvideo - Google,0,0,1080,1920
+0 0 1080 1920,Google Chrome,Stackoverflow - Google,0,0,1080,1920
+150 100 800 920,Microsoft Edge,Mails - Outlook,0,0,1080,1920

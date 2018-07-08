@@ -70,6 +70,8 @@ namespace PiP_Tool.MachineLearning
 
             var prediction = model.Predict(windowData);
 
+            prediction.Predicted();
+
             return prediction;
         }
 

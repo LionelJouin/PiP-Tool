@@ -1,4 +1,7 @@
-﻿using Microsoft.ML;
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
+using Microsoft.ML;
 using Microsoft.ML.Data;
 using Microsoft.ML.Trainers;
 using Microsoft.ML.Transforms;
@@ -22,7 +25,8 @@ namespace PiP_Tool.MachineLearning
 
         private static MachineLearningService _instance;
         private const string DataPath = "Data.txt";
-        private readonly LearningPipeline _pipeline;
+        private const string ModelPath = "Model.zip";
+        private static PredictionModel<WindowData, RegionPrediction> _model;
 
         #endregion
 
@@ -43,36 +47,65 @@ namespace PiP_Tool.MachineLearning
         /// </summary>
         private MachineLearningService()
         {
-            _pipeline = new LearningPipeline
+        }
+
+        public async Task TrainAsync()
+        {
+            var pipeline = new LearningPipeline
             {
                 new TextLoader(DataPath).CreateFrom<WindowData>(separator: ','),
                 new Dictionarizer("Label"),
                 new TextFeaturizer("Program", "Program"),
                 new TextFeaturizer("WindowTitle", "WindowTitle"),
-                new ColumnConcatenator("Features", "Program", "WindowTitle"),
+                new ColumnConcatenator("Features", "Program", "WindowTitle", "WindowTop", "WindowLeft", "WindowHeight", "WindowWidth"),
                 new StochasticDualCoordinateAscentClassifier(),
                 new PredictedLabelColumnOriginalValueConverter {PredictedLabelColumn = "PredictedLabel"}
             };
+            _model = pipeline.Train<WindowData, RegionPrediction>();
+
+            await _model.WriteAsync(ModelPath);
         }
 
-        public RegionPrediction Predict(string program, string windowTitle)
+        public Task<RegionPrediction> Predict(string program, string windowTitle)
         {
-            return Predict(new WindowData
+            return PredictAsync(new WindowData
             {
                 Program = program,
                 WindowTitle = windowTitle
             });
         }
 
-        public RegionPrediction Predict(WindowData windowData)
+        public async Task<RegionPrediction> PredictAsync(WindowData windowData)
         {
-            var model = _pipeline.Train<WindowData, RegionPrediction>();
-
-            var prediction = model.Predict(windowData);
+            if (_model == null)
+            {
+                _model = await PredictionModel.ReadAsync<WindowData, RegionPrediction>(ModelPath);
+            }
+            var prediction = _model.Predict(windowData);
 
             prediction.Predicted();
 
             return prediction;
+        }
+
+        public void AddData(WindowData windowData)
+        {
+            var newLine =
+                $"{Environment.NewLine}" +
+                $"{windowData.Region}," +
+                $"{windowData.Program}," +
+                $"{windowData.WindowTitle}," +
+                $"{windowData.WindowTop}," +
+                $"{windowData.WindowLeft}," +
+                $"{windowData.WindowHeight}," +
+                $"{windowData.WindowWidth}";
+
+            if (!File.Exists(DataPath))
+            {
+                File.WriteAllText(DataPath, "");
+            }
+
+            File.AppendAllText(DataPath, newLine);
         }
 
     }

@@ -191,6 +191,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\PiP-Tool.MachineLearning\PiP-Tool.MachineLearning.csproj">
+      <Project>{e42fcf21-8c65-44ae-82f5-43f0acc09755}</Project>
+      <Name>PiP-Tool.MachineLearning</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PiP-Tool.Native\PiP-Tool.Native.csproj">
       <Project>{C1E4ED3B-147C-4F7C-8F78-007ABB3ACF3A}</Project>
       <Name>PiP-Tool.Native</Name>

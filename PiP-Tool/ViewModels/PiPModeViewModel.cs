@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -11,6 +12,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using PiP_Tool.DataModel;
 using PiP_Tool.Interfaces;
+using PiP_Tool.MachineLearning;
 using PiP_Tool.Native;
 using PiP_Tool.Views;
 using Application = System.Windows.Application;
@@ -193,6 +195,11 @@ namespace PiP_Tool.ViewModels
             Width = _selectedWindow.SelectedRegion.Width;
             Top = 200;
             Left = 200;
+            
+            //MachineLearningService.Instance.TrainAsync().ContinueWith(obj =>
+            //{
+
+            //});
 
             // set Min size
             if (Height < Width)

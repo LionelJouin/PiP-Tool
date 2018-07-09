@@ -24,9 +24,9 @@ namespace PiP_Tool.MachineLearning
         #region private
 
         private static MachineLearningService _instance;
-        private const string DataPath = "Data.txt";
-        private const string ModelPath = "Model.zip";
-        private static PredictionModel<WindowData, RegionPrediction> _model;
+        private readonly string _dataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Data.csv");
+        private readonly string _modelPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Model.zip");
+        private PredictionModel<WindowData, RegionPrediction> _model;
 
         #endregion
 
@@ -41,19 +41,21 @@ namespace PiP_Tool.MachineLearning
         public void Dispose()
         {
         }
-        
+
         /// <summary>
         /// Constructor (Singleton so private)
         /// </summary>
         private MachineLearningService()
         {
+            if (!File.Exists(_dataPath))
+                File.WriteAllText(_dataPath, "");
         }
 
         public async Task TrainAsync()
         {
             var pipeline = new LearningPipeline
             {
-                new TextLoader(DataPath).CreateFrom<WindowData>(separator: ','),
+                new TextLoader(_dataPath).CreateFrom<WindowData>(separator: ','),
                 new Dictionarizer("Label"),
                 new TextFeaturizer("Program", "Program"),
                 new TextFeaturizer("WindowTitle", "WindowTitle"),
@@ -63,7 +65,7 @@ namespace PiP_Tool.MachineLearning
             };
             _model = pipeline.Train<WindowData, RegionPrediction>();
 
-            await _model.WriteAsync(ModelPath);
+            await _model.WriteAsync(_modelPath);
         }
 
         public Task<RegionPrediction> Predict(string program, string windowTitle)
@@ -79,7 +81,7 @@ namespace PiP_Tool.MachineLearning
         {
             if (_model == null)
             {
-                _model = await PredictionModel.ReadAsync<WindowData, RegionPrediction>(ModelPath);
+                _model = await PredictionModel.ReadAsync<WindowData, RegionPrediction>(_modelPath);
             }
             var prediction = _model.Predict(windowData);
 
@@ -100,12 +102,10 @@ namespace PiP_Tool.MachineLearning
                 $"{windowData.WindowHeight}," +
                 $"{windowData.WindowWidth}";
 
-            if (!File.Exists(DataPath))
-            {
-                File.WriteAllText(DataPath, "");
-            }
+            if (!File.Exists(_dataPath))
+                File.WriteAllText(_dataPath, "");
 
-            File.AppendAllText(DataPath, newLine);
+            File.AppendAllText(_dataPath, newLine);
         }
 
     }

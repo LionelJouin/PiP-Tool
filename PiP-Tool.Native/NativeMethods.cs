@@ -63,6 +63,9 @@ namespace PiP_Tool.Native
         [DllImport("user32.dll")]
         public static extern IntPtr GetForegroundWindow();
 
+        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        public static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
+
         #endregion
 
         #region gdi32.dll
@@ -97,6 +100,6 @@ namespace PiP_Tool.Native
         public static extern int DwmUpdateThumbnailProperties(IntPtr hThumb, ref NativeStructs.DwmThumbnailProperties props);
 
         #endregion
-
+        
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
@@ -8,6 +9,8 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using PiP_Tool.DataModel;
 using PiP_Tool.Interfaces;
+using PiP_Tool.MachineLearning;
+using PiP_Tool.MachineLearning.DataModel;
 using PiP_Tool.Native;
 
 namespace PiP_Tool.ViewModels
@@ -286,8 +289,34 @@ namespace PiP_Tool.ViewModels
             Left = 0;
             Height = MinHeight;
             Width = MinWidth;
-            
+
             SetAsForegroundWindow();
+
+            Task.Run(() =>
+            {
+                MachineLearningService.Instance.PredictAsync(
+                    _windowInfo.Program,
+                    _windowInfo.Title,
+                    _windowInfo.Position.Y,
+                    _windowInfo.Position.X,
+                    _windowInfo.Rect.Height,
+                    _windowInfo.Rect.Width).ContinueWith(SetRegion);
+            });
+        }
+
+        private void SetRegion(Task<RegionPrediction> obj)
+        {
+            try
+            {
+                Top = obj.Result.Top;
+                Left = obj.Result.Left;
+                Height = obj.Result.Height;
+                Width = obj.Result.Width;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
 
         /// <summary>
@@ -299,7 +328,7 @@ namespace PiP_Tool.ViewModels
             var windowsList = Application.Current.Windows.Cast<Window>();
             return windowsList.FirstOrDefault(window => window.DataContext == this);
         }
-        
+
         /// <summary>
         /// Set this window as foreground window
         /// </summary>

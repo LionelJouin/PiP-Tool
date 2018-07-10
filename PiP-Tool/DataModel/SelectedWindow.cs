@@ -10,6 +10,12 @@ namespace PiP_Tool.DataModel
         public WindowInfo WindowInfo { get; }
         public NativeStructs.Rect SelectedRegion { get; set; }
 
+        public NativeStructs.Rect SelectedRegionNoBorder => new NativeStructs.Rect(
+            SelectedRegion.Left - WindowInfo.Border.Left,
+            SelectedRegion.Top - WindowInfo.Border.Top,
+            SelectedRegion.Right - WindowInfo.Border.Left,
+            SelectedRegion.Bottom - WindowInfo.Border.Top
+        );
         /// <summary>
         /// Gets ratio width / height
         /// </summary>

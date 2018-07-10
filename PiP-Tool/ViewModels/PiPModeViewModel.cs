@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -195,11 +196,8 @@ namespace PiP_Tool.ViewModels
             Width = _selectedWindow.SelectedRegion.Width;
             Top = 200;
             Left = 200;
-            
-            //MachineLearningService.Instance.TrainAsync().ContinueWith(obj =>
-            //{
 
-            //});
+            Train();
 
             // set Min size
             if (Height < Width)
@@ -286,7 +284,7 @@ namespace PiP_Tool.ViewModels
             switch (position)
             {
                 case Position.TopLeft:
-                    top = (int) (resolution.Height * DefaultPositionPercentage);
+                    top = (int)(resolution.Height * DefaultPositionPercentage);
                     left = (int)(resolution.Width * DefaultPositionPercentage);
                     break;
                 case Position.TopRight:
@@ -318,6 +316,34 @@ namespace PiP_Tool.ViewModels
         }
 
         /// <summary>
+        /// Add Selected region to data (machine learning) and update the model
+        /// </summary>
+        private void Train()
+        {
+            var windowNoBorder = _selectedWindow.WindowInfo.RectNoBorder;
+            var regionNoBorder = _selectedWindow.SelectedRegionNoBorder;
+
+            var region =
+                $"{regionNoBorder.Top} " +
+                $"{regionNoBorder.Left} " +
+                $"{regionNoBorder.Height} " +
+                $"{regionNoBorder.Width}";
+
+            Task.Run(() =>
+            {
+                MachineLearningService.Instance.AddData(
+                    region,
+                    _selectedWindow.WindowInfo.Program,
+                    _selectedWindow.WindowInfo.Title,
+                    windowNoBorder.Y,
+                    windowNoBorder.X,
+                    windowNoBorder.Height,
+                    windowNoBorder.Width);
+                MachineLearningService.Instance.TrainAsync().ContinueWith(obj => { Console.WriteLine("Trained"); });
+            });
+        }
+
+        /// <summary>
         /// Keep aspect ratio on window resize
         /// https://stackoverflow.com/questions/2471867/resize-a-wpf-window-but-maintain-proportions
         /// </summary>
@@ -344,7 +370,7 @@ namespace PiP_Tool.ViewModels
             if (TopBarIsVisible)
                 topBarHeight = TopBarHeight;
 
-            position.cx = (int)((position.cy - topBarHeight)* Ratio);
+            position.cx = (int)((position.cy - topBarHeight) * Ratio);
 
             Marshal.StructureToPtr(position, lParam, true);
             handeled = true;

@@ -25,9 +25,13 @@ namespace PiP_Tool.MachineLearning.DataModel
         [ColumnName("WindowWidth")]
         public float WindowWidth;
 
+        [NoColumn]
         public int Top;
+        [NoColumn]
         public int Left;
+        [NoColumn]
         public int Height;
+        [NoColumn]
         public int Width;
 
         #endregion

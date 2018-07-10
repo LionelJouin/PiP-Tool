@@ -103,6 +103,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataModel\RegionPrediction.cs" />
+    <Compile Include="DataModel\WindowData.cs" />
     <Compile Include="MachineLearningService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

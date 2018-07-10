@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 using PiP_Tool.Native;
@@ -13,11 +14,19 @@ namespace PiP_Tool.DataModel
         #region public
 
         public IntPtr Handle { get; }
+        public string Program { get; private set; }
         public string Title { get; private set; }
         public Point Position { get; private set; }
         public Size Size { get; private set; }
         public NativeStructs.Rect Rect { get; private set; }
         public NativeStructs.Rect Border { get; set; }
+
+        public NativeStructs.Rect RectNoBorder => new NativeStructs.Rect(
+            Position.X + Border.Left,
+            Position.Y + Border.Top,
+            Rect.Width - (Border.Left + Border.Right),
+            Rect.Height - (Border.Top + Border.Bottom)
+        );
 
         /// <summary>
         /// Gets if window is minimized
@@ -41,13 +50,14 @@ namespace PiP_Tool.DataModel
             Handle = handle;
             RefreshInfo();
         }
-        
+
         /// <summary>
         /// Refresh all window informations (size, position, title, style, border...)
         /// </summary>
         public void RefreshInfo()
         {
             GetSizeAndPosition();
+            GetProgram();
             GetTitle();
             GetWinInfo();
             GetBorder();
@@ -74,6 +84,17 @@ namespace PiP_Tool.DataModel
             Rect = rct;
             Position = new Point(rct.Left, rct.Top);
             Size = new Size(rct.Right - rct.Left + 1, rct.Bottom - rct.Top + 1);
+        }
+
+        /// <summary>
+        /// Get window program
+        /// </summary>
+        private void GetProgram()
+        {
+            NativeMethods.GetWindowThreadProcessId(Handle, out var processId);
+            if (processId == 0)
+                return;
+            Program = Process.GetProcessById((int)processId).ProcessName;
         }
 
         /// <summary>

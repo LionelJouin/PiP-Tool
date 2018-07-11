@@ -1,4 +1,5 @@
-﻿using Microsoft.ML.Runtime.Api;
+﻿using System.Linq;
+using Microsoft.ML.Runtime.Api;
 
 namespace PiP_Tool.MachineLearning.DataModel
 {
@@ -33,6 +34,8 @@ namespace PiP_Tool.MachineLearning.DataModel
         public int Height;
         [NoColumn]
         public int Width;
+
+        public float PredictionScore => Score.Max();
 
         #endregion
 

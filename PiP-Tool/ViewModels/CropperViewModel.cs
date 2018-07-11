@@ -244,6 +244,9 @@ namespace PiP_Tool.ViewModels
         private NativeStructs.Rect _sizeRestriction;
         private WindowInfo _windowInfo;
 
+        private CancellationTokenSource _mlSource;
+        private CancellationToken _mlToken;
+
         #endregion
 
         /// <inheritdoc />
@@ -292,16 +295,18 @@ namespace PiP_Tool.ViewModels
 
             SetAsForegroundWindow();
 
+            _mlSource = new CancellationTokenSource();
+            _mlToken = _mlSource.Token;
             Task.Run(() =>
             {
                 MachineLearningService.Instance.PredictAsync(
                     _windowInfo.Program,
                     _windowInfo.Title,
-                    _windowInfo.Position.Y,
-                    _windowInfo.Position.X,
-                    _windowInfo.Rect.Height,
-                    _windowInfo.Rect.Width).ContinueWith(SetRegion);
-            });
+                    _windowInfo.RectNoBorder.Y,
+                    _windowInfo.RectNoBorder.X,
+                    _windowInfo.RectNoBorder.Height,
+                    _windowInfo.RectNoBorder.Width).ContinueWith(SetRegion, _mlToken);
+            }, _mlToken);
         }
 
         private void SetRegion(Task<RegionPrediction> obj)
@@ -379,6 +384,7 @@ namespace PiP_Tool.ViewModels
         /// </summary>
         private void ClosingCommandExecute()
         {
+            _mlSource?.Cancel();
             MessengerInstance.Unregister<WindowInfo>(this);
             MessengerInstance.Unregister<Action<NativeStructs.Rect>>(this);
         }

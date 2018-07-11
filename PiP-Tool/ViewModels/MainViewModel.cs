@@ -7,6 +7,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using PiP_Tool.DataModel;
 using PiP_Tool.Interfaces;
+using PiP_Tool.MachineLearning;
 using PiP_Tool.Native;
 using PiP_Tool.Services;
 using PiP_Tool.Views;
@@ -73,6 +74,8 @@ namespace PiP_Tool.ViewModels
             ClosingCommand = new RelayCommand(ClosingCommandExecute);
 
             WindowsList = new ObservableCollection<WindowInfo>();
+
+            MachineLearningService.Instance.Init();
 
             ProcessesService.Instance.OpenWindowsChanged += (s, e) => UpdateWindowsList();
             ProcessesService.Instance.ForegroundWindowChanged += ForegroundWindowChanged;

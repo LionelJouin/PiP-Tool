@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.ML;
@@ -32,6 +33,8 @@ namespace PiP_Tool.MachineLearning
         private readonly string _dataPath;
         private readonly string _modelPath;
         private PredictionModel<WindowData, RegionPrediction> _model;
+        private readonly TaskCompletionSource<bool> _ready;
+        private readonly SemaphoreSlim _semaphore;
 
         #endregion
 
@@ -40,14 +43,31 @@ namespace PiP_Tool.MachineLearning
         /// </summary>
         private MachineLearningService()
         {
+            _semaphore = new SemaphoreSlim(1);
+            _ready = new TaskCompletionSource<bool>();
+
             _dataPath = Path.Combine(_folderPath, "Data.csv");
             _modelPath = Path.Combine(_folderPath, "Model.zip");
 
             if (!Directory.Exists(_folderPath))
                 Directory.CreateDirectory(_folderPath);
+        }
 
-            if (!DataExist)
-                File.WriteAllText(_dataPath, "");
+        public void Init()
+        {
+            if (_ready.Task.IsCompleted)
+                return;
+
+            Task.Run(async () =>
+            {
+                if (!ModelExist)
+                    await Train();
+                else
+                    _model = await PredictionModel.ReadAsync<WindowData, RegionPrediction>(_modelPath);
+            }).ContinueWith(obj =>
+            {
+                _ready.SetResult(true);
+            });
         }
 
         /// <summary>
@@ -62,10 +82,33 @@ namespace PiP_Tool.MachineLearning
         {
         }
 
+        private void CheckDataFile()
+        {
+            if (!DataExist)
+                File.WriteAllText(_dataPath, "");
+
+            var lineCount = File.ReadLines(_dataPath).Count();
+            if (lineCount >= 2)
+                return;
+            AddData("0 0 100 100", "PiP", "PiP", 0, 0, 100, 100);
+            AddData("0 0 100 100", "Tool", "Tool", 0, 0, 200, 200);
+            AddData("100 100 200 200", "Test", "Test", 0, 0, 300, 300);
+        }
+
         public async Task TrainAsync()
+        {
+            if (!_ready.Task.IsCompleted)
+                await _ready.Task;
+
+            await Train();
+        }
+
+        private async Task Train()
         {
             try
             {
+                CheckDataFile();
+
                 var pipeline = new LearningPipeline {
                         new TextLoader(_dataPath).CreateFrom<WindowData>(separator: ','),
                         new Dictionarizer("Label"),
@@ -75,7 +118,10 @@ namespace PiP_Tool.MachineLearning
                         new StochasticDualCoordinateAscentClassifier(),
                         new PredictedLabelColumnOriginalValueConverter {PredictedLabelColumn = "PredictedLabel"}
                 };
+
+                await _semaphore.WaitAsync();
                 _model = pipeline.Train<WindowData, RegionPrediction>();
+                _semaphore.Release();
 
                 await _model.WriteAsync(_modelPath);
             }
@@ -97,16 +143,16 @@ namespace PiP_Tool.MachineLearning
                 WindowWidth = windowWidth
             });
         }
-
+        
         public async Task<RegionPrediction> PredictAsync(WindowData windowData)
         {
-            if (!ModelExist)
-                await TrainAsync();
+            if (!_ready.Task.IsCompleted)
+                await _ready.Task;
 
-            if (_model == null)
-                _model = await PredictionModel.ReadAsync<WindowData, RegionPrediction>(_modelPath);
-
+            await _semaphore.WaitAsync();
             var prediction = _model.Predict(windowData);
+            _semaphore.Release();
+
             prediction.Predicted();
 
             return prediction;

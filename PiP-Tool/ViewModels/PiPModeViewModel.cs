@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -158,6 +157,9 @@ namespace PiP_Tool.ViewModels
         private SelectedWindow _selectedWindow;
 
         private enum Position { TopLeft, TopRight, BottomLeft, BottomRight }
+
+        private CancellationTokenSource _mlSource;
+        private CancellationToken _mlToken;
 
         #endregion
 
@@ -329,6 +331,8 @@ namespace PiP_Tool.ViewModels
                 $"{regionNoBorder.Height} " +
                 $"{regionNoBorder.Width}";
 
+            _mlSource = new CancellationTokenSource();
+            _mlToken = _mlSource.Token;
             Task.Run(() =>
             {
                 MachineLearningService.Instance.AddData(
@@ -339,8 +343,9 @@ namespace PiP_Tool.ViewModels
                     windowNoBorder.X,
                     windowNoBorder.Height,
                     windowNoBorder.Width);
-                MachineLearningService.Instance.TrainAsync().ContinueWith(obj => { Console.WriteLine("Trained"); });
-            });
+
+                MachineLearningService.Instance.TrainAsync().ContinueWith(obj => { Console.WriteLine("Trained"); }, _mlToken);
+            }, _mlToken);
         }
 
         /// <summary>
@@ -384,6 +389,7 @@ namespace PiP_Tool.ViewModels
         /// </summary>
         public void Dispose()
         {
+            _mlSource?.Cancel();
             ((HwndSource)PresentationSource.FromVisual(ThisWindow()))?.RemoveHook(DragHook);
         }
 

@@ -64,7 +64,7 @@ namespace PiP_Tool.MachineLearning.DataModel
         #endregion
 
         /// <summary>
-        /// 
+        /// Adjust Height and Width against the Window Height and Width 
         /// </summary>
         public void Predicted()
         {

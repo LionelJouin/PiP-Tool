@@ -77,7 +77,7 @@ namespace PiP_Tool.ViewModels
 
             MachineLearningService.Instance.Init();
 
-            ProcessesService.Instance.OpenWindowsChanged += (s, e) => UpdateWindowsList();
+            ProcessesService.Instance.OpenWindowsChanged += OpenWindowsChanged;
             ProcessesService.Instance.ForegroundWindowChanged += ForegroundWindowChanged;
             UpdateWindowsList();
         }
@@ -138,6 +138,13 @@ namespace PiP_Tool.ViewModels
                 SelectedWindowInfo = foregroundWindow;
         }
 
+        /// <summary>
+        /// Called when open windows changed
+        /// </summary>
+        /// <param name="sender">The source of the event</param>
+        /// <param name="e">Event arguments</param>
+        private void OpenWindowsChanged(object sender, EventArgs e) => UpdateWindowsList();
+
         #region commands
 
         /// <summary>
@@ -167,6 +174,8 @@ namespace PiP_Tool.ViewModels
         /// </summary>
         private void ClosingCommandExecute()
         {
+            ProcessesService.Instance.OpenWindowsChanged -= OpenWindowsChanged;
+            ProcessesService.Instance.ForegroundWindowChanged -= ForegroundWindowChanged;
             ProcessesService.Instance.Dispose();
             _cropperWindow?.Close();
         }

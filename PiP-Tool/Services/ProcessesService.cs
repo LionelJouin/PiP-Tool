@@ -118,14 +118,15 @@ namespace PiP_Tool.Services
         /// </summary>
         ~ProcessesService() => Dispose();
 
+        /// <inheritdoc />
         /// <summary>
         /// Dispose: Unhook, singleton
         /// </summary>
         public void Dispose()
         {
-            _instance = null;
             NativeMethods.UnhookWinEvent(_createDestroyEventhook);
             NativeMethods.UnhookWinEvent(_foregroundEventhook);
+            _instance = null;
         }
 
         /// <summary>

@@ -26,9 +26,9 @@ namespace PiP_Tool.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public string UseMachineLearning {
+        public bool UseMachineLearning {
             get {
-                return ((string)(this["UseMachineLearning"]));
+                return ((bool)(this["UseMachineLearning"]));
             }
             set {
                 this["UseMachineLearning"] = value;
@@ -44,6 +44,18 @@ namespace PiP_Tool.Properties {
             }
             set {
                 this["Language"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UseClickToSelectWindow {
+            get {
+                return ((bool)(this["UseClickToSelectWindow"]));
+            }
+            set {
+                this["UseClickToSelectWindow"] = value;
             }
         }
     }

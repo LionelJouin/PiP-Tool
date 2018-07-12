@@ -41,6 +41,13 @@ namespace PiP_Tool.ViewModels
         /// </summary>
         public NativeStructs.Rect SelectedRegion => new NativeStructs.Rect(Left, Top, Width + Left, Top + Height);
 
+        public const int MinSize = 100;
+        public const int DefaultPosition = 0;
+        public const int DefaultSize = MinSize;
+
+        public bool RegionHasBeenModified => Top != DefaultPosition || Left != DefaultPosition ||
+                                             Height != DefaultSize || Width != DefaultSize;
+
         /// <summary>
         /// Gets or sets top property of the window
         /// </summary>
@@ -303,8 +310,8 @@ namespace PiP_Tool.ViewModels
 
             MaxHeight = _sizeRestriction.Height;
             MaxWidth = _sizeRestriction.Width;
-            MinHeight = 100;
-            MinWidth = 100;
+            MinHeight = MinSize;
+            MinWidth = MinSize;
 
             Top = 0;
             Left = 0;
@@ -333,6 +340,8 @@ namespace PiP_Tool.ViewModels
         /// <param name="obj">Prediction result</param>
         private void SetRegion(Task<RegionPrediction> obj)
         {
+            if (RegionHasBeenModified)
+                return;
             Top = obj.Result.Top;
             Left = obj.Result.Left;
             Height = obj.Result.Height;

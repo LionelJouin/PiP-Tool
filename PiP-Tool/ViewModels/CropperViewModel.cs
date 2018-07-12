@@ -20,6 +20,19 @@ namespace PiP_Tool.ViewModels
 
         #region public
 
+        /// <summary>
+        /// Gets or sets window title
+        /// </summary>
+        public string Title
+        {
+            get => _title;
+            set
+            {
+                _title = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public ICommand ClosingCommand { get; }
         public event EventHandler<EventArgs> RequestClose;
 
@@ -223,6 +236,8 @@ namespace PiP_Tool.ViewModels
 
         #region private
 
+        private string _title;
+
         private int _windowTop;
         private int _windowLeft;
         private int _windowWidth;
@@ -274,6 +289,9 @@ namespace PiP_Tool.ViewModels
                 RequestClose?.Invoke(this, EventArgs.Empty);
                 return;
             }
+
+            Title = windowInfo.Title + " - Cropper - PiP-Tool";
+
             _windowInfo.SetAsForegroundWindow();
             _sizeRestriction = _windowInfo.Rect - _windowInfo.Border;
 

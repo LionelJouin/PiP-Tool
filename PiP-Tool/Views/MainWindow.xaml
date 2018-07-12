@@ -11,7 +11,8 @@
     Top="0"
     ResizeMode="NoResize"
     BorderThickness="1, 0, 1, 1" 
-    Title="MainWindow" Height="50" Width="450" WindowStyle="None">
+    Height="50" Width="450" WindowStyle="None"
+    Title="PiP-Tool">
 
     <Window.DataContext>
         <viewModels:MainViewModel/>

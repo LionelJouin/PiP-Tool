@@ -14,7 +14,7 @@
         Left="{Binding WindowLeft, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
         Width="{Binding WindowWidth, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
         Height="{Binding WindowHeight, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-        Title="CropperWindow">
+        Title="{Binding Title, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
 
     <Window.DataContext>
         <viewModels:CropperViewModel/>

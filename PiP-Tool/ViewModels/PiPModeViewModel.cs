@@ -26,6 +26,19 @@ namespace PiP_Tool.ViewModels
 
         #region public
 
+        /// <summary>
+        /// Gets or sets window title
+        /// </summary>
+        public string Title
+        {
+            get => _title;
+            set
+            {
+                _title = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public const int MinSize = 100;
         public const float DefaultSizePercentage = 0.25f;
         public const float DefaultPositionPercentage = 0.1f;
@@ -144,6 +157,8 @@ namespace PiP_Tool.ViewModels
 
         #region private
 
+        private string _title;
+
         private int _heightOffset;
         private Visibility _topBarVisibility;
         private bool _renderSizeEventDisabled;
@@ -189,6 +204,9 @@ namespace PiP_Tool.ViewModels
         private void InitSelectedWindow(SelectedWindow selectedWindow)
         {
             MessengerInstance.Unregister<SelectedWindow>(this);
+
+            Title = selectedWindow.WindowInfo.Title + " - PiP Mode - PiP-Tool";
+
             _selectedWindow = selectedWindow;
             _renderSizeEventDisabled = true;
             TopBarVisibility = Visibility.Hidden;

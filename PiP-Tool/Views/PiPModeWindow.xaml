@@ -7,7 +7,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:command="http://www.galasoft.ch/mvvmlight"
         mc:Ignorable="d"
-        Title="PiPModeWindow" 
+        Title="{Binding Title, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
         ResizeMode="CanResizeWithGrip" 
         AllowsTransparency="True"
         MinHeight="{Binding MinHeight, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"

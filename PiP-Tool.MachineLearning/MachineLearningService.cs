@@ -53,6 +53,9 @@ namespace PiP_Tool.MachineLearning
                 Directory.CreateDirectory(_folderPath);
         }
 
+        /// <summary>
+        /// Init <see cref="_model"/> : read model if exist, create it if not
+        /// </summary>
         public void Init()
         {
             if (_ready.Task.IsCompleted)
@@ -82,19 +85,10 @@ namespace PiP_Tool.MachineLearning
         {
         }
 
-        private void CheckDataFile()
-        {
-            if (!DataExist)
-                File.WriteAllText(_dataPath, "");
-
-            var lineCount = File.ReadLines(_dataPath).Count();
-            if (lineCount >= 2)
-                return;
-            AddData("0 0 100 100", "PiP", "PiP", 0, 0, 100, 100);
-            AddData("0 0 100 100", "Tool", "Tool", 0, 0, 200, 200);
-            AddData("100 100 200 200", "Test", "Test", 0, 0, 300, 300);
-        }
-
+        /// <summary>
+        /// check if prediction is ready and call <see cref="Train()"/>
+        /// </summary>
+        /// <returns>Task asynchronous method</returns>
         public async Task TrainAsync()
         {
             if (!_ready.Task.IsCompleted)
@@ -103,6 +97,10 @@ namespace PiP_Tool.MachineLearning
             await Train();
         }
 
+        /// <summary>
+        /// Train and write in model and set <see cref="_model"/> 
+        /// </summary>
+        /// <returns>Task asynchronous method</returns>
         private async Task Train()
         {
             try
@@ -131,6 +129,16 @@ namespace PiP_Tool.MachineLearning
             }
         }
 
+        /// <summary>
+        /// Create WindowData and call <see cref="PredictAsync(WindowData)"/>
+        /// </summary>
+        /// <param name="program"><see cref="WindowData.Program"/></param>
+        /// <param name="windowTitle"><see cref="WindowData.WindowTitle"/></param>
+        /// <param name="windowTop"><see cref="WindowData.WindowTop"/></param>
+        /// <param name="windowLeft"><see cref="WindowData.WindowLeft"/></param>
+        /// <param name="windowHeight"><see cref="WindowData.WindowHeight"/></param>
+        /// <param name="windowWidth"><see cref="WindowData.WindowWidth"/></param>
+        /// <returns>Task asynchronous method with region predicted</returns>
         public async Task<RegionPrediction> PredictAsync(string program, string windowTitle, float windowTop, float windowLeft, float windowHeight, float windowWidth)
         {
             return await PredictAsync(new WindowData
@@ -143,7 +151,12 @@ namespace PiP_Tool.MachineLearning
                 WindowWidth = windowWidth
             });
         }
-        
+
+        /// <summary>
+        /// Predict region
+        /// </summary>
+        /// <param name="windowData">Window data to use for the prediction</param>
+        /// <returns>Task asynchronous method with region predicted</returns>
         public async Task<RegionPrediction> PredictAsync(WindowData windowData)
         {
             if (!_ready.Task.IsCompleted)
@@ -158,6 +171,16 @@ namespace PiP_Tool.MachineLearning
             return prediction;
         }
 
+        /// <summary>
+        /// Add new data
+        /// </summary>
+        /// <param name="region"><see cref="WindowData.Region"/></param>
+        /// <param name="program"><see cref="WindowData.Program"/></param>
+        /// <param name="windowTitle"><see cref="WindowData.WindowTitle"/></param>
+        /// <param name="windowTop"><see cref="WindowData.WindowTop"/></param>
+        /// <param name="windowLeft"><see cref="WindowData.WindowLeft"/></param>
+        /// <param name="windowHeight"><see cref="WindowData.WindowHeight"/></param>
+        /// <param name="windowWidth"><see cref="WindowData.WindowWidth"/></param>
         public void AddData(string region, string program, string windowTitle, float windowTop, float windowLeft, float windowHeight, float windowWidth)
         {
             var newLine =
@@ -174,6 +197,22 @@ namespace PiP_Tool.MachineLearning
                 File.WriteAllText(_dataPath, "");
 
             File.AppendAllText(_dataPath, newLine);
+        }
+
+        /// <summary>
+        /// Check if data file exist, create and add data if not
+        /// </summary>
+        private void CheckDataFile()
+        {
+            if (!DataExist)
+                File.WriteAllText(_dataPath, "");
+
+            var lineCount = File.ReadLines(_dataPath).Count();
+            if (lineCount >= 2)
+                return;
+            AddData("0 0 100 100", "PiP", "PiP", 0, 0, 100, 100);
+            AddData("0 0 100 100", "Tool", "Tool", 0, 0, 200, 200);
+            AddData("100 100 200 200", "Test", "Test", 0, 0, 300, 300);
         }
 
     }

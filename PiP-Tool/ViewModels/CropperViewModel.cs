@@ -327,19 +327,16 @@ namespace PiP_Tool.ViewModels
             }, _mlToken);
         }
 
+        /// <summary>
+        /// Set region to crop
+        /// </summary>
+        /// <param name="obj">Prediction result</param>
         private void SetRegion(Task<RegionPrediction> obj)
         {
-            try
-            {
-                Top = obj.Result.Top;
-                Left = obj.Result.Left;
-                Height = obj.Result.Height;
-                Width = obj.Result.Width;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
+            Top = obj.Result.Top;
+            Left = obj.Result.Left;
+            Height = obj.Result.Height;
+            Width = obj.Result.Width;
         }
 
         /// <summary>

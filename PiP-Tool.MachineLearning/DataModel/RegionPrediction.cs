@@ -8,21 +8,39 @@ namespace PiP_Tool.MachineLearning.DataModel
 
         #region public
 
+        /// <summary>
+        /// <see cref="WindowData.Region"/>  
+        /// </summary>
         [ColumnName("PredictedLabel")]
         public string Region;
 
+        /// <summary>
+        /// Score of the prediction
+        /// </summary>
         [ColumnName("Score")]
         public float[] Score;
 
+        /// <summary>
+        /// <see cref="WindowData.WindowTop"/>  
+        /// </summary>
         [ColumnName("WindowTop")]
         public float WindowTop;
 
+        /// <summary>
+        /// <see cref="WindowData.WindowLeft"/>  
+        /// </summary>
         [ColumnName("WindowLeft")]
         public float WindowLeft;
 
+        /// <summary>
+        /// <see cref="WindowData.WindowHeight"/>  
+        /// </summary>
         [ColumnName("WindowHeight")]
         public float WindowHeight;
 
+        /// <summary>
+        /// <see cref="WindowData.WindowWidth"/>  
+        /// </summary>
         [ColumnName("WindowWidth")]
         public float WindowWidth;
 
@@ -45,6 +63,9 @@ namespace PiP_Tool.MachineLearning.DataModel
 
         #endregion
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Predicted()
         {
             if (Region.Split(Delimiter).Length != 4)

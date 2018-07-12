@@ -24,8 +24,8 @@ namespace PiP_Tool.DataModel
         public NativeStructs.Rect RectNoBorder => new NativeStructs.Rect(
             Position.X + Border.Left,
             Position.Y + Border.Top,
-            Rect.Width - (Border.Left + Border.Right),
-            Rect.Height - (Border.Top + Border.Bottom)
+            Rect.Width - (Border.Left + Border.Right) + Position.X + Border.Left,
+            Rect.Height - (Border.Top + Border.Bottom) + Position.Y + Border.Top
         );
 
         /// <summary>

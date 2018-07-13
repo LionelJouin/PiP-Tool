@@ -231,8 +231,6 @@ namespace PiP_Tool.ViewModels
             SetPosition(Position.BottomLeft);
 
             InitDwmThumbnail();
-
-            ((HwndSource)PresentationSource.FromVisual(ThisWindow()))?.AddHook(DragHook);
         }
 
         /// <summary>
@@ -418,6 +416,7 @@ namespace PiP_Tool.ViewModels
         /// </summary>
         private void LoadedCommandExecute()
         {
+            ((HwndSource)PresentationSource.FromVisual(ThisWindow()))?.AddHook(DragHook);
             var windowsList = Application.Current.Windows.Cast<Window>();
             var thisWindow = windowsList.FirstOrDefault(x => x.DataContext == this);
             if (thisWindow != null)

@@ -77,6 +77,9 @@ namespace PiP_Tool.Native
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool DeleteObject([In] IntPtr hObject);
 
+        [DllImport("gdi32.dll")]
+        public static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
+
         #endregion
 
         #region dwmapi.dll
@@ -100,6 +103,6 @@ namespace PiP_Tool.Native
         public static extern int DwmUpdateThumbnailProperties(IntPtr hThumb, ref NativeStructs.DwmThumbnailProperties props);
 
         #endregion
-        
+
     }
 }

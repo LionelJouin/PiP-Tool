@@ -137,7 +137,7 @@ namespace PiP_Tool.Native
 
             public static Rect operator -(Rect r1, Rect r2)
             {
-                return new Rectangle(r1.Left, r1.Top, r1.Width - (r2.Left + r2.Right), r1.Height - (r2.Top + r2.Left));
+                return new Rectangle(r1.Left, r1.Top, r1.Width - (r2.Left + r2.Right), r1.Height - (r2.Top + r2.Bottom));
             }
 
             public bool Equals(Rect r)
@@ -164,5 +164,6 @@ namespace PiP_Tool.Native
                 return String.Format(CultureInfo.CurrentCulture, "{{Left={0},Top={1},Right={2},Bottom={3}}}", Left, Top, Right, Bottom);
             }
         }
+
     }
 }

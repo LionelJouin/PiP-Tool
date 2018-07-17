@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
+using PiP_Tool.Helpers;
 using PiP_Tool.Native;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
@@ -126,11 +127,12 @@ namespace PiP_Tool.DataModel
         private void GetBorder()
         {
             NativeMethods.DwmGetWindowAttribute(Handle, DWMWINDOWATTRIBUTE.ExtendedFrameBounds, out NativeStructs.Rect frame, Marshal.SizeOf(typeof(NativeStructs.Rect)));
+
             Border = new NativeStructs.Rect(
-                frame.Left - Rect.Left,
-                frame.Top - Rect.Top,
-                Rect.Right - frame.Right,
-                Rect.Bottom - frame.Bottom
+                (int)(Math.Floor(frame.Left / ScaleHelper.ScalingFactor) - Rect.Left),
+                (int)(Math.Floor(frame.Top / ScaleHelper.ScalingFactor) - Rect.Top),
+                (int)(Rect.Right - Math.Ceiling(frame.Right / ScaleHelper.ScalingFactor)),
+                (int)(Rect.Bottom - Math.Ceiling(frame.Bottom / ScaleHelper.ScalingFactor))
             );
         }
 

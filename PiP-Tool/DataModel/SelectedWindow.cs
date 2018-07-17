@@ -1,4 +1,5 @@
-﻿using PiP_Tool.Native;
+﻿using PiP_Tool.Helpers;
+using PiP_Tool.Native;
 
 namespace PiP_Tool.DataModel
 {
@@ -35,6 +36,14 @@ namespace PiP_Tool.DataModel
         public SelectedWindow(WindowInfo windowInfo, NativeStructs.Rect selectedRegion)
         {
             WindowInfo = windowInfo;
+
+            selectedRegion = new NativeStructs.Rect(
+                (int) (selectedRegion.Left * ScaleHelper.ScalingFactor),
+                (int) (selectedRegion.Top * ScaleHelper.ScalingFactor),
+                (int) (selectedRegion.Right * ScaleHelper.ScalingFactor),
+                (int) (selectedRegion.Bottom * ScaleHelper.ScalingFactor)
+            );
+
             SelectedRegion = new NativeStructs.Rect(
                 selectedRegion.Left + WindowInfo.Border.Left,
                 selectedRegion.Top + WindowInfo.Border.Top,

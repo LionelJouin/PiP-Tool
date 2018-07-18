@@ -4,9 +4,15 @@ PiP tool is a software to use the Picture in Picture mode on Windows. This featu
 
 To use this tool, select a window and the region of the window, then validate. A new window (Always on the top) will appear with the selected region. The software does not work yet with minimized windows (If you're watching a video, and you minimize the window, the video in the Picture in Picture mode will stop)
 
+### Machine Learning ([ML.NET](https://www.microsoft.com/net/learn/apps/machine-learning-and-ai/ml-dotnet))
+
+Machine learning is used in this software to predict selected regions in order to simplify and speed up the usage of the PiP-Tool. 
+
+There are no default data provided with this app, data are created and stored locally from your previous uses of this software. When you have validated a selected region to enter in Picture in Picture Mode, region' data are stored and the machine learning' model is improved.
+
 ## Requirements
 
-* Microsoft Windows Vista or greater.
+* Microsoft Windows Vista or greater (64 bit).
 * Microsoft .NET Framework 4.7.
 
 ## Installation

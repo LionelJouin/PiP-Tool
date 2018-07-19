@@ -8,6 +8,7 @@ using Microsoft.ML.Data;
 using Microsoft.ML.Trainers;
 using Microsoft.ML.Transforms;
 using PiP_Tool.MachineLearning.DataModel;
+using PiP_Tool.Shared;
 
 namespace PiP_Tool.MachineLearning
 {
@@ -21,17 +22,15 @@ namespace PiP_Tool.MachineLearning
         /// </summary>
         public static MachineLearningService Instance => _instance ?? (_instance = new MachineLearningService());
 
-        public bool DataExist => Directory.Exists(_folderPath) && File.Exists(_dataPath);
-        public bool ModelExist => Directory.Exists(_folderPath) && File.Exists(_modelPath);
+        public bool DataExist => Directory.Exists(Constants.FolderPath) && File.Exists(Constants.DataPath);
+        public bool ModelExist => Directory.Exists(Constants.FolderPath) && File.Exists(Constants.ModelPath);
 
         #endregion
 
         #region private
 
         private static MachineLearningService _instance;
-        private readonly string _folderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PiP-Tool");
-        private readonly string _dataPath;
-        private readonly string _modelPath;
+
         private PredictionModel<WindowData, RegionPrediction> _model;
         private readonly TaskCompletionSource<bool> _ready;
         private readonly SemaphoreSlim _semaphore;
@@ -46,11 +45,8 @@ namespace PiP_Tool.MachineLearning
             _semaphore = new SemaphoreSlim(1);
             _ready = new TaskCompletionSource<bool>();
 
-            _dataPath = Path.Combine(_folderPath, "Data.csv");
-            _modelPath = Path.Combine(_folderPath, "Model.zip");
-
-            if (!Directory.Exists(_folderPath))
-                Directory.CreateDirectory(_folderPath);
+            if (!Directory.Exists(Constants.FolderPath))
+                Directory.CreateDirectory(Constants.FolderPath);
         }
 
         /// <summary>
@@ -66,7 +62,7 @@ namespace PiP_Tool.MachineLearning
                 if (!ModelExist)
                     await Train();
                 else
-                    _model = await PredictionModel.ReadAsync<WindowData, RegionPrediction>(_modelPath);
+                    _model = await PredictionModel.ReadAsync<WindowData, RegionPrediction>(Constants.ModelPath);
             }).ContinueWith(obj =>
             {
                 _ready.SetResult(true);
@@ -105,10 +101,11 @@ namespace PiP_Tool.MachineLearning
         {
             try
             {
+                Logger.Instance.Info("ML : Training model");
                 CheckDataFile();
 
                 var pipeline = new LearningPipeline {
-                        new TextLoader(_dataPath).CreateFrom<WindowData>(separator: ','),
+                        new TextLoader(Constants.DataPath).CreateFrom<WindowData>(separator: ','),
                         new Dictionarizer("Label"),
                         new TextFeaturizer("Program", "Program"),
                         new TextFeaturizer("WindowTitle", "WindowTitle"),
@@ -121,7 +118,9 @@ namespace PiP_Tool.MachineLearning
                 _model = pipeline.Train<WindowData, RegionPrediction>();
                 _semaphore.Release();
 
-                await _model.WriteAsync(_modelPath);
+                await _model.WriteAsync(Constants.ModelPath);
+
+                Logger.Instance.Info("ML : Model trained");
             }
             catch (Exception e)
             {
@@ -168,6 +167,8 @@ namespace PiP_Tool.MachineLearning
 
             prediction.Predicted();
 
+            Logger.Instance.Info("ML : Predicted : " + prediction + " From " + windowData);
+
             return prediction;
         }
 
@@ -183,6 +184,9 @@ namespace PiP_Tool.MachineLearning
         /// <param name="windowWidth"><see cref="WindowData.WindowWidth"/></param>
         public void AddData(string region, string program, string windowTitle, float windowTop, float windowLeft, float windowHeight, float windowWidth)
         {
+
+            Logger.Instance.Info("ML : Add new data");
+
             var newLine =
                 $"{Environment.NewLine}" +
                 $"{region}," +
@@ -193,10 +197,10 @@ namespace PiP_Tool.MachineLearning
                 $"{windowHeight}," +
                 $"{windowWidth}";
 
-            if (!File.Exists(_dataPath))
-                File.WriteAllText(_dataPath, "");
+            if (!File.Exists(Constants.DataPath))
+                File.WriteAllText(Constants.DataPath, "");
 
-            File.AppendAllText(_dataPath, newLine);
+            File.AppendAllText(Constants.DataPath, newLine);
         }
 
         /// <summary>
@@ -205,10 +209,10 @@ namespace PiP_Tool.MachineLearning
         private void CheckDataFile()
         {
             if (!DataExist)
-                File.WriteAllText(_dataPath, "");
+                File.WriteAllText(Constants.DataPath, "");
 
-            var lineCount = File.ReadLines(_dataPath).Count();
-            if (lineCount >= 2)
+            var lineCount = File.ReadLines(Constants.DataPath).Count();
+            if (lineCount >= 3)
                 return;
             AddData("0 0 100 100", "PiP", "PiP", 0, 0, 100, 100);
             AddData("0 0 100 100", "Tool", "Tool", 0, 0, 200, 200);

@@ -46,6 +46,15 @@ namespace PiP_Tool.MachineLearning.DataModel
         /// </summary>
         [Column("6", "WindowWidth")]
         public float WindowWidth;
+        
+        public override string ToString()
+        {
+            return "WindowTitle : " + WindowTitle + ", " +
+                   "WindowTop : " + WindowTop + ", " +
+                   "WindowLeft : " + WindowLeft + ", " +
+                   "WindowHeight : " + WindowHeight + ", " +
+                   "WindowWidth : " + WindowWidth;
+        }
 
     }
 }

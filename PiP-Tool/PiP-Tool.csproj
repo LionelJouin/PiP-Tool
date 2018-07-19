@@ -252,6 +252,7 @@
   <ItemGroup>
     <None Include="App.config">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -262,6 +263,10 @@
     <ProjectReference Include="..\PiP-Tool.Native\PiP-Tool.Native.csproj">
       <Project>{C1E4ED3B-147C-4F7C-8F78-007ABB3ACF3A}</Project>
       <Name>PiP-Tool.Native</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PiP-Tool.Shared\PiP-Tool.Shared.csproj">
+      <Project>{4D729D44-0AC3-4AFA-B438-FB2C4E959646}</Project>
+      <Name>PiP-Tool.Shared</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

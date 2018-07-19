@@ -82,6 +82,14 @@ namespace PiP_Tool.MachineLearning.DataModel
             if (Height + Top > WindowHeight)
                 Height = (int)(WindowHeight - Top);
         }
+        
+        public override string ToString()
+        {
+            return "Top : " + Top + ", " +
+                   "Left : " + Left + ", " +
+                   "Height : " + Height + ", " +
+                   "Width : " + Width;
+        }
 
     }
 }

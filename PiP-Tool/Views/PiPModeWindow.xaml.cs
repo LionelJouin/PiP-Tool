@@ -1,5 +1,6 @@
 ﻿using System.Windows.Input;
 using PiP_Tool.Interfaces;
+using PiP_Tool.Shared;
 
 namespace PiP_Tool.Views
 {
@@ -16,6 +17,8 @@ namespace PiP_Tool.Views
         public PiPModeWindow()
         {
             InitializeComponent();
+
+            Logger.Instance.Info("   ====== PiPModeWindow ======   ");
 
             Loaded += (s, e) =>
             {

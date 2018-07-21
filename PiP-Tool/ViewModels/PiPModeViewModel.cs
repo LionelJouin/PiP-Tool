@@ -14,6 +14,7 @@ using PiP_Tool.DataModel;
 using PiP_Tool.Interfaces;
 using PiP_Tool.MachineLearning;
 using PiP_Tool.Native;
+using PiP_Tool.Shared;
 using PiP_Tool.Views;
 using Application = System.Windows.Application;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
@@ -184,6 +185,8 @@ namespace PiP_Tool.ViewModels
         /// </summary>
         public PiPModeViewModel()
         {
+            Logger.Instance.Info("   ====== PiPModeWindow ======   ");
+
             LoadedCommand = new RelayCommand(LoadedCommandExecute);
             CloseCommand = new RelayCommand(CloseCommandExecute);
             ClosingCommand = new RelayCommand(ClosingCommandExecute);
@@ -203,6 +206,14 @@ namespace PiP_Tool.ViewModels
         /// <param name="selectedWindow">Selected window to use in pip mode</param>
         private void InitSelectedWindow(SelectedWindow selectedWindow)
         {
+            if (selectedWindow == null || selectedWindow.WindowInfo == null)
+            {
+                Logger.Instance.Error("Can't init PiP mode");
+                return;
+            }
+
+            Logger.Instance.Info("Init PiP mode : " + selectedWindow.WindowInfo.Title);
+
             MessengerInstance.Unregister<SelectedWindow>(this);
 
             Title = selectedWindow.WindowInfo.Title + " - PiP Mode - PiP-Tool";
@@ -438,6 +449,7 @@ namespace PiP_Tool.ViewModels
         /// </summary>
         private void ClosingCommandExecute()
         {
+            Logger.Instance.Info("   |||||| Close PiPModeWindow ||||||   ");
             Dispose();
         }
 

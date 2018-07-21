@@ -1,6 +1,5 @@
 ﻿using System.Windows.Input;
 using PiP_Tool.Interfaces;
-using PiP_Tool.Shared;
 
 namespace PiP_Tool.Views
 {
@@ -18,8 +17,6 @@ namespace PiP_Tool.Views
         {
             InitializeComponent();
 
-            Logger.Instance.Info("   ====== PiPModeWindow ======   ");
-
             Loaded += (s, e) =>
             {
                 if (DataContext is ICloseable closeable)
@@ -27,6 +24,10 @@ namespace PiP_Tool.Views
             };
         }
 
+        /// <summary>
+        /// Drag this window
+        /// </summary>
+        /// <param name="e">Event arguments</param>
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);

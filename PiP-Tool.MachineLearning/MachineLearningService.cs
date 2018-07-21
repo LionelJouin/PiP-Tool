@@ -42,6 +42,8 @@ namespace PiP_Tool.MachineLearning
         /// </summary>
         private MachineLearningService()
         {
+            Logger.Instance.Info("ML : Init machine learning service");
+
             _semaphore = new SemaphoreSlim(1);
             _ready = new TaskCompletionSource<bool>();
 
@@ -209,11 +211,15 @@ namespace PiP_Tool.MachineLearning
         private void CheckDataFile()
         {
             if (!DataExist)
+            {
+                Logger.Instance.Warn("ML : " + DataExist + " doesn't exist");
                 File.WriteAllText(Constants.DataPath, "");
+            }
 
             var lineCount = File.ReadLines(Constants.DataPath).Count();
             if (lineCount >= 3)
                 return;
+            Logger.Instance.Warn("ML : No or not enough data");
             AddData("0 0 100 100", "PiP", "PiP", 0, 0, 100, 100);
             AddData("0 0 100 100", "Tool", "Tool", 0, 0, 200, 200);
             AddData("100 100 200 200", "Test", "Test", 0, 0, 300, 300);

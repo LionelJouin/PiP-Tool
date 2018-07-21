@@ -10,6 +10,7 @@ using PiP_Tool.Interfaces;
 using PiP_Tool.MachineLearning;
 using PiP_Tool.Native;
 using PiP_Tool.Services;
+using PiP_Tool.Shared;
 using PiP_Tool.Views;
 
 namespace PiP_Tool.ViewModels
@@ -69,6 +70,8 @@ namespace PiP_Tool.ViewModels
         /// </summary>
         public MainViewModel()
         {
+            Logger.Instance.Info("   ====== MainWindow ======   ");
+
             StartPipCommand = new RelayCommand(StartPipCommandExecute);
             QuitCommand = new RelayCommand(QuitCommandExecute);
             ClosingCommand = new RelayCommand(ClosingCommandExecute);
@@ -87,6 +90,7 @@ namespace PiP_Tool.ViewModels
         /// </summary>
         private void UpdateWindowsList()
         {
+            Logger.Instance.Info("Windows list updated");
             var openWindows = ProcessesService.Instance.OpenWindows;
 
             var toAdd = openWindows.Where(x => WindowsList.All(y => x != y));
@@ -135,7 +139,12 @@ namespace PiP_Tool.ViewModels
             UpdateWindowsList();
             var foregroundWindow = ProcessesService.Instance.ForegroundWindow;
             if (foregroundWindow != null)
+            {
                 SelectedWindowInfo = foregroundWindow;
+                Logger.Instance.Info("Foreground window updated : " + SelectedWindowInfo.Title);
+            }
+            else
+                Logger.Instance.Warn("Foreground window updated but window is null");
         }
 
         /// <summary>
@@ -174,6 +183,7 @@ namespace PiP_Tool.ViewModels
         /// </summary>
         private void ClosingCommandExecute()
         {
+            Logger.Instance.Info("   |||||| Close MainWindow ||||||   ");
             ProcessesService.Instance.OpenWindowsChanged -= OpenWindowsChanged;
             ProcessesService.Instance.ForegroundWindowChanged -= ForegroundWindowChanged;
             ProcessesService.Instance.Dispose();

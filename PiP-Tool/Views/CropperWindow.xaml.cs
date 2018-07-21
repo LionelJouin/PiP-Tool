@@ -1,5 +1,4 @@
 ﻿using PiP_Tool.Interfaces;
-using PiP_Tool.Shared;
 
 namespace PiP_Tool.Views
 {
@@ -15,8 +14,6 @@ namespace PiP_Tool.Views
         public CropperWindow()
         {
             InitializeComponent();
-
-            Logger.Instance.Info("   ====== CropperWindow ======   ");
 
             Loaded += (s, e) =>
             {

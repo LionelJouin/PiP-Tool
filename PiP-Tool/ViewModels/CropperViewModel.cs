@@ -12,6 +12,7 @@ using PiP_Tool.Interfaces;
 using PiP_Tool.MachineLearning;
 using PiP_Tool.MachineLearning.DataModel;
 using PiP_Tool.Native;
+using PiP_Tool.Shared;
 
 namespace PiP_Tool.ViewModels
 {
@@ -277,6 +278,8 @@ namespace PiP_Tool.ViewModels
         /// </summary>
         public CropperViewModel()
         {
+            Logger.Instance.Info("   ====== CropperWindow ======   ");
+
             ClosingCommand = new RelayCommand(ClosingCommandExecute);
             MessengerInstance.Register<WindowInfo>(this, Init);
             MessengerInstance.Register<Action<NativeStructs.Rect>>(this, StartPip);
@@ -292,10 +295,13 @@ namespace PiP_Tool.ViewModels
             _windowInfo = windowInfo;
             if (windowInfo == null)
             {
+                Logger.Instance.Error("Can't Init cropper");
                 ClosingCommandExecute();
                 RequestClose?.Invoke(this, EventArgs.Empty);
                 return;
             }
+
+            Logger.Instance.Info("Init cropper : " + windowInfo.Title);
 
             Title = windowInfo.Title + " - Cropper - PiP-Tool";
 
@@ -408,6 +414,7 @@ namespace PiP_Tool.ViewModels
         /// </summary>
         private void ClosingCommandExecute()
         {
+            Logger.Instance.Info("   |||||| Close CropperWindow ||||||   ");
             _mlSource?.Cancel();
             MessengerInstance.Unregister<WindowInfo>(this);
             MessengerInstance.Unregister<Action<NativeStructs.Rect>>(this);

@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Interop;
 using PiP_Tool.DataModel;
 using PiP_Tool.Native;
+using PiP_Tool.Shared;
 
 namespace PiP_Tool.Services
 {
@@ -89,6 +90,8 @@ namespace PiP_Tool.Services
         /// </summary>
         private ProcessesService()
         {
+            Logger.Instance.Info("Init processes service");
+
             _excludedWindows = new List<IntPtr>();
             GetProcesses();
 

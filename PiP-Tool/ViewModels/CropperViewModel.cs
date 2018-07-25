@@ -41,13 +41,10 @@ namespace PiP_Tool.ViewModels
         /// Gets selected region
         /// </summary>
         public NativeStructs.Rect SelectedRegion => new NativeStructs.Rect(Left, Top, Width + Left, Top + Height);
-
-        public const int MinSize = 100;
+        
         public const int DefaultPosition = 0;
-        public const int DefaultSize = MinSize;
-
         public bool RegionHasBeenModified => Top != DefaultPosition || Left != DefaultPosition ||
-                                             Height != DefaultSize || Width != DefaultSize;
+                                             Height != Constants.MinCropperSize || Width != Constants.MinCropperSize;
 
         /// <summary>
         /// Gets or sets top property of the window
@@ -316,8 +313,8 @@ namespace PiP_Tool.ViewModels
 
             MaxHeight = _sizeRestriction.Height;
             MaxWidth = _sizeRestriction.Width;
-            MinHeight = MinSize;
-            MinWidth = MinSize;
+            MinHeight = Constants.MinCropperSize;
+            MinWidth = Constants.MinCropperSize;
 
             Top = 0;
             Left = 0;

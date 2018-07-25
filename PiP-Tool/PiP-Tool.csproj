@@ -161,7 +161,6 @@
     </ApplicationDefinition>
     <Compile Include="Controls\MoveThumb.cs" />
     <Compile Include="Controls\ResizeThumb.cs" />
-    <Compile Include="Helpers\ScaleHelper.cs" />
     <Compile Include="Interfaces\ICloseable.cs" />
     <Compile Include="DataModel\SelectedWindow.cs" />
     <Compile Include="DataModel\WindowInfo.cs" />

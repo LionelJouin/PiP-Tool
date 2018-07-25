@@ -2,8 +2,8 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
-using PiP_Tool.Helpers;
 using PiP_Tool.Native;
+using PiP_Tool.Shared.Helpers;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 

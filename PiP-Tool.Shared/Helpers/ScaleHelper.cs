@@ -2,7 +2,7 @@
 using System.Drawing;
 using PiP_Tool.Native;
 
-namespace PiP_Tool.Helpers
+namespace PiP_Tool.Shared.Helpers
 {
     public class ScaleHelper
     {
@@ -20,7 +20,7 @@ namespace PiP_Tool.Helpers
                 var logicalScreenHeight = NativeMethods.GetDeviceCaps(desktop, (int)DeviceCap.VERTRES);
                 var physicalScreenHeight = NativeMethods.GetDeviceCaps(desktop, (int)DeviceCap.DESKTOPVERTRES);
 
-                var screenScalingFactor = (float)physicalScreenHeight / (float)logicalScreenHeight;
+                var screenScalingFactor = physicalScreenHeight / (float)logicalScreenHeight;
 
                 return screenScalingFactor;
             }

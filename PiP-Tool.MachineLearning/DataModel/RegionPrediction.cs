@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Microsoft.ML.Runtime.Api;
+using Constants = PiP_Tool.Shared.Constants;
 
 namespace PiP_Tool.MachineLearning.DataModel
 {
@@ -71,16 +72,22 @@ namespace PiP_Tool.MachineLearning.DataModel
             if (Region.Split(Delimiter).Length != 4)
                 return;
 
-            Top = int.Parse(Region.Split(Delimiter)[0]);
-            Left = int.Parse(Region.Split(Delimiter)[1]);
-            Height = int.Parse(Region.Split(Delimiter)[2]);
-            Width = int.Parse(Region.Split(Delimiter)[3]);
+            Top = (int) (int.Parse(Region.Split(Delimiter)[0]) / Shared.Helpers.ScaleHelper.ScalingFactor);
+            Left = (int)(int.Parse(Region.Split(Delimiter)[1]) / Shared.Helpers.ScaleHelper.ScalingFactor);
+            Height = (int)(int.Parse(Region.Split(Delimiter)[2]) / Shared.Helpers.ScaleHelper.ScalingFactor);
+            Width = (int)(int.Parse(Region.Split(Delimiter)[3]) / Shared.Helpers.ScaleHelper.ScalingFactor);
 
             if (Width + Left > WindowWidth)
                 Width = (int)(WindowWidth - Left);
 
             if (Height + Top > WindowHeight)
                 Height = (int)(WindowHeight - Top);
+
+            if (Height < Constants.MinCropperSize)
+                Height = Constants.MinCropperSize;
+
+            if (Width < Constants.MinCropperSize)
+                Width = Constants.MinCropperSize;
         }
         
         public override string ToString()

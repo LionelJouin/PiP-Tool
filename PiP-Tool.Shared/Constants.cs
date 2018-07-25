@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using PiP_Tool.Shared.Helpers;
 
 namespace PiP_Tool.Shared
 {
@@ -13,6 +14,8 @@ namespace PiP_Tool.Shared
         public static readonly string ModelPath = Path.Combine(FolderPath, "Model.zip");
 
         public static readonly string LogPath = Path.Combine(FolderPath, "logs.txt");
+
+        public static int MinCropperSize => (int) (100 / ScaleHelper.ScalingFactor);
 
     }
 }

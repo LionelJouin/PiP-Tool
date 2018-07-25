@@ -1,5 +1,5 @@
-﻿using PiP_Tool.Helpers;
-using PiP_Tool.Native;
+﻿using PiP_Tool.Native;
+using PiP_Tool.Shared.Helpers;
 
 namespace PiP_Tool.DataModel
 {

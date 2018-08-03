@@ -958,13 +958,19 @@
         "Entry"
         {
         "MsmKey" = "8:_861C3F7538DACAEFAAC84543FAB46D11"
-        "OwnerKey" = "8:_58F08C5A6B014206B040286D3496A479"
+        "OwnerKey" = "8:_194521B8842E47CBF294B5104E21C36C"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_861C3F7538DACAEFAAC84543FAB46D11"
         "OwnerKey" = "8:_0EA29C3D090A43699FFB109179BD4C71"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_861C3F7538DACAEFAAC84543FAB46D11"
+        "OwnerKey" = "8:_58F08C5A6B014206B040286D3496A479"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -2488,12 +2494,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_861C3F7538DACAEFAAC84543FAB46D11"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_B47E00DD880ACBE83E975A942AE120CD"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -2501,6 +2501,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_194521B8842E47CBF294B5104E21C36C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_861C3F7538DACAEFAAC84543FAB46D11"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -9026,15 +9032,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:PiP-Tool"
-        "ProductCode" = "8:{23A80E04-99C5-4262-BB7D-78C062575A63}"
-        "PackageCode" = "8:{19BC71E6-2DB2-49C5-90A8-234592C82451}"
+        "ProductCode" = "8:{2D93E5EF-BB98-41F0-B057-CA3FF8DDAE64}"
+        "PackageCode" = "8:{F3167D0C-4004-4E21-9599-E8498693EB85}"
         "UpgradeCode" = "8:{12EB6E84-F64E-4B2F-BAA1-D78A5C4895BE}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:1.1.0"
         "Manufacturer" = "8:Lionel Jouin"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:https://github.com/LionelJouin/PiP-Tool"
@@ -9147,6 +9153,20 @@
         }
         "Shortcut"
         {
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_131437B87B6A4FBFB2DA41781765B50C"
+            {
+            "Name" = "8:PiP-Tool  (Picture In Picture tool)"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:32512"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_0EA29C3D090A43699FFB109179BD4C71"
+            "Folder" = "8:_9BD0D02F512A4A658493B69B8CC22FFE"
+            "WorkingFolder" = "8:_5BBC4A05CC504A7F84A280FB6ECC8D7A"
+            "Icon" = "8:_0EA29C3D090A43699FFB109179BD4C71"
+            "Feature" = "8:"
+            }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_F3A30648652448E3A70B30E8CFFB76B4"
             {
             "Name" = "8:PiP-Tool  (Picture In Picture tool)"

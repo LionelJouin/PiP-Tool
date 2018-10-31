@@ -64,7 +64,15 @@ namespace PiP_Tool.MachineLearning
                 if (!ModelExist)
                     await Train();
                 else
-                    _model = await PredictionModel.ReadAsync<WindowData, RegionPrediction>(Constants.ModelPath);
+                    try
+                    {
+                        _model = await PredictionModel.ReadAsync<WindowData, RegionPrediction>(Constants.ModelPath);
+                    }
+                    catch (Exception)
+                    {
+                        File.Delete(Constants.ModelPath);
+                        await Train();
+                    }
             }).ContinueWith(obj =>
             {
                 _ready.SetResult(true);

@@ -360,9 +360,6 @@ namespace PiP_Tool.ViewModels
             var windowNoBorder = _selectedWindow.WindowInfo.RectNoBorder;
             var regionNoBorder = _selectedWindow.SelectedRegionNoBorder;
 
-            //regionNoBorder.Height = (int) (regionNoBorder.Height * _selectedWindow.WindowInfo.DpiY);
-            //regionNoBorder.Width = (int)(regionNoBorder.Width * _selectedWindow.WindowInfo.DpiX);
-
             var region =
                     $"{regionNoBorder.Top} " +
                     $"{regionNoBorder.Left} " +

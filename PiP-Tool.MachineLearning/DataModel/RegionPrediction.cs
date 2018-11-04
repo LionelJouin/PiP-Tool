@@ -76,18 +76,6 @@ namespace PiP_Tool.MachineLearning.DataModel
             Left = int.Parse(Region.Split(Delimiter)[1]);
             Height = int.Parse(Region.Split(Delimiter)[2]);
             Width = int.Parse(Region.Split(Delimiter)[3]);
-
-            if (Width + Left > WindowWidth)
-                Width = (int)(WindowWidth - Left);
-
-            if (Height + Top > WindowHeight)
-                Height = (int)(WindowHeight - Top);
-
-            if (Height < Constants.MinCropperSize)
-                Height = Constants.MinCropperSize;
-
-            if (Width < Constants.MinCropperSize)
-                Width = Constants.MinCropperSize;
         }
         
         public override string ToString()

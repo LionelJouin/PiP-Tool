@@ -41,7 +41,7 @@ namespace PiP_Tool.ViewModels
         /// Gets selected region
         /// </summary>
         public NativeStructs.Rect SelectedRegion => new NativeStructs.Rect(Left, Top, Width + Left, Top + Height);
-        
+
         public const int DefaultPosition = 0;
         public bool RegionHasBeenModified => Top != DefaultPosition || Left != DefaultPosition ||
                                              Height != Constants.MinCropperSize || Width != Constants.MinCropperSize;
@@ -345,11 +345,23 @@ namespace PiP_Tool.ViewModels
         {
             if (RegionHasBeenModified)
                 return;
-            
-            Top = (int) (obj.Result.Top / _windowInfo.DpiY);
-            Left = (int) (obj.Result.Left / _windowInfo.DpiX);
+
+            Top = (int)(obj.Result.Top / _windowInfo.DpiY);
+            Left = (int)(obj.Result.Left / _windowInfo.DpiX);
             Height = (int)(obj.Result.Height / _windowInfo.DpiY);
             Width = (int)(obj.Result.Width / _windowInfo.DpiX);
+
+            if (Width + Left > WindowWidth)
+                Width = WindowWidth - Left;
+
+            if (Height + Top > WindowHeight)
+                Height = WindowHeight - Top;
+
+            if (Height < Constants.MinCropperSize)
+                Height = Constants.MinCropperSize;
+
+            if (Width < Constants.MinCropperSize)
+                Width = Constants.MinCropperSize;
         }
 
         /// <summary>

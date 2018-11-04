@@ -15,6 +15,7 @@ using PiP_Tool.Interfaces;
 using PiP_Tool.MachineLearning;
 using PiP_Tool.Native;
 using PiP_Tool.Shared;
+using PiP_Tool.Shared.Helpers;
 using PiP_Tool.Views;
 using Application = System.Windows.Application;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
@@ -53,6 +54,7 @@ namespace PiP_Tool.ViewModels
         public ICommand ChangeSelectedWindowCommand { get; }
         public ICommand MouseEnterCommand { get; }
         public ICommand MouseLeaveCommand { get; }
+        public ICommand DpiChangedCommand { get; }
 
         /// <summary>
         /// Gets or sets min height property of the window
@@ -160,6 +162,8 @@ namespace PiP_Tool.ViewModels
 
         private string _title;
 
+        private float _dpiX = 1;
+        private float _dpiY = 1;
         private int _heightOffset;
         private Visibility _topBarVisibility;
         private bool _renderSizeEventDisabled;
@@ -193,6 +197,7 @@ namespace PiP_Tool.ViewModels
             ChangeSelectedWindowCommand = new RelayCommand(ChangeSelectedWindowCommandExecute);
             MouseEnterCommand = new RelayCommand<MouseEventArgs>(MouseEnterCommandExecute);
             MouseLeaveCommand = new RelayCommand<MouseEventArgs>(MouseLeaveCommandExecute);
+            DpiChangedCommand = new RelayCommand(DpiChangedCommandExecute);
 
             MessengerInstance.Register<SelectedWindow>(this, InitSelectedWindow);
 
@@ -223,8 +228,10 @@ namespace PiP_Tool.ViewModels
             TopBarVisibility = Visibility.Hidden;
             _heightOffset = 0;
             Ratio = _selectedWindow.Ratio;
-            Height = _selectedWindow.SelectedRegion.Height;
-            Width = _selectedWindow.SelectedRegion.Width;
+
+            DpiChangedCommandExecute();
+            Height = (int)(_selectedWindow.SelectedRegion.Height / _dpiY);
+            Width = (int)(_selectedWindow.SelectedRegion.Width / _dpiX);
             Top = 200;
             Left = 200;
 
@@ -239,7 +246,8 @@ namespace PiP_Tool.ViewModels
             _renderSizeEventDisabled = false;
 
             SetSize(DefaultSizePercentage);
-            SetPosition(Position.BottomLeft);
+            //SetPosition(Position.BottomLeft);
+            SetPosition(Position.TopLeft);
 
             InitDwmThumbnail();
         }
@@ -267,7 +275,7 @@ namespace PiP_Tool.ViewModels
             if (_thumbHandle == IntPtr.Zero)
                 return;
 
-            var dest = new NativeStructs.Rect(0, _heightOffset, _width, _height);
+            var dest = new NativeStructs.Rect(0, _heightOffset, (int)(_width * _dpiX), (int)(_height * _dpiY));
 
             var props = new NativeStructs.DwmThumbnailProperties
             {
@@ -352,11 +360,14 @@ namespace PiP_Tool.ViewModels
             var windowNoBorder = _selectedWindow.WindowInfo.RectNoBorder;
             var regionNoBorder = _selectedWindow.SelectedRegionNoBorder;
 
+            //regionNoBorder.Height = (int) (regionNoBorder.Height * _selectedWindow.WindowInfo.DpiY);
+            //regionNoBorder.Width = (int)(regionNoBorder.Width * _selectedWindow.WindowInfo.DpiX);
+
             var region =
-                $"{regionNoBorder.Top} " +
-                $"{regionNoBorder.Left} " +
-                $"{regionNoBorder.Height} " +
-                $"{regionNoBorder.Width}";
+                    $"{regionNoBorder.Top} " +
+                    $"{regionNoBorder.Left} " +
+                    $"{regionNoBorder.Height} " +
+                    $"{regionNoBorder.Width}";
 
             _mlSource = new CancellationTokenSource();
             _mlToken = _mlSource.Token;
@@ -394,7 +405,6 @@ namespace PiP_Tool.ViewModels
                 return IntPtr.Zero;
 
             var position = (NativeStructs.WINDOWPOS)Marshal.PtrToStructure(lParam, typeof(NativeStructs.WINDOWPOS));
-
             if ((position.flags & (int)SWP.NOMOVE) != 0 ||
                 HwndSource.FromHwnd(hwnd)?.RootVisual == null) return IntPtr.Zero;
 
@@ -473,7 +483,7 @@ namespace PiP_Tool.ViewModels
                 return;
             _renderSizeEventDisabled = true;
             TopBarVisibility = Visibility.Visible;
-            _heightOffset = TopBarHeight;
+            _heightOffset = (int)(TopBarHeight * _dpiY);
             Top = Top - TopBarHeight;
             Height = Height + TopBarHeight;
             MinHeight = MinHeight + TopBarHeight;
@@ -503,6 +513,14 @@ namespace PiP_Tool.ViewModels
             Height = Height - TopBarHeight;
             _renderSizeEventDisabled = false;
             e.Handled = true;
+        }
+
+        /// <summary>
+        /// Executed on DPI change to handle multi-screen with different DPI
+        /// </summary>
+        private void DpiChangedCommandExecute()
+        {
+            DpiHelper.GetDpi(_targetHandle, out _dpiX, out _dpiY);
         }
 
         #endregion

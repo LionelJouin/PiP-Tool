@@ -38,6 +38,9 @@
         <i:EventTrigger EventName="MouseLeave">
             <command:EventToCommand Command="{Binding MouseLeaveCommand}" PassEventArgsToCommand="True" />
         </i:EventTrigger>
+        <i:EventTrigger EventName="DpiChanged">
+            <command:EventToCommand Command="{Binding DpiChangedCommand}" />
+        </i:EventTrigger>
     </i:Interaction.Triggers>
 
     <Window.Background>

@@ -14,8 +14,8 @@ namespace PiP_Tool.Shared
         public static readonly string ModelPath = Path.Combine(FolderPath, "Model.zip");
 
         public static readonly string LogPath = Path.Combine(FolderPath, "logs.txt");
-
-        public static int MinCropperSize => (int) (100 / ScaleHelper.ScalingFactor);
+        
+        public static int MinCropperSize => 100;
 
     }
 }

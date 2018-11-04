@@ -140,6 +140,16 @@ namespace PiP_Tool.Native
                 return new Rectangle(r1.Left, r1.Top, r1.Width - (r2.Left + r2.Right), r1.Height - (r2.Top + r2.Bottom));
             }
 
+            public static Rect operator *(Rect r1,  float f)
+            {
+                return new Rectangle(r1.Left, r1.Top, (int) (r1.Width * f), (int) (r1.Height * f));
+            }
+
+            public static Rect operator /(Rect r1, float f)
+            {
+                return new Rectangle(r1.Left, r1.Top, (int)(r1.Width / f), (int)(r1.Height / f));
+            }
+
             public bool Equals(Rect r)
             {
                 return r.Left == Left && r.Top == Top && r.Right == Right && r.Bottom == Bottom;

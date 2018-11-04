@@ -66,6 +66,9 @@ namespace PiP_Tool.Native
         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         public static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
 
+        [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        public static extern IntPtr MonitorFromWindow(IntPtr hwnd, MonitorDefaultTo dwFlags);
+
         #endregion
 
         #region gdi32.dll
@@ -104,5 +107,11 @@ namespace PiP_Tool.Native
 
         #endregion
 
+        #region SHCore.dll
+
+        [DllImport("SHCore.dll", CharSet = CharSet.Unicode, PreserveSig = false)]
+        public static extern void GetDpiForMonitor(IntPtr hmonitor, MONITOR_DPI_TYPE dpiType, out int dpiX, out int dpiY);
+
+        #endregion
     }
 }

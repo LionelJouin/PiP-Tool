@@ -38,10 +38,10 @@ namespace PiP_Tool.DataModel
             WindowInfo = windowInfo;
 
             selectedRegion = new NativeStructs.Rect(
-                (int) (selectedRegion.Left * ScaleHelper.ScalingFactor),
-                (int) (selectedRegion.Top * ScaleHelper.ScalingFactor),
-                (int) (selectedRegion.Right * ScaleHelper.ScalingFactor),
-                (int) (selectedRegion.Bottom * ScaleHelper.ScalingFactor)
+                (int)(selectedRegion.Left * windowInfo.DpiX),
+                (int)(selectedRegion.Top * windowInfo.DpiY),
+                (int)(selectedRegion.Right * windowInfo.DpiX),
+                (int)(selectedRegion.Bottom * windowInfo.DpiY)
             );
 
             SelectedRegion = new NativeStructs.Rect(

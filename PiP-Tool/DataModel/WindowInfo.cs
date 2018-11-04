@@ -17,6 +17,8 @@ namespace PiP_Tool.DataModel
         public IntPtr Handle { get; }
         public string Program { get; private set; }
         public string Title { get; private set; }
+        public float DpiX { get; private set; }
+        public float DpiY { get; private set; }
         public Point Position { get; private set; }
         public Size Size { get; private set; }
         public NativeStructs.Rect Rect { get; private set; }
@@ -49,6 +51,8 @@ namespace PiP_Tool.DataModel
         public WindowInfo(IntPtr handle)
         {
             Handle = handle;
+            DpiX = 1;
+            DpiY = 1;
             RefreshInfo();
         }
 
@@ -57,6 +61,7 @@ namespace PiP_Tool.DataModel
         /// </summary>
         public void RefreshInfo()
         {
+            GetDpi();
             GetSizeAndPosition();
             GetProgram();
             GetTitle();
@@ -75,16 +80,26 @@ namespace PiP_Tool.DataModel
             RefreshInfo();
             NativeMethods.SetForegroundWindow(Handle);
         }
-
+        
         /// <summary>
         /// Get window size and position
         /// </summary>
         private void GetSizeAndPosition()
         {
             if (!NativeMethods.GetWindowRect(Handle, out var rct)) return;
-            Rect = rct;
-            Position = new Point(rct.Left, rct.Top);
-            Size = new Size(rct.Right - rct.Left + 1, rct.Bottom - rct.Top + 1);
+
+            //DpiHelper.GetDpi(Handle, out var dpiX, out var dpiY);
+            DpiHelper.GetPrimaryDpi(out var dpiPrimaryX, out var dpiPrimaryY);
+
+            var temprct = new NativeStructs.Rect(
+                (int)(rct.Left / DpiX),
+                (int)(rct.Top / DpiY),
+                (int)(rct.Right / DpiX),
+                (int)(rct.Bottom / DpiY)
+            );
+            Rect = temprct;
+            Position = new Point((int) (rct.Left / dpiPrimaryX), (int) (rct.Top / dpiPrimaryY));
+            Size = new Size(temprct.Right - temprct.Left + 1, temprct.Bottom - temprct.Top + 1);
         }
 
         /// <summary>
@@ -112,6 +127,16 @@ namespace PiP_Tool.DataModel
         }
 
         /// <summary>
+        /// Get DPI of monitor where the window is
+        /// </summary>
+        private void GetDpi()
+        {
+            DpiHelper.GetDpi(Handle, out var dpiX, out var dpiY);
+            DpiX = dpiX;
+            DpiY = dpiY;
+        }
+
+        /// <summary>
         /// Get window info (window style...)
         /// </summary>
         private void GetWinInfo()
@@ -120,7 +145,7 @@ namespace PiP_Tool.DataModel
             _winInfo.cbSize = (uint)Marshal.SizeOf(_winInfo);
             NativeMethods.GetWindowInfo(Handle, ref _winInfo);
         }
-
+        
         /// <summary>
         /// Get window border size
         /// </summary>
@@ -129,10 +154,10 @@ namespace PiP_Tool.DataModel
             NativeMethods.DwmGetWindowAttribute(Handle, DWMWINDOWATTRIBUTE.ExtendedFrameBounds, out NativeStructs.Rect frame, Marshal.SizeOf(typeof(NativeStructs.Rect)));
 
             Border = new NativeStructs.Rect(
-                (int)(Math.Floor(frame.Left / ScaleHelper.ScalingFactor) - Rect.Left),
-                (int)(Math.Floor(frame.Top / ScaleHelper.ScalingFactor) - Rect.Top),
-                (int)(Rect.Right - Math.Ceiling(frame.Right / ScaleHelper.ScalingFactor)),
-                (int)(Rect.Bottom - Math.Ceiling(frame.Bottom / ScaleHelper.ScalingFactor))
+                (int)(Math.Floor(frame.Left / DpiX) - Rect.Left),
+                (int)(Math.Floor(frame.Top / DpiY) - Rect.Top),
+                (int)(Rect.Right - Math.Ceiling(frame.Right / DpiX)),
+                (int)(Rect.Bottom - Math.Ceiling(frame.Bottom / DpiY))
             );
         }
 

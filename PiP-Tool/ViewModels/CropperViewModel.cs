@@ -345,10 +345,11 @@ namespace PiP_Tool.ViewModels
         {
             if (RegionHasBeenModified)
                 return;
-            Top = obj.Result.Top;
-            Left = obj.Result.Left;
-            Height = obj.Result.Height;
-            Width = obj.Result.Width;
+            
+            Top = (int) (obj.Result.Top / _windowInfo.DpiY);
+            Left = (int) (obj.Result.Left / _windowInfo.DpiX);
+            Height = (int)(obj.Result.Height / _windowInfo.DpiY);
+            Width = (int)(obj.Result.Width / _windowInfo.DpiX);
         }
 
         /// <summary>

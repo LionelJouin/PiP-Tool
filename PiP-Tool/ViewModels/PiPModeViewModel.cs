@@ -246,8 +246,7 @@ namespace PiP_Tool.ViewModels
             _renderSizeEventDisabled = false;
 
             SetSize(DefaultSizePercentage);
-            //SetPosition(Position.BottomLeft);
-            SetPosition(Position.TopLeft);
+            SetPosition(Position.BottomLeft);
 
             InitDwmThumbnail();
         }
@@ -316,6 +315,8 @@ namespace PiP_Tool.ViewModels
         {
             _renderSizeEventDisabled = true;
             var resolution = Screen.PrimaryScreen.Bounds;
+            resolution.Width = (int)(resolution.Width / _dpiX);
+            resolution.Height = (int)(resolution.Height / _dpiY);
             var top = 0;
             var left = 0;
             switch (position)

@@ -15,11 +15,19 @@ namespace PiP_Tool.Shared.Helpers
         /// <param name="dpiY">out dpi Y (vertical)</param>
         public static void GetDpi(IntPtr hwnd, out float dpiX, out float dpiY)
         {
-            var handle = NativeMethods.MonitorFromWindow(hwnd, MonitorDefaultTo.MONITOR_DEFAULTTONEAREST);
-            NativeMethods.GetDpiForMonitor(handle, MONITOR_DPI_TYPE.MDT_EFFECTIVE_DPI, out var x, out var y);
+            try
+            {
+                var handle = NativeMethods.MonitorFromWindow(hwnd, MonitorDefaultTo.MONITOR_DEFAULTTONEAREST);
+                NativeMethods.GetDpiForMonitor(handle, MONITOR_DPI_TYPE.MDT_EFFECTIVE_DPI, out var x, out var y);
 
-            dpiX = x / 96f;
-            dpiY = y / 96f;
+                dpiX = x / 96f;
+                dpiY = y / 96f;
+            }
+            catch (Exception)
+            {
+                dpiX = 1;
+                dpiY = 1;
+            }
         }
 
         /// <summary>

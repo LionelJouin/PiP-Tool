@@ -1,4 +1,9 @@
-# PiP-Tool (Picture In Picture tool)
+# ![logo][] PiP-Tool (Picture In Picture tool)
+
+[![Release](https://img.shields.io/github/release/LionelJouin/PiP-Tool.svg)](https://github.com/LionelJouin/PiP-Tool/releases)
+[![Release](https://img.shields.io/azure-devops/build/lioneljouin/PiP-Tool/3.svg)](https://lioneljouin.visualstudio.com/PiP-Tool)
+
+[logo]: https://i.imgur.com/SMaB1GI.png
 
 PiP tool is a software to use the Picture in Picture mode on Windows. This feature allows you to watch content (video for example) in thumbnail format on the screen while continuing to use any other software on Windows.
 

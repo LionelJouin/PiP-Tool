@@ -29,6 +29,7 @@ Get the [latest version](https://github.com/LionelJouin/PiP-Tool/releases) from 
 ![Pip-Tool](https://i.imgur.com/h53u77B.png)
 ![Pip-Tool](https://i.imgur.com/Uyth2KG.png)
 ![Pip-Tool](https://i.imgur.com/wReFIh7.png)
+![Pip-Tool](https://i.imgur.com/X5Udm8L.gif)
 
 ## Authors
 
